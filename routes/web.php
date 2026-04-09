@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+include_once __DIR__.'/client/client.php';
 
 Auth::routes();
 
@@ -19,7 +17,6 @@ Auth::routes();
 ======================< Administration Routes >=================
 ==============================================================*/
 Route::middleware(['auth'])->group(function () {
-    include_once 'administration/administration.php';
-    include_once 'landlord/landlord.php';
-    include_once 'student/student.php';
+    include_once __DIR__.'/administration/administration.php';
+    include_once __DIR__.'/client/portal/portal.php';
 });

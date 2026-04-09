@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in | StuNest</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased min-h-screen flex flex-col">
+
+    <header class="border-b border-gray-100 bg-white">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight">StuNest.</span>
+            </a>
+            <a href="register.html" class="text-sm font-medium text-gray-600 hover:text-gray-900">Create an account</a>
+        </div>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center px-6 py-16">
+        <div class="w-full max-w-md">
+            <h1 class="text-3xl font-semibold tracking-tight text-center mb-2">Welcome back</h1>
+            <p class="text-gray-500 text-center text-sm mb-10">Log in to manage bookings, listings, and messages.</p>
+
+            <form class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm" action="#" method="post" id="login-form">
+                <label class="block">
+                    <span class="text-xs font-semibold text-gray-900 uppercase tracking-wide">Email</span>
+                    <input type="email" name="email" required autocomplete="email"
+                        class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-colors"
+                        placeholder="you@university.ac.uk">
+                </label>
+
+                <label class="block mt-5">
+                    <span class="text-xs font-semibold text-gray-900 uppercase tracking-wide">Password</span>
+                    <input type="password" name="password" required autocomplete="current-password"
+                        class="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-colors"
+                        placeholder="••••••••">
+                </label>
+
+                <div class="flex items-center justify-between mt-4">
+                    <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                        <input type="checkbox" name="remember" class="rounded border-gray-300 text-black focus:ring-black">
+                        Remember me
+                    </label>
+                    <a href="#" class="text-sm font-medium text-gray-900 hover:underline">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="mt-8 w-full bg-black text-white text-sm font-semibold py-3.5 rounded-xl hover:bg-gray-800 transition-colors">
+                    Log in
+                </button>
+            </form>
+
+            <p class="text-center text-sm text-gray-500 mt-8">
+                New to StuNest?
+                <a href="register.html" class="font-semibold text-gray-900 hover:underline">Create an account</a>
+            </p>
+
+            <div class="mt-10 pt-10 border-t border-gray-200">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider text-center mb-4">Quick access (demo)</p>
+                <div class="grid grid-cols-2 gap-3 text-center text-sm">
+                    <a href="student_dashboard.html" class="rounded-xl border border-gray-200 bg-white py-3 px-2 hover:border-gray-400 transition-colors">Student</a>
+                    <a href="landlord_dashboard.html" class="rounded-xl border border-gray-200 bg-white py-3 px-2 hover:border-gray-400 transition-colors">Landlord</a>
+                    <a href="institute_dashboard.html" class="rounded-xl border border-gray-200 bg-white py-3 px-2 hover:border-gray-400 transition-colors">Institution</a>
+                    <a href="agent_dashboard.html" class="rounded-xl border border-gray-200 bg-white py-3 px-2 hover:border-gray-400 transition-colors">Agent</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-8 text-center text-xs text-gray-400">
+        <a href="index.html" class="hover:text-gray-600">← Back to home</a>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('login-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

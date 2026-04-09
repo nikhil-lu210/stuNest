@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All pages | StuNest</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased min-h-screen">
+
+    <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight">StuNest.</span>
+            </a>
+            <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Design index</span>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 pb-20">
+        <div class="mb-10">
+            <h1 class="text-3xl font-semibold tracking-tight">All pages</h1>
+            <p class="text-gray-500 mt-2 max-w-2xl">
+                Open any screen below to review layout, navigation, and styling. Use this while building or handing off the static prototype.
+            </p>
+        </div>
+
+        <div class="space-y-10">
+
+            <section>
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Marketing &amp; browse</h2>
+                <ul class="grid gap-3 sm:grid-cols-2">
+                    <li>
+                        <a href="index.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="home" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Home</span>
+                                <p class="text-sm text-gray-500 mt-1">Landing, hero search, featured listings, how it works.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">index.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="search_result.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="search" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Search results</span>
+                                <p class="text-sm text-gray-500 mt-1">Split list + map, filters, property cards.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">search_result.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="property_detail.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="image" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Property detail</span>
+                                <p class="text-sm text-gray-500 mt-1">Gallery, description, amenities, booking card.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">property_detail.html</code>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Authentication</h2>
+                <ul class="grid gap-3 sm:grid-cols-2">
+                    <li>
+                        <a href="login.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="log-in" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Log in</span>
+                                <p class="text-sm text-gray-500 mt-1">Email / password, demo portal shortcuts.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">login.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="register.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="user-plus" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Register</span>
+                                <p class="text-sm text-gray-500 mt-1">Student, institution, landlord, agent flows.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">register.html</code>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Dashboards</h2>
+                <ul class="grid gap-3 sm:grid-cols-2">
+                    <li>
+                        <a href="student_dashboard.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Student dashboard</span>
+                                <p class="text-sm text-gray-500 mt-1">Applications, saved, messages.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">student_dashboard.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="landlord_dashboard.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="building-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Landlord dashboard</span>
+                                <p class="text-sm text-gray-500 mt-1">Listings, applications, messages.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">landlord_dashboard.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="institute_dashboard.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="school" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Institution dashboard</span>
+                                <p class="text-sm text-gray-500 mt-1">Partnership tools and student housing overview.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">institute_dashboard.html</code>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="agent_dashboard.html" class="group flex items-start gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm hover:border-gray-900 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+                                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-900 group-hover:underline">Agent dashboard</span>
+                                <p class="text-sm text-gray-500 mt-1">Portfolios, leads, viewings.</p>
+                                <code class="text-xs text-gray-400 mt-2 block">agent_dashboard.html</code>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">This page</h2>
+                <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-5">
+                    <p class="text-sm text-gray-600">
+                        You are on <code class="text-gray-900">site-map.html</code> — bookmark it for quick access while designing.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500">
+        <a href="index.html" class="hover:text-gray-900">← Back to home</a>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

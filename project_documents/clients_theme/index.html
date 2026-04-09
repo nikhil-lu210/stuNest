@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StuNest | Premium Student Housing</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/lightbox.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-white font-sans text-gray-900 antialiased">
+
+    <!-- Navbar inlined so it always renders (fetch-based includes fail on file:// and some hosts) -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-6">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 cursor-pointer">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight">StuNest.</span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="search_result.html" class="text-gray-900 hover:text-gray-600 transition-colors">Explore</a>
+                <a href="index.html#how-it-works" class="text-gray-900 hover:text-gray-600 transition-colors">How it works</a>
+                <a href="register.html?role=landlord" class="text-gray-900 hover:text-gray-600 transition-colors">List a property</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="hidden md:block text-sm font-medium hover:text-gray-600 transition-colors px-4 py-2">
+                    Log in
+                </a>
+                <a href="register.html" class="hidden md:block bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-gray-800 transition-transform active:scale-95">
+                    Sign up
+                </a>
+                <a href="search_result.html" class="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Search">
+                    <i data-lucide="search" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+        <div class="max-w-4xl mx-auto text-center mt-12 md:mt-20">
+            <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+                Find your perfect <br class="hidden md:block" />
+                <span class="text-gray-400">student home.</span>
+            </h1>
+            <p class="mt-6 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Premium student accommodation near your university. Verified properties, simple booking, and zero hidden fees.
+            </p>
+        </div>
+
+        <div class="mt-12 md:mt-16 max-w-4xl mx-auto">
+            <div id="search-container" class="hidden md:flex items-center bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 p-2">
+                <div class="flex-1 flex items-center px-6 border-r border-gray-100">
+                    <i data-lucide="map-pin" class="text-gray-400 mr-3 w-5 h-5"></i>
+                    <div class="flex-1">
+                        <p class="text-xs font-semibold text-gray-900 tracking-wide uppercase">Location</p>
+                        <input
+                            type="text"
+                            id="location-input"
+                            placeholder="University or City"
+                            class="w-full bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium text-base mt-0.5"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex-1 flex items-center px-6 border-r border-gray-100 cursor-pointer group">
+                    <i data-lucide="calendar" class="text-gray-400 mr-3 w-5 h-5 group-hover:text-black transition-colors"></i>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-900 tracking-wide uppercase">Move in</p>
+                        <p class="text-gray-400 font-medium text-base mt-0.5 group-hover:text-gray-900 transition-colors">Add dates</p>
+                    </div>
+                </div>
+
+                <div class="flex-1 flex items-center px-6 cursor-pointer group">
+                    <i data-lucide="users" class="text-gray-400 mr-3 w-5 h-5 group-hover:text-black transition-colors"></i>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-900 tracking-wide uppercase">Guests</p>
+                        <p class="text-gray-400 font-medium text-base mt-0.5 group-hover:text-gray-900 transition-colors">1 Student</p>
+                    </div>
+                </div>
+
+                <a href="search_result.html" class="bg-black text-white h-14 w-14 rounded-full flex items-center justify-center hover:bg-gray-800 transition-transform active:scale-95 flex-shrink-0" aria-label="Search">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </a>
+            </div>
+
+            <a href="search_result.html" class="md:hidden block bg-white rounded-3xl border border-gray-200 shadow-sm p-4">
+                <div class="flex items-center bg-gray-50 rounded-2xl p-4">
+                    <i data-lucide="search" class="text-gray-900 mr-3 w-5 h-5"></i>
+                    <span class="w-full text-left text-gray-500 font-medium">Where are you studying?</span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <section class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <h2 class="text-3xl font-semibold tracking-tight">Premium Studios</h2>
+                <p class="text-gray-500 mt-2 font-medium">Top-rated living spaces near campus.</p>
+            </div>
+            <a href="search_result.html" class="hidden md:flex items-center text-sm font-semibold hover:text-gray-500 transition-colors">
+                View all <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+
+            <a href="property_detail.html" class="group block">
+                <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="home-listing-1">
+                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Oxford Studio" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/stunest-a/800/800'">
+                    <div class="absolute top-4 right-4 p-2.5 bg-white/70 backdrop-blur-md rounded-full text-gray-900 z-10 pointer-events-none">
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                    </div>
+                    <div class="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold tracking-wide uppercase z-10 shadow-sm">Verified</div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-900 truncate">The Oxford Studio</h3>
+                        <p class="text-gray-500 text-sm mt-0.5">UCL (1.2 miles)</p>
+                        <p class="text-gray-400 text-sm">Islington, London</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm font-medium">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-black"></i>
+                        <span>4.9</span>
+                    </div>
+                </div>
+                <div class="mt-2 border-t border-gray-100 pt-2">
+                    <p class="font-semibold text-lg">£285 <span class="text-gray-500 text-sm font-normal">/pw</span></p>
+                </div>
+            </a>
+
+            <a href="property_detail.html" class="group block">
+                <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="home-listing-2">
+                    <img src="https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nova Premium En-suite" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/stunest-b/800/800'">
+                    <div class="absolute top-4 right-4 p-2.5 bg-white/70 backdrop-blur-md rounded-full text-gray-900 z-10 pointer-events-none">
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                    </div>
+                    <div class="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold tracking-wide uppercase z-10 shadow-sm">Verified</div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-900 truncate">Nova Premium En-suite</h3>
+                        <p class="text-gray-500 text-sm mt-0.5">King's College (0.8 miles)</p>
+                        <p class="text-gray-400 text-sm">Camden Town, London</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm font-medium">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-black"></i>
+                        <span>4.8</span>
+                    </div>
+                </div>
+                <div class="mt-2 border-t border-gray-100 pt-2">
+                    <p class="font-semibold text-lg">£320 <span class="text-gray-500 text-sm font-normal">/pw</span></p>
+                </div>
+            </a>
+
+            <a href="property_detail.html" class="group block">
+                <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="home-listing-3">
+                    <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Apex Student Living" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/stunest-c/800/800'">
+                    <div class="absolute top-4 right-4 p-2.5 bg-white/70 backdrop-blur-md rounded-full text-gray-900 z-10 pointer-events-none">
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                    </div>
+                    <div class="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold tracking-wide uppercase z-10 shadow-sm">Verified</div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-900 truncate">Apex Student Living</h3>
+                        <p class="text-gray-500 text-sm mt-0.5">Imperial College (2.5 miles)</p>
+                        <p class="text-gray-400 text-sm">Wembley, London</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm font-medium">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-black"></i>
+                        <span>4.7</span>
+                    </div>
+                </div>
+                <div class="mt-2 border-t border-gray-100 pt-2">
+                    <p class="font-semibold text-lg">£210 <span class="text-gray-500 text-sm font-normal">/pw</span></p>
+                </div>
+            </a>
+
+            <a href="property_detail.html" class="group block">
+                <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="home-listing-4">
+                    <img src="https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Chapter Loft" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/stunest-d/800/800'">
+                    <div class="absolute top-4 right-4 p-2.5 bg-white/70 backdrop-blur-md rounded-full text-gray-900 z-10 pointer-events-none">
+                        <i data-lucide="heart" class="w-4 h-4"></i>
+                    </div>
+                    <div class="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold tracking-wide uppercase z-10 shadow-sm">Verified</div>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-900 truncate">The Chapter Loft</h3>
+                        <p class="text-gray-500 text-sm mt-0.5">LSE (0.5 miles)</p>
+                        <p class="text-gray-400 text-sm">Spitalfields, London</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm font-medium">
+                        <i data-lucide="star" class="w-3.5 h-3.5 fill-black"></i>
+                        <span>5.0</span>
+                    </div>
+                </div>
+                <div class="mt-2 border-t border-gray-100 pt-2">
+                    <p class="font-semibold text-lg">£395 <span class="text-gray-500 text-sm font-normal">/pw</span></p>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <section id="how-it-works" class="bg-gray-50 py-32 px-6 mt-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Booking made beautifully simple.</h2>
+                <p class="text-gray-500 mt-4 text-lg">Your journey to the perfect room in 3 transparent steps.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="search" class="w-7 h-7 text-black"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">1. Discover</h3>
+                    <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">
+                        Search verified properties near your campus. Filter by price, amenities, and room type.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="shield-check" class="w-7 h-7 text-black"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">2. Verify &amp; Apply</h3>
+                    <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">
+                        Review verified photos and student reviews. Submit your application instantly online.
+                    </p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="home" class="w-7 h-7 text-black"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">3. Move In</h3>
+                    <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">
+                        Sign your digital contract and pay securely. Pack your bags and move into your new home.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-200 bg-white pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+            <div class="col-span-2 md:col-span-1">
+                <a href="index.html" class="flex items-center gap-2 mb-6">
+                    <div class="w-6 h-6 bg-black rounded-md flex items-center justify-center">
+                        <span class="text-white font-bold text-sm leading-none">S</span>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight">StuNest.</span>
+                </a>
+                <p class="text-gray-500 text-sm mb-6">
+                    Elevating the student living experience worldwide.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider">Explore</h4>
+                <ul class="space-y-3 text-gray-500 text-sm">
+                    <li><a href="search_result.html" class="hover:text-black transition-colors">Search London</a></li>
+                    <li><a href="property_detail.html" class="hover:text-black transition-colors">Example listing</a></li>
+                    <li><a href="register.html?role=student" class="hover:text-black transition-colors">Student sign up</a></li>
+                    <li><a href="register.html?role=institution" class="hover:text-black transition-colors">Institution portal</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider">Portals</h4>
+                <ul class="space-y-3 text-gray-500 text-sm">
+                    <li><a href="student_dashboard.html" class="hover:text-black transition-colors">Student dashboard</a></li>
+                    <li><a href="landlord_dashboard.html" class="hover:text-black transition-colors">Landlord dashboard</a></li>
+                    <li><a href="institute_dashboard.html" class="hover:text-black transition-colors">Institution dashboard</a></li>
+                    <li><a href="agent_dashboard.html" class="hover:text-black transition-colors">Agent dashboard</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider">Account</h4>
+                <ul class="space-y-3 text-gray-500 text-sm">
+                    <li><a href="login.html" class="hover:text-black transition-colors">Log in</a></li>
+                    <li><a href="register.html" class="hover:text-black transition-colors">Create account</a></li>
+                    <li><a href="login.html" class="hover:text-black transition-colors">Help</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+            <p>© 2026 StuNest Inc. All rights reserved.</p>
+            <div class="flex flex-wrap gap-6 justify-center">
+                <a href="site-map.html" class="font-medium text-gray-900 hover:underline">All pages (design index)</a>
+                <a href="#" class="hover:text-black transition-colors">Privacy</a>
+                <a href="#" class="hover:text-black transition-colors">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/lightbox.js"></script>
+    <script src="assets/js/navbar-home.js"></script>
+    <script src="assets/js/page-home.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

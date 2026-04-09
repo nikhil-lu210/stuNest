@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute Portal | StuNest</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- --- SIDEBAR (Desktop) --- -->
+    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 border-b border-gray-100 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
+                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+            </div>
+            <span class="text-xl font-bold tracking-tight">StuNest.</span>
+            <span class="ml-2 text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-indigo-100">Uni</span>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
+            <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-lg bg-gray-50 text-gray-900 transition-colors" data-target="overview">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                Overview
+            </button>
+            <button class="nav-btn w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="students">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="user-check" class="w-5 h-5"></i>
+                    Student Verification
+                </div>
+                <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full">45 Pending</span>
+            </button>
+            <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="partners">
+                <i data-lucide="building-2" class="w-5 h-5"></i>
+                Approved Partners
+            </button>
+            <button class="nav-btn w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="welfare">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="life-buoy" class="w-5 h-5"></i>
+                    Welfare Alerts
+                </div>
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            </button>
+            <div class="pt-4 mt-4 border-t border-gray-100">
+                <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    Institution Settings
+                </button>
+            </div>
+        </nav>
+
+        <!-- Profile (Bottom Sidebar) -->
+        <div class="p-4 border-t border-gray-200 bg-white">
+            <div class="flex items-center gap-3 px-2 py-2">
+                <div class="w-10 h-10 bg-indigo-900 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
+                    <!-- Placeholder for Uni Logo -->
+                    UCL
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">UCL Housing Dept.</p>
+                    <p class="text-xs text-indigo-600 font-medium truncate">Dr. Sarah Jenkins</p>
+                </div>
+                <a href="login.html" class="text-gray-400 hover:text-black" aria-label="Log out">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- --- MOBILE HEADER --- -->
+    <header class="md:hidden fixed top-0 w-full h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2 cursor-pointer">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
+            </div>
+            <span class="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-indigo-100">Uni</span>
+        </div>
+        <div class="w-8 h-8 bg-indigo-900 text-white rounded-full flex items-center justify-center font-bold text-[10px]">
+            UCL
+        </div>
+    </header>
+
+    <!-- --- MAIN CONTENT AREA --- -->
+    <main class="flex-1 h-full overflow-y-auto pt-16 md:pt-0 custom-scrollbar">
+        
+        <!-- Top Bar Area (Desktop) -->
+        <div class="hidden md:flex h-20 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40">
+            <div>
+                <h1 class="text-xl font-semibold tracking-tight" id="page-title">University Overview</h1>
+                <p class="text-xs text-gray-500 mt-0.5">University College London (Academic Year 26/27)</p>
+            </div>
+
+            <div class="flex items-center gap-4 shrink-0">
+                <button class="bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
+                    <i data-lucide="download" class="w-4 h-4"></i> Download Census
+                </button>
+                <div class="w-px h-6 bg-gray-200"></div>
+                <button class="p-2 text-gray-400 hover:text-black transition-colors relative">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-7xl mx-auto pb-24">
+
+            <!-- ========================================== -->
+            <!-- TAB 1: OVERVIEW (Active) -->
+            <!-- ========================================== -->
+            <div id="overview" class="tab-content active">
+                
+                <!-- Metrics -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Metric 1 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Registered Students</h3>
+                            <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">4,205</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">Active on StuNest</p>
+                    </div>
+                    
+                    <!-- Metric 2 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Secured Housing</h3>
+                            <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="home" class="w-4 h-4 text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">89%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+                            <div class="bg-green-500 h-1.5 rounded-full" style="width: 89%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Metric 3 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+                        <div class="flex items-center justify-between mb-4 pl-2">
+                            <h3 class="text-sm font-medium text-gray-500">Pending Approvals</h3>
+                            <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="clock" class="w-4 h-4 text-amber-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1 pl-2">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">45</span>
+                        </div>
+                        <p class="text-sm text-amber-600 font-medium pl-2">Requires verification</p>
+                    </div>
+
+                    <!-- Metric 4 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Open Welfare Flags</h3>
+                            <div class="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="alert-circle" class="w-4 h-4 text-red-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">3</span>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium cursor-pointer hover:text-gray-900 underline">View open cases</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Quick Roster Needs -->
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-gray-900">Recent Verification Requests</h2>
+                            <button class="text-sm font-medium text-indigo-600 hover:text-indigo-800" onclick="document.querySelector('[data-target=\'students\']').click()">Review All</button>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                            <!-- Student 1 -->
+                            <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600">JD</div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">John Doe <span class="text-xs text-gray-400 font-normal ml-1">ID: 8839201</span></p>
+                                        <p class="text-xs text-gray-500">BSc Computer Science • Year 1</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors" title="Verify">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Student 2 -->
+                            <div class="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600">AM</div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">Alice Miller <span class="text-xs text-gray-400 font-normal ml-1">ID: 8839202</span></p>
+                                        <p class="text-xs text-gray-500">MSc Economics • Postgrad</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors" title="Verify">
+                                        <i data-lucide="check" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Partner Updates -->
+                    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-gray-900">Partner Accommodation Alerts</h2>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-start gap-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">Chapter Living Update</p>
+                                    <p class="text-sm text-gray-600 mt-1">Chapter Spitalfields is now 95% booked for the upcoming term. Consider directing overflow to Chapter Highbury.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 bg-red-50 p-4 rounded-xl border border-red-100">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600 mt-0.5"></i>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">Maintenance Notice</p>
+                                    <p class="text-sm text-gray-600 mt-1">Apex Student Living reported a hot water outage for Block B affecting 12 UCL students. Estimated fix: 4 hours.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: STUDENT VERIFICATION -->
+            <!-- ========================================== -->
+            <div id="students" class="tab-content">
+                
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    
+                    <!-- Table Toolbar -->
+                    <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/50">
+                        <div class="relative w-full sm:w-72">
+                            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" placeholder="Search student ID, name or course..." class="w-full pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all">
+                        </div>
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button class="bg-black text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-gray-800 flex items-center gap-2 shadow-sm transition-colors">
+                                <i data-lucide="check-square" class="w-4 h-4"></i> Bulk Verify Selected
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead class="bg-gray-50 text-gray-500 font-medium border-b border-gray-200 uppercase tracking-wider text-[11px]">
+                                <tr>
+                                    <th class="px-6 py-4 w-10">
+                                        <input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
+                                    </th>
+                                    <th class="px-6 py-4">Student Name</th>
+                                    <th class="px-6 py-4">Student ID / Portal Email</th>
+                                    <th class="px-6 py-4">Course & Level</th>
+                                    <th class="px-6 py-4">Verification Status</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 text-gray-900">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
+                                    </td>
+                                    <td class="px-6 py-4 font-semibold">John Doe</td>
+                                    <td class="px-6 py-4 text-gray-500">
+                                        <div>#8839201</div>
+                                        <div class="text-xs">j.doe.26@ucl.ac.uk</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600">BSc Computer Science (Y1)</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-100 px-2.5 py-1 rounded-md text-xs font-medium">
+                                            <div class="w-1.5 h-1.5 bg-amber-500 rounded-full"></div> Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right flex justify-end gap-2">
+                                        <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold hover:border-black transition-colors">Verify</button>
+                                        <button class="bg-white border border-gray-200 text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors">Reject</button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" class="rounded border-gray-300 text-black focus:ring-black">
+                                    </td>
+                                    <td class="px-6 py-4 font-semibold">Alice Miller</td>
+                                    <td class="px-6 py-4 text-gray-500">
+                                        <div>#8839202</div>
+                                        <div class="text-xs">alice.m@ucl.ac.uk</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600">MSc Economics (PG)</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 border border-amber-100 px-2.5 py-1 rounded-md text-xs font-medium">
+                                            <div class="w-1.5 h-1.5 bg-amber-500 rounded-full"></div> Pending
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right flex justify-end gap-2">
+                                        <button class="bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-semibold hover:border-black transition-colors">Verify</button>
+                                        <button class="bg-white border border-gray-200 text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-red-50 transition-colors">Reject</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 (Verified) -->
+                                <tr class="bg-gray-50/30">
+                                    <td class="px-6 py-4">
+                                        <input type="checkbox" disabled class="rounded border-gray-200 opacity-50">
+                                    </td>
+                                    <td class="px-6 py-4 font-semibold text-gray-500">Marcus Wright</td>
+                                    <td class="px-6 py-4 text-gray-400">
+                                        <div>#8821005</div>
+                                        <div class="text-xs">m.wright@ucl.ac.uk</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-500">BA History (Y3)</td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-100 px-2.5 py-1 rounded-md text-xs font-medium">
+                                            <i data-lucide="check" class="w-3 h-3"></i> Verified
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-gray-400 hover:text-black text-sm underline">Revoke</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: APPROVED PARTNERS -->
+            <!-- ========================================== -->
+            <div id="partners" class="tab-content">
+                <div class="mb-6">
+                    <p class="text-gray-500">Properties explicitly approved by UCL Accommodation Services for student safety and quality.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Partner Card 1 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col">
+                        <div class="h-32 bg-gray-100 relative">
+                            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&w=600&q=80" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700 shadow-sm border border-indigo-100">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Partner
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-semibold text-lg text-gray-900 truncate">The Oxford Studio</h3>
+                            <p class="text-sm text-gray-500 mt-0.5">Managed by Chapter Living</p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-sm mt-auto">
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold">UCL Students</p>
+                                    <p class="font-semibold text-gray-900 mt-0.5">142 Housed</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold">Distance</p>
+                                    <p class="font-semibold text-gray-900 mt-0.5">1.2 miles</p>
+                                </div>
+                            </div>
+                            <button class="w-full mt-5 bg-white border border-gray-200 text-gray-900 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Manage Affiliation</button>
+                        </div>
+                    </div>
+
+                    <!-- Partner Card 2 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col">
+                        <div class="h-32 bg-gray-100 relative">
+                            <img src="https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&w=600&q=80" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700 shadow-sm border border-indigo-100">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Partner
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-semibold text-lg text-gray-900 truncate">Nova Premium En-suite</h3>
+                            <p class="text-sm text-gray-500 mt-0.5">Managed by Unite Students</p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-sm mt-auto">
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold">UCL Students</p>
+                                    <p class="font-semibold text-gray-900 mt-0.5">89 Housed</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-semibold">Distance</p>
+                                    <p class="font-semibold text-gray-900 mt-0.5">2.4 miles</p>
+                                </div>
+                            </div>
+                            <button class="w-full mt-5 bg-white border border-gray-200 text-gray-900 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Manage Affiliation</button>
+                        </div>
+                    </div>
+
+                    <!-- Add New Card -->
+                    <div class="border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center p-6 text-gray-500 hover:text-black hover:border-gray-400 transition-colors cursor-pointer min-h-[300px]">
+                        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                            <i data-lucide="plus" class="w-6 h-6"></i>
+                        </div>
+                        <p class="font-semibold">Add Partner Property</p>
+                        <p class="text-sm text-center mt-1">Review landlord applications for official University endorsement.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 4: WELFARE ALERTS -->
+            <!-- ========================================== -->
+            <div id="welfare" class="tab-content">
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 bg-red-50/30 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                <i data-lucide="life-buoy" class="w-5 h-5 text-red-500"></i> Open Welfare Cases
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Issues escalated by students or landlords requiring University intervention.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="divide-y divide-gray-100">
+                        <!-- Alert 1 -->
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex gap-3">
+                                    <span class="bg-red-100 text-red-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">High Priority</span>
+                                    <span class="text-sm font-medium text-gray-500 border border-gray-200 rounded px-2.5 py-1">Case #W-4492</span>
+                                </div>
+                                <span class="text-sm text-gray-400">Raised 2 hrs ago</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">Contract Dispute / Early Termination Request</h3>
+                            <p class="text-gray-600 text-sm mb-4">Student (Marcus Wright, ID #8821005) is requesting early contract termination from 'Apex Living' citing severe ongoing noise complaints impacting studies. Landlord has refused.</p>
+                            <div class="flex gap-3">
+                                <button class="bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-gray-800 transition-colors">Take Case</button>
+                                <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Message Student</button>
+                                <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Message Landlord</button>
+                            </div>
+                        </div>
+
+                        <!-- Alert 2 -->
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="flex gap-3">
+                                    <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Medium Priority</span>
+                                    <span class="text-sm font-medium text-gray-500 border border-gray-200 rounded px-2.5 py-1">Case #W-4491</span>
+                                </div>
+                                <span class="text-sm text-gray-400">Raised 1 day ago</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">Accessibility Accommodation Needed</h3>
+                            <p class="text-gray-600 text-sm mb-4">Incoming verified student requires ground-floor room confirmation for mobility reasons at 'Nova Premium'. Landlord has not responded to platform messages for 72 hours.</p>
+                            <div class="flex gap-3">
+                                <button class="bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm hover:bg-gray-800 transition-colors">Take Case</button>
+                                <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Contact Landlord directly</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div class="flex flex-col items-center justify-center h-64 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="settings" class="w-8 h-8 text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Institution Settings</h3>
+                    <p class="text-gray-500 mt-1 max-w-sm">Manage SSO integration for student verification, configure welfare escalation contacts, and update university details.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- --- MOBILE BOTTOM NAV --- -->
+    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-50 px-4 py-3 flex justify-between items-center pb-safe">
+        <button class="flex flex-col items-center gap-1 text-black nav-btn-mobile" data-target="overview">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold">Home</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black relative nav-btn-mobile" data-target="students">
+            <i data-lucide="user-check" class="w-5 h-5"></i>
+            <span class="absolute top-0 right-1 w-2 h-2 bg-indigo-600 rounded-full border border-white"></span>
+            <span class="text-[10px] font-semibold">Roster</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black nav-btn-mobile" data-target="partners">
+            <i data-lucide="building-2" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold">Partners</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black relative nav-btn-mobile" data-target="welfare">
+            <i data-lucide="life-buoy" class="w-5 h-5"></i>
+            <span class="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+            <span class="text-[10px] font-semibold">Alerts</span>
+        </button>
+    </nav>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Tab Switching Logic
+        const navBtns = document.querySelectorAll('.nav-btn, .nav-btn-mobile');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const pageTitle = document.getElementById('page-title');
+
+        // Titles for the header based on tab
+        const titles = {
+            'overview': 'University Overview',
+            'students': 'Student Verification',
+            'partners': 'Approved Partner Properties',
+            'welfare': 'Welfare & Support Cases',
+            'settings': 'Institution Settings'
+        };
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                if(!targetId) return; 
+                
+                // Hide all contents
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Reset Desktop Button Styles
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('bg-gray-50', 'text-gray-900', 'font-semibold');
+                    b.classList.add('text-gray-500', 'font-medium');
+                });
+
+                // Reset Mobile Button Styles
+                document.querySelectorAll('.nav-btn-mobile').forEach(b => {
+                    b.classList.remove('text-black');
+                    b.classList.add('text-gray-400');
+                });
+
+                // Activate clicked Desktop button (if exists)
+                const desktopBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+                if(desktopBtn) {
+                    desktopBtn.classList.remove('text-gray-500', 'font-medium');
+                    desktopBtn.classList.add('bg-gray-50', 'text-gray-900', 'font-semibold');
+                }
+
+                // Activate clicked Mobile button (if exists)
+                const mobileBtn = document.querySelector(`.nav-btn-mobile[data-target="${targetId}"]`);
+                if(mobileBtn) {
+                    mobileBtn.classList.remove('text-gray-400');
+                    mobileBtn.classList.add('text-black');
+                }
+
+                // Show target content
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Page Title
+                if(pageTitle) {
+                    pageTitle.innerText = titles[targetId];
+                }
+            });
+        });
+    </script>
+</body>
+</html>

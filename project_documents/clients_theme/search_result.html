@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore London | StuNest</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/lightbox.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-white font-sans text-gray-900 antialiased min-h-screen flex flex-col">
+
+    <!-- Header + filters inlined (fetch includes fail on file://) -->
+    <header class="border-b border-gray-100 bg-white z-50 shrink-0">
+        <div class="px-6 h-20 flex items-center justify-between gap-4">
+            <a href="index.html" class="flex items-center gap-2 w-48 shrink-0">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight hidden lg:block">StuNest.</span>
+            </a>
+
+            <a href="search_result.html" class="hidden md:flex items-center bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-shadow duration-300 py-2 px-4 cursor-pointer">
+                <span class="text-sm font-semibold px-4 border-r border-gray-200">London</span>
+                <span class="text-sm font-medium text-gray-500 px-4 border-r border-gray-200">Sep 2026</span>
+                <span class="text-sm font-medium text-gray-500 px-4">1 Student</span>
+                <div class="bg-black text-white p-2 rounded-full ml-2">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </div>
+            </a>
+
+            <div class="md:hidden flex-1 flex justify-center">
+                <a href="search_result.html" class="flex items-center gap-2 bg-gray-50 rounded-full py-2 px-4 border border-gray-100 w-full max-w-sm">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-500"></i>
+                    <span class="text-sm font-medium">London</span>
+                </a>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 w-48 shrink-0">
+                <a href="register.html?role=landlord" class="hidden lg:block text-sm font-medium hover:text-gray-600 transition-colors whitespace-nowrap">
+                    List your property
+                </a>
+                <a href="login.html" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">Log in</a>
+                <a href="register.html" class="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors">
+                    <span class="hidden sm:inline">Sign up</span>
+                    <i data-lucide="user" class="w-4 h-4 sm:hidden"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="px-6 py-4 flex items-center gap-3 overflow-x-auto no-scrollbar border-t border-gray-50">
+            <button type="button" class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                Filters
+            </button>
+            <div class="w-px h-6 bg-gray-200 shrink-0 mx-2"></div>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Price</button>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">En-suite</button>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Studio</button>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Gym</button>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Bills Included</button>
+            <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Distance to Uni</button>
+        </div>
+    </header>
+
+    <!-- --- SPLIT SCREEN MAIN CONTENT --- -->
+    <main class="flex-1 flex overflow-hidden min-h-[60vh] lg:min-h-[calc(100vh-12rem)]">
+        
+        <!-- LEFT: LISTINGS GRID -->
+        <section class="w-full lg:w-[55%] xl:w-[60%] flex-col overflow-y-auto custom-scrollbar-wide px-6 py-6 pb-24 lg:pb-6">
+            
+            <p class="text-sm font-medium text-gray-500 mb-2">320+ places to stay in London</p>
+            <h1 class="text-3xl font-semibold tracking-tight mb-6">Student accommodations</h1>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 xl:gap-8">
+                
+                <!-- Listing Card 1 -->
+                <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-1">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Oxford Studio" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr1/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </span>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 4.9
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">The Oxford Studio</h3>
+                            <p class="font-semibold text-base shrink-0">£285<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">Premium Studio • Islington</p>
+                        <p class="text-gray-400 text-sm">1.2 miles to UCL</p>
+                    </div>
+                </a>
+
+                <!-- Listing Card 2 -->
+                <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-2">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nova Premium" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr2/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </span>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 4.8
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">Nova Premium En-suite</h3>
+                            <p class="font-semibold text-base shrink-0">£320<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">En-suite Room • Camden Town</p>
+                        <p class="text-gray-400 text-sm">0.8 miles to King's College</p>
+                    </div>
+                </a>
+
+                <!-- Listing Card 3 -->
+                <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-3">
+                        <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Apex Living" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr3/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </span>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 4.7
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">Apex Student Living</h3>
+                            <p class="font-semibold text-base shrink-0">£210<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">Shared Apartment • Wembley</p>
+                        <p class="text-gray-400 text-sm">2.5 miles to Imperial College</p>
+                    </div>
+                </a>
+
+                <!-- Listing Card 4 -->
+                <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-4">
+                        <!-- Using a solid placeholder approach if Unsplash fails, but Unsplash should load -->
+                        <img src="https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Chapter Loft" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr4/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-red-500"></i>
+                        </span>
+                        <div class="absolute top-3 left-3 px-2 py-1 bg-black text-white rounded-lg text-[10px] font-bold tracking-wider uppercase z-10">
+                            Rare Find
+                        </div>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 5.0
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">The Chapter Loft</h3>
+                            <p class="font-semibold text-base shrink-0">£395<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">Luxury Studio • Spitalfields</p>
+                        <p class="text-gray-400 text-sm">0.5 miles to LSE</p>
+                    </div>
+                </a>
+
+                <!-- Listing Card 5 -->
+                <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-5">
+                        <img src="https://images.unsplash.com/photo-1499955085172-a104c9463ece?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Battersea Residence" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr5/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </span>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 4.6
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">Battersea Residence</h3>
+                            <p class="font-semibold text-base shrink-0">£260<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">Standard Studio • Battersea</p>
+                        <p class="text-gray-400 text-sm">1.8 miles to King's College</p>
+                    </div>
+                </a>
+
+                 <!-- Listing Card 6 -->
+                 <a href="property_detail.html" class="group block">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-6">
+                        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Stratford Quarters" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr6/800/600'">
+                        <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
+                            <i data-lucide="heart" class="w-4 h-4"></i>
+                        </span>
+                        <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
+                            <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> 4.5
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">Stratford Quarters</h3>
+                            <p class="font-semibold text-base shrink-0">£230<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-1 truncate">En-suite Room • Stratford</p>
+                        <p class="text-gray-400 text-sm">Next to Queen Mary Uni</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Load More -->
+            <div class="mt-12 text-center pb-12">
+                <p class="text-sm text-gray-500 mb-4">Continue exploring London</p>
+                <button class="bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-black transition-colors">Show more</button>
+            </div>
+        </section>
+
+        <!-- RIGHT: INTERACTIVE MAP (Desktop Only) -->
+        <!-- We use an Unsplash image of a map as a placeholder, with absolute positioning for custom UI map pins -->
+        <section class="hidden lg:block lg:w-[45%] xl:w-[40%] bg-gray-200 relative border-l border-gray-200">
+            <!-- Simulated Map Background -->
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Map View" class="w-full h-full object-cover opacity-60 mix-blend-multiply grayscale" onerror="this.onerror=null;this.src='https://picsum.photos/1200/800'">
+            
+            <!-- Map Overlay UI -->
+            <div class="absolute inset-0 p-4">
+                
+                <!-- Map Pin 1 -->
+                <div class="absolute top-[25%] left-[30%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">
+                        £285
+                    </div>
+                </div>
+
+                <!-- Map Pin 2 -->
+                <div class="absolute top-[45%] left-[50%] group cursor-pointer transition-transform hover:scale-105 hover:z-20 z-10">
+                    <div class="bg-black text-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-black scale-110">
+                        £320
+                    </div>
+                    <!-- Minimal Tooltip (Simulated Active State) -->
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-xl shadow-2xl w-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&w=400&q=60" class="h-24 w-full object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr-map/400/200'">
+                        <div class="p-2">
+                            <p class="text-xs font-semibold truncate">Nova Premium En-suite</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Pin 3 -->
+                <div class="absolute top-[60%] left-[20%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">
+                        £210
+                    </div>
+                </div>
+
+                <!-- Map Pin 4 -->
+                <div class="absolute top-[35%] right-[25%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">
+                        £395
+                    </div>
+                </div>
+
+                 <!-- Map Pin 5 -->
+                 <div class="absolute bottom-[30%] right-[35%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">
+                        £260
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zoom Controls -->
+            <div class="absolute right-6 bottom-8 flex flex-col gap-2">
+                <button class="w-10 h-10 bg-white rounded-lg shadow-md flex items-center justify-center hover:bg-gray-50 active:scale-95 transition-all text-gray-700">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                </button>
+                <button class="w-10 h-10 bg-white rounded-lg shadow-md flex items-center justify-center hover:bg-gray-50 active:scale-95 transition-all text-gray-700">
+                    <i data-lucide="minus" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Mobile Map Toggle Button (Sticky Bottom) -->
+        <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40">
+            <button class="bg-gray-900 text-white px-5 py-3 rounded-full font-medium text-sm shadow-xl flex items-center gap-2 hover:bg-black hover:scale-105 transition-all active:scale-95">
+                Map <i data-lucide="map" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="shrink-0 border-t border-gray-200 bg-white pt-10 pb-6 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+            <div class="col-span-2 md:col-span-1">
+                <a href="index.html" class="flex items-center gap-2 mb-4">
+                    <div class="w-6 h-6 bg-black rounded-md flex items-center justify-center">
+                        <span class="text-white font-bold text-sm leading-none">S</span>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight">StuNest.</span>
+                </a>
+                <p class="text-gray-500 text-sm">
+                    Elevating the student living experience worldwide.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-3 text-sm uppercase tracking-wider">Explore</h4>
+                <ul class="space-y-2 text-gray-500 text-sm">
+                    <li><a href="search_result.html" class="hover:text-black transition-colors">Search London</a></li>
+                    <li><a href="property_detail.html" class="hover:text-black transition-colors">Example listing</a></li>
+                    <li><a href="register.html?role=student" class="hover:text-black transition-colors">Student sign up</a></li>
+                    <li><a href="index.html" class="hover:text-black transition-colors">Home</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-3 text-sm uppercase tracking-wider">Portals</h4>
+                <ul class="space-y-2 text-gray-500 text-sm">
+                    <li><a href="student_dashboard.html" class="hover:text-black transition-colors">Student</a></li>
+                    <li><a href="landlord_dashboard.html" class="hover:text-black transition-colors">Landlord</a></li>
+                    <li><a href="institute_dashboard.html" class="hover:text-black transition-colors">Institution</a></li>
+                    <li><a href="agent_dashboard.html" class="hover:text-black transition-colors">Agent</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-3 text-sm uppercase tracking-wider">Account</h4>
+                <ul class="space-y-2 text-gray-500 text-sm">
+                    <li><a href="login.html" class="hover:text-black transition-colors">Log in</a></li>
+                    <li><a href="register.html" class="hover:text-black transition-colors">Create account</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-6 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-gray-500">
+            <p>© 2026 StuNest Inc. All rights reserved.</p>
+            <div class="flex flex-wrap gap-6 justify-center">
+                <a href="site-map.html" class="font-medium text-gray-900 hover:underline">All pages</a>
+                <a href="#" class="hover:text-black transition-colors">Privacy</a>
+                <a href="#" class="hover:text-black transition-colors">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/lightbox.js"></script>
+    <script src="assets/js/pages/search-result.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* Dashboards + search: tabs and scrollbars */
+
+.tab-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.tab-content.active {
+  display: block;
+  opacity: 1;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 10px;
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}
+
+/* Wider scrollbar variant (search listings pane) */
+.custom-scrollbar-wide::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar-wide::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-wide::-webkit-scrollbar-thumb {
+  background-color: #e5e7eb;
+  border-radius: 20px;
+}
+.custom-scrollbar-wide:hover::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}

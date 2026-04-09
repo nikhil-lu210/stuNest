@@ -1,0 +1,29 @@
+<!-- Solid header for app routes (search, property detail). Pass title via optional data attributes if needed. -->
+<header class="border-b border-gray-100 bg-white z-50 shrink-0">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
+        <a href="index.html" class="flex items-center gap-2 cursor-pointer shrink-0">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+            </div>
+            <span class="text-xl font-bold tracking-tight hidden lg:block">StuNest.</span>
+        </a>
+
+        <a href="search_result.html" class="hidden md:flex flex-1 max-w-xl items-center bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-shadow duration-300 py-2 px-4 cursor-pointer mx-4">
+            <span class="text-sm font-semibold px-4 border-r border-gray-200 truncate">Start your search</span>
+            <div class="bg-black text-white p-2 rounded-full ml-auto shrink-0">
+                <i data-lucide="search" class="w-4 h-4"></i>
+            </div>
+        </a>
+
+        <div class="flex items-center justify-end gap-3 shrink-0">
+            <a href="site-map.html" class="hidden xl:block text-xs font-medium text-gray-400 hover:text-gray-700">All pages</a>
+            <a href="register.html?role=landlord" class="hidden lg:block text-sm font-medium hover:text-gray-600 transition-colors whitespace-nowrap">
+                List your property
+            </a>
+            <a href="login.html" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">Log in</a>
+            <a href="register.html" class="hidden sm:inline-flex items-center bg-black text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-800 transition-colors">
+                Sign up
+            </a>
+        </div>
+    </div>
+</header>

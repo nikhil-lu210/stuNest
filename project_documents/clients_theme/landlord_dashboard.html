@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Dashboard | StuNest</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- --- SIDEBAR (Desktop) --- -->
+    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
+        <!-- Logo -->
+        <div class="h-20 flex items-center px-6 border-b border-gray-100 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
+                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+            </div>
+            <span class="text-xl font-bold tracking-tight">StuNest.</span>
+            <span class="ml-2 text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Host</span>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-lg bg-gray-50 text-gray-900 transition-colors" data-target="overview-tab">
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                Overview
+            </button>
+            <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="properties-tab">
+                <i data-lucide="building" class="w-5 h-5"></i>
+                Properties
+            </button>
+            <button class="nav-btn w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="applications-tab">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    Applications
+                </div>
+                <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full">3 New</span>
+            </button>
+            <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="messages-tab">
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+                Messages
+            </button>
+            <div class="pt-4 mt-4 border-t border-gray-100">
+                <button class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-colors" data-target="settings-tab">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    Settings
+                </button>
+            </div>
+        </nav>
+
+        <!-- User Profile (Bottom Sidebar) -->
+        <div class="p-4 border-t border-gray-200">
+            <div class="flex items-center gap-3 px-2 py-2">
+                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&w=150&q=80" alt="Host Profile" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">Chapter Living</p>
+                    <p class="text-xs text-gray-500 truncate">Premium Partner</p>
+                </div>
+                <a href="login.html" class="text-gray-400 hover:text-black" aria-label="Log out">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- --- MOBILE HEADER --- -->
+    <header class="md:hidden fixed top-0 w-full h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2 cursor-pointer">
+            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
+            </div>
+            <span class="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Host</span>
+        </div>
+        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&w=150&q=80" alt="Host Profile" class="w-full h-full object-cover">
+        </div>
+    </header>
+
+    <!-- --- MAIN CONTENT AREA --- -->
+    <main class="flex-1 h-full overflow-y-auto pt-16 md:pt-0">
+        
+        <!-- Top Bar Area (Desktop) -->
+        <div class="hidden md:flex h-20 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40">
+            <h1 class="text-xl font-semibold tracking-tight" id="page-title">Overview</h1>
+            <div class="flex items-center gap-4">
+                <button class="bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Property
+                </button>
+                <div class="w-px h-6 bg-gray-200"></div>
+                <button class="p-2 text-gray-400 hover:text-black transition-colors relative">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-24">
+
+            <!-- ========================================== -->
+            <!-- TAB 1: OVERVIEW (Active by default) -->
+            <!-- ========================================== -->
+            <div id="overview-tab" class="tab-content active">
+                
+                <!-- Quick Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Stat 1 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Active Listings</h3>
+                            <div class="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center">
+                                <i data-lucide="building" class="w-4 h-4 text-gray-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">12</span>
+                            <span class="text-sm font-medium text-green-600">+2 this month</span>
+                        </div>
+                    </div>
+                    <!-- Stat 2 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Pending Applications</h3>
+                            <div class="w-8 h-8 bg-amber-50 rounded-full flex items-center justify-center">
+                                <i data-lucide="users" class="w-4 h-4 text-amber-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">7</span>
+                            <span class="text-sm font-medium text-amber-600">Requires review</span>
+                        </div>
+                    </div>
+                    <!-- Stat 3 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-medium text-gray-500">Est. Occupancy Rate</h3>
+                            <div class="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+                                <i data-lucide="pie-chart" class="w-4 h-4 text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-semibold tracking-tight text-gray-900">92%</span>
+                            <span class="text-sm font-medium text-gray-500">For upcoming term</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity / Action Items -->
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-900">Action Required</h2>
+                        <button class="text-sm font-medium text-gray-500 hover:text-black">View all</button>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        
+                        <!-- Action Item 1 -->
+                        <div class="p-6 flex items-start gap-4 hover:bg-gray-50 transition-colors">
+                            <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center shrink-0">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">New application for The Oxford Studio</p>
+                                <p class="text-sm text-gray-500 mt-1">Emma Watson (UCL) has applied for a 51-week tenancy.</p>
+                            </div>
+                            <button class="bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:border-black transition-colors">Review</button>
+                        </div>
+
+                        <!-- Action Item 2 -->
+                        <div class="p-6 flex items-start gap-4 hover:bg-gray-50 transition-colors">
+                            <div class="w-10 h-10 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center shrink-0">
+                                <i data-lucide="message-square" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">Unread message from tenant</p>
+                                <p class="text-sm text-gray-500 mt-1">James Smith asked a question about Nova Premium En-suite.</p>
+                            </div>
+                            <button class="bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:border-black transition-colors">Reply</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: PROPERTIES -->
+            <!-- ========================================== -->
+            <div id="properties-tab" class="tab-content">
+                
+                <div class="flex justify-between items-center mb-6">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" placeholder="Search properties..." class="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-black focus:border-black w-64 bg-white">
+                    </div>
+                    <button class="md:hidden bg-black text-white p-2 rounded-lg"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Property List Item 1 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row gap-6 shadow-sm items-center">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&w=400&q=80" alt="Property" class="w-full md:w-32 h-32 object-cover rounded-xl shrink-0">
+                        
+                        <div class="flex-1 min-w-0 w-full">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Live</span>
+                                <span class="text-sm text-gray-400 border-l border-gray-300 pl-2">Islington, London</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">The Oxford Studio</h3>
+                            <p class="text-sm text-gray-500 mt-1">Premium Studio • £285/pw • 1 Bed • 1 Bath</p>
+                        </div>
+                        
+                        <div class="flex md:flex-col gap-2 w-full md:w-auto mt-4 md:mt-0 shrink-0">
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Edit</button>
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">View Stats</button>
+                        </div>
+                    </div>
+
+                    <!-- Property List Item 2 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row gap-6 shadow-sm items-center">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&w=400&q=80" alt="Property" class="w-full md:w-32 h-32 object-cover rounded-xl shrink-0">
+                        
+                        <div class="flex-1 min-w-0 w-full">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Live</span>
+                                <span class="text-sm text-gray-400 border-l border-gray-300 pl-2">Camden Town, London</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">Nova Premium En-suite</h3>
+                            <p class="text-sm text-gray-500 mt-1">En-suite Room • £320/pw • 1 Bed • Shared Kitchen</p>
+                        </div>
+                        
+                        <div class="flex md:flex-col gap-2 w-full md:w-auto mt-4 md:mt-0 shrink-0">
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">Edit</button>
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors">View Stats</button>
+                        </div>
+                    </div>
+
+                    <!-- Property List Item 3 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col md:flex-row gap-6 shadow-sm items-center opacity-75">
+                        <div class="w-full md:w-32 h-32 bg-gray-100 flex items-center justify-center rounded-xl shrink-0">
+                            <i data-lucide="image" class="w-8 h-8 text-gray-300"></i>
+                        </div>
+                        
+                        <div class="flex-1 min-w-0 w-full">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Draft</span>
+                                <span class="text-sm text-gray-400 border-l border-gray-300 pl-2">Wembley, London</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">Apex Student Living (Unit 4B)</h3>
+                            <p class="text-sm text-gray-500 mt-1">Missing photos and description</p>
+                        </div>
+                        
+                        <div class="flex md:flex-col gap-2 w-full md:w-auto mt-4 md:mt-0 shrink-0">
+                            <button class="flex-1 bg-black text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors">Complete Listing</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: APPLICATIONS -->
+            <!-- ========================================== -->
+            <div id="applications-tab" class="tab-content">
+                
+                <div class="flex gap-4 mb-6 overflow-x-auto no-scrollbar pb-2">
+                    <button class="bg-black text-white px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap">Pending (3)</button>
+                    <button class="bg-white border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-gray-50 whitespace-nowrap">Approved</button>
+                    <button class="bg-white border border-gray-200 text-gray-600 px-4 py-1.5 rounded-full text-sm font-medium hover:bg-gray-50 whitespace-nowrap">Declined</button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Applicant Card 1 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex gap-4 items-center">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&w=150&q=80" alt="Student" class="w-12 h-12 rounded-full object-cover border border-gray-100">
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 text-lg leading-tight">Emma Watson</h3>
+                                    <p class="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-blue-600"></i> Verified UCL Student
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-gray-400 uppercase">2 hrs ago</span>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Applying for</p>
+                            <p class="font-semibold text-gray-900">The Oxford Studio</p>
+                            <div class="flex justify-between mt-2 text-sm text-gray-600 border-t border-gray-200 pt-2">
+                                <span>14 Sep 2026 - 51 Weeks</span>
+                                <span class="font-semibold text-gray-900">£14,535 total</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button class="flex-1 bg-black text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-colors shadow-sm">Approve</button>
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition-colors">Decline</button>
+                            <button class="w-11 h-11 bg-white border border-gray-200 text-gray-600 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Applicant Card 2 -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex gap-4 items-center">
+                                <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-500 text-lg border border-gray-100">
+                                    JS
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 text-lg leading-tight">James Smith</h3>
+                                    <p class="text-sm text-amber-600 flex items-center gap-1 mt-1">
+                                        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Pending ID Verification
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-bold text-gray-400 uppercase">1 day ago</span>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
+                            <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Applying for</p>
+                            <p class="font-semibold text-gray-900">Nova Premium En-suite</p>
+                            <div class="flex justify-between mt-2 text-sm text-gray-600 border-t border-gray-200 pt-2">
+                                <span>1 Sep 2026 - 44 Weeks</span>
+                                <span class="font-semibold text-gray-900">£14,080 total</span>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button class="flex-1 bg-black text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-colors shadow-sm opacity-50 cursor-not-allowed" title="Waiting for student verification">Approve</button>
+                            <button class="flex-1 bg-white border border-gray-200 text-gray-900 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition-colors">Decline</button>
+                            <button class="w-11 h-11 bg-white border border-gray-200 text-gray-600 rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors shrink-0">
+                                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Empty State Placeholders for others tabs -->
+            <div id="messages-tab" class="tab-content">
+                <div class="flex flex-col items-center justify-center h-64 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="message-square" class="w-8 h-8 text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Inbox empty</h3>
+                    <p class="text-gray-500 mt-1 max-w-sm">Messages from prospective and current tenants will appear here.</p>
+                </div>
+            </div>
+
+            <div id="settings-tab" class="tab-content">
+                <div class="flex flex-col items-center justify-center h-64 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="settings" class="w-8 h-8 text-gray-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Account Settings</h3>
+                    <p class="text-gray-500 mt-1 max-w-sm">Manage your payout methods, company profile, and notification preferences.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- --- MOBILE BOTTOM NAV --- -->
+    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-50 px-6 py-3 flex justify-between items-center pb-safe">
+        <button class="flex flex-col items-center gap-1 text-black nav-btn-mobile" data-target="overview-tab">
+            <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+            <span class="text-[10px] font-semibold">Home</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black nav-btn-mobile" data-target="properties-tab">
+            <i data-lucide="building" class="w-6 h-6"></i>
+            <span class="text-[10px] font-semibold">Listings</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black relative nav-btn-mobile" data-target="applications-tab">
+            <i data-lucide="users" class="w-6 h-6"></i>
+            <span class="absolute top-0 right-1 w-2 h-2 bg-amber-500 rounded-full border border-white"></span>
+            <span class="text-[10px] font-semibold">Apps</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-black nav-btn-mobile" data-target="messages-tab">
+            <i data-lucide="message-square" class="w-6 h-6"></i>
+            <span class="text-[10px] font-semibold">Inbox</span>
+        </button>
+    </nav>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Tab Switching Logic
+        const navBtns = document.querySelectorAll('.nav-btn, .nav-btn-mobile');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const pageTitle = document.getElementById('page-title');
+
+        // Titles for the header based on tab
+        const titles = {
+            'overview-tab': 'Dashboard Overview',
+            'properties-tab': 'Manage Properties',
+            'applications-tab': 'Student Applications',
+            'messages-tab': 'Messages',
+            'settings-tab': 'Host Settings'
+        };
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                
+                // Hide all contents
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Reset Desktop Button Styles
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('bg-gray-50', 'text-gray-900', 'font-semibold');
+                    b.classList.add('text-gray-500', 'font-medium');
+                });
+
+                // Reset Mobile Button Styles
+                document.querySelectorAll('.nav-btn-mobile').forEach(b => {
+                    b.classList.remove('text-black');
+                    b.classList.add('text-gray-400');
+                });
+
+                // Activate clicked Desktop button (if exists)
+                const desktopBtn = document.querySelector(`.nav-btn[data-target="${targetId}"]`);
+                if(desktopBtn) {
+                    desktopBtn.classList.remove('text-gray-500', 'font-medium');
+                    desktopBtn.classList.add('bg-gray-50', 'text-gray-900', 'font-semibold');
+                }
+
+                // Activate clicked Mobile button (if exists)
+                const mobileBtn = document.querySelector(`.nav-btn-mobile[data-target="${targetId}"]`);
+                if(mobileBtn) {
+                    mobileBtn.classList.remove('text-gray-400');
+                    mobileBtn.classList.add('text-black');
+                }
+
+                // Show target content
+                document.getElementById(targetId).classList.add('active');
+
+                // Update Page Title
+                if(pageTitle) {
+                    pageTitle.innerText = titles[targetId];
+                }
+            });
+        });
+    </script>
+</body>
+</html>

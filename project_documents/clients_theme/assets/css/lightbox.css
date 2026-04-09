@@ -1,0 +1,128 @@
+/* StuNest lightbox overlay */
+
+.stunest-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.92);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.stunest-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.stunest-lightbox__inner {
+  position: relative;
+  max-width: min(96vw, 1400px);
+  max-height: 90vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stunest-lightbox__img {
+  max-width: 100%;
+  max-height: calc(90vh - 3rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.stunest-lightbox__caption {
+  margin-top: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  text-align: center;
+  max-width: 40rem;
+}
+
+.stunest-lightbox__counter {
+  position: absolute;
+  top: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.stunest-lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.stunest-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stunest-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.stunest-lightbox__nav:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stunest-lightbox__nav--prev {
+  left: 0.5rem;
+}
+
+.stunest-lightbox__nav--next {
+  right: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .stunest-lightbox__nav {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .stunest-lightbox__nav--prev {
+    left: 0.25rem;
+  }
+  .stunest-lightbox__nav--next {
+    right: 0.25rem;
+  }
+}
+
+body.stunest-lightbox-open {
+  overflow: hidden;
+}

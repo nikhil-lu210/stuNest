@@ -16,7 +16,7 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->is('administration/dashboard*') ? 'active' : '' }}">
             <a href="{{ route('administration.dashboard.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Dashboard">Dashboard</div>
@@ -30,19 +30,19 @@
 
         <!-- User Management -->
         @canany (['User Create', 'User Read']) 
-            <li class="menu-item {{ request()->is('settings/user*') ? 'active open' : '' }}">
+            <li class="menu-item {{ request()->is('administration/settings/user*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-user-shield"></i>
                     <div data-i18n="User Management">User Management</div>
                 </a>
                 <ul class="menu-sub">
                     @can ('User Read') 
-                        <li class="menu-item {{ request()->is('settings/user/all*') ? 'active' : '' }}">
+                        <li class="menu-item {{ request()->is('administration/settings/user/all*') ? 'active' : '' }}">
                             <a href="{{ route('administration.settings.user.index') }}" class="menu-link">All Users</a>
                         </li>
                     @endcan
                     @can ('User Create')
-                        <li class="menu-item {{ request()->is('settings/user/create*') ? 'active' : '' }}">
+                        <li class="menu-item {{ request()->is('administration/settings/user/create*') ? 'active' : '' }}">
                             <a href="{{ route('administration.settings.user.create') }}" class="menu-link">Create New User</a>
                         </li>
                     @endcan
@@ -52,27 +52,27 @@
         
         <!-- Role & Permission -->
         @canany (['Permission Create', 'Permission Read', 'Role Create', 'Role Read'])
-            <li class="menu-item {{ request()->is('settings/rolepermission*') ? 'active open' : '' }}">
+            <li class="menu-item {{ request()->is('administration/settings/rolepermission*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-lock"></i>
                     <div data-i18n="Role & Permission">Role & Permission</div>
                 </a>
                 <ul class="menu-sub">
                     @canany (['Role Create', 'Role Read'])
-                        <li class="menu-item {{ request()->is('settings/rolepermission/role*') ? 'active open' : '' }}">
+                        <li class="menu-item {{ request()->is('administration/settings/rolepermission/role*') ? 'active open' : '' }}">
                             <a href="javascript:void(0);" class="menu-link menu-toggle">
                                 <div data-i18n="Role">Role</div>
                             </a>
                             <ul class="menu-sub">
                                 @can ('Role Read') 
-                                    <li class="menu-item {{ request()->is('settings/rolepermission/role/all*') ? 'active' : '' }}">
+                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/role/all*') ? 'active' : '' }}">
                                         <a href="{{ route('administration.settings.rolepermission.role.index') }}" class="menu-link">
                                             <div data-i18n="All Roles">All Roles</div>
                                         </a>
                                     </li>
                                 @endcan
                                 @can ('Role Create') 
-                                    <li class="menu-item {{ request()->is('settings/rolepermission/role/create') ? 'active' : '' }}">
+                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/role/create') ? 'active' : '' }}">
                                         <a href="{{ route('administration.settings.rolepermission.role.create') }}" class="menu-link">
                                             <div data-i18n="Create Role">Create Role</div>
                                         </a>
@@ -83,20 +83,20 @@
                     @endcanany
                     
                     @canany (['Permission Create', 'Permission Read'])
-                        <li class="menu-item {{ request()->is('settings/rolepermission/permission*') ? 'active open' : '' }}">
+                        <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission*') ? 'active open' : '' }}">
                             <a href="javascript:void(0);" class="menu-link menu-toggle">
                                 <div data-i18n="Permissions">Permissions</div>
                             </a>
                             <ul class="menu-sub">
                                 @can ('Permission Read') 
-                                    <li class="menu-item {{ request()->is('settings/rolepermission/permission/all*') ? 'active' : '' }}">
+                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission/all*') ? 'active' : '' }}">
                                         <a href="{{ route('administration.settings.rolepermission.permission.index') }}" class="menu-link">
                                             <div data-i18n="All Permission">All Permission</div>
                                         </a>
                                     </li>
                                 @endcan
                                 @can ('Permission Create') 
-                                    <li class="menu-item {{ request()->is('settings/rolepermission/permission/create*') ? 'active' : '' }}">
+                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission/create*') ? 'active' : '' }}">
                                         <a href="{{ route('administration.settings.rolepermission.permission.create') }}" class="menu-link">
                                             <div data-i18n="Create Permission">Create Permission</div>
                                         </a>
@@ -110,16 +110,16 @@
         @endcanany
         
         <!-- Shortcuts -->
-        <li class="menu-item {{ request()->is('shortcuts*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->is('administration/shortcuts*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-share-3"></i>
                 <div data-i18n="Shortcuts">Shortcuts</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->is('shortcut') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->is('administration/shortcut') ? 'active' : '' }}">
                     <a href="#" class="menu-link">My Shortcuts</a>
                 </li>
-                <li class="menu-item {{ request()->is('shortcuts/create*') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->is('administration/shortcuts/create*') ? 'active' : '' }}">
                     <a href="#" class="menu-link">Add Shortcut</a>
                 </li>
             </ul>

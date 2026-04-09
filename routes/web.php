@@ -20,4 +20,6 @@ Auth::routes();
 ==============================================================*/
 Route::middleware(['auth'])->group(function () {
     include_once 'administration/administration.php';
+    include_once 'landlord/landlord.php';
+    include_once 'student/student.php';
 });

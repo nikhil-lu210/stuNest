@@ -80,25 +80,25 @@
     <div class="col-md-12">
         <ul class="nav nav-pills flex-column flex-sm-row mb-4">
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('my/profile*') ? 'active' : '' }}" href="{{ route('administration.my.profile') }}">
+                <a class="nav-link {{ request()->is('administration/my/profile*') ? 'active' : '' }}" href="{{ route('administration.my.profile') }}">
                     <i class="ti-xs ti ti-user-check me-1"></i> 
                     Profile
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('my/attendance*') ? 'active' : '' }}" href="{{ route('administration.my.attendance') }}">
+                <a class="nav-link {{ request()->is('administration/my/attendance*') ? 'active' : '' }}" href="{{ route('administration.my.attendance') }}">
                     <i class="ti-xs ti ti-clock-dollar me-1"></i> 
                     Attendance
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('my/break*') ? 'active' : '' }}" href="{{ route('administration.my.break') }}">
+                <a class="nav-link {{ request()->is('administration/my/break*') ? 'active' : '' }}" href="{{ route('administration.my.break') }}">
                     <i class="ti-xs ti ti-hourglass-empty me-1"></i> 
                     Breaks
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('my/task*') ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ request()->is('administration/my/task*') ? 'active' : '' }}" href="#">
                     <i class="ti-xs ti ti-subtask me-1"></i> 
                     Tasks
                 </a>

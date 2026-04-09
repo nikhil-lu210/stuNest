@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 /* ==============================================
 ============< Administration Routes >============
 ===============================================*/
-// Route::prefix('administration')
-Route::prefix('')
+Route::prefix('administration')
         ->name('administration.')
         ->group(function () {
             // notification

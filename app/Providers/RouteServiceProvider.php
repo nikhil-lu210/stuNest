@@ -7,5 +7,6 @@ namespace App\Providers;
  */
 class RouteServiceProvider
 {
-    public const HOME = '/dashboard';
+    /** Default post-auth fallback (staff); use role-based redirects for marketplace users. */
+    public const HOME = '/administration/dashboard';
 }

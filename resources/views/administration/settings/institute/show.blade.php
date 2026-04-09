@@ -55,8 +55,11 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Branch') }}</th>
-                                <th>{{ __('City') }}</th>
                                 <th>{{ __('Country') }}</th>
+                                <th>{{ __('City') }}</th>
+                                <th>{{ __('Area') }}</th>
+                                <th>{{ __('Address') }}</th>
+                                <th>{{ __('Postcode') }}</th>
                                 <th>{{ __('Primary') }}</th>
                             </tr>
                         </thead>
@@ -64,8 +67,11 @@
                             @forelse ($institute->locations as $loc)
                                 <tr>
                                     <td>{{ $loc->name }}</td>
-                                    <td>{{ $loc->city ?? '—' }}</td>
-                                    <td>{{ $loc->country }}</td>
+                                    <td>{{ $loc->country?->name ?? '—' }}</td>
+                                    <td>{{ $loc->city?->name ?? '—' }}</td>
+                                    <td>{{ $loc->area?->name ?? '—' }}</td>
+                                    <td>{{ $loc->address_line_1 ?? '—' }}</td>
+                                    <td>{{ $loc->postcode ?? '—' }}</td>
                                     <td>
                                         @if ($loc->is_primary)
                                             <span class="badge bg-label-primary">{{ __('Yes') }}</span>
@@ -76,7 +82,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted">{{ __('No branches recorded.') }}</td>
+                                    <td colspan="7" class="text-center text-muted">{{ __('No branches recorded.') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

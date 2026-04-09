@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "countries": [
+    {
+      "iso_code": "CY",
+      "name": "Cyprus",
+      "is_active": true,
+      "cities": [
+        {
+          "name": "Nicosia",
+          "is_active": true,
+          "sort_order": 1,
+          "areas": [
+            { "name": "Strovolos", "is_active": true, "sort_order": 1 },
+            { "name": "Engomi", "is_active": true },
+            "Aglantzia"
+          ]
+        },
+        {
+          "name": "Limassol",
+          "is_active": true,
+          "sort_order": 2,
+          "areas": ["Germasogeia", "Agios Athanasios", "Kato Polemidia"]
+        }
+      ]
+    },
+    {
+      "iso_code": "GB",
+      "name": "United Kingdom",
+      "is_active": true,
+      "cities": [
+        {
+          "name": "London",
+          "areas": [
+            { "name": "Camden", "is_active": true },
+            { "name": "Westminster", "is_active": true }
+          ]
+        }
+      ]
+    }
+  ]
+}

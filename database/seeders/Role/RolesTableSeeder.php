@@ -48,6 +48,11 @@ class RolesTableSeeder extends Seeder
                     'Institute Read',
                     'Institute Update',
                     'Institute Delete',
+
+                    'Geography Create',
+                    'Geography Read',
+                    'Geography Update',
+                    'Geography Delete',
                 ];
             } elseif ($role === 'Super Admin') {
                 $permissions = [
@@ -70,6 +75,11 @@ class RolesTableSeeder extends Seeder
                     'Institute Read',
                     'Institute Update',
                     'Institute Delete',
+
+                    'Geography Create',
+                    'Geography Read',
+                    'Geography Update',
+                    'Geography Delete',
                 ];
             } elseif ($role === 'Admin') {
                 $permissions = [
@@ -86,6 +96,11 @@ class RolesTableSeeder extends Seeder
                     'Institute Read',
                     'Institute Update',
                     'Institute Delete',
+
+                    'Geography Create',
+                    'Geography Read',
+                    'Geography Update',
+                    'Geography Delete',
                 ];
             } elseif ($role === 'HR Manager') {
                 $permissions = [

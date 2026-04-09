@@ -54,5 +54,18 @@ class PermissionsTableSeeder extends Seeder
                 ]
             );
         }
+
+        $geographyModule = PermissionModule::firstOrCreate(['name' => 'Geography']);
+        foreach (['Create', 'Read', 'Update', 'Delete'] as $permission) {
+            Permission::firstOrCreate(
+                [
+                    'name' => "{$geographyModule->name} {$permission}",
+                    'guard_name' => 'web',
+                ],
+                [
+                    'permission_module_id' => $geographyModule->id,
+                ]
+            );
+        }
     }
 }

@@ -12,21 +12,13 @@ class InstituteLocation extends Model
         'institute_id',
         'name',
         'address_line_1',
-        'city',
         'postcode',
-        'country',
+        'country_id',
+        'city_id',
+        'area_id',
         'is_primary',
         'sort_order',
     ];
-
-    protected static function booted(): void
-    {
-        static::creating(function (InstituteLocation $location) {
-            if (empty($location->country)) {
-                $location->country = 'GB';
-            }
-        });
-    }
 
     protected function casts(): array
     {
@@ -38,6 +30,21 @@ class InstituteLocation extends Model
     public function institute(): BelongsTo
     {
         return $this->belongsTo(Institute::class);
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(Area::class);
     }
 
     public function representatives(): HasMany

@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Administration\Settings\Institute;
 
+use App\Models\Area;
+use App\Models\City;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class InstituteStoreRequest extends FormRequest
 {
@@ -28,11 +31,44 @@ class InstituteStoreRequest extends FormRequest
             'locations' => ['required', 'array', 'min:1'],
             'locations.*.name' => ['required', 'string', 'max:255'],
             'locations.*.address_line_1' => ['nullable', 'string', 'max:255'],
-            'locations.*.city' => ['nullable', 'string', 'max:125'],
             'locations.*.postcode' => ['nullable', 'string', 'max:32'],
-            'locations.*.country' => ['nullable', 'string', 'size:2'],
+            'locations.*.country_id' => ['required', 'integer', 'exists:countries,id'],
+            'locations.*.city_id' => ['required', 'integer', 'exists:cities,id'],
+            'locations.*.area_id' => ['required', 'integer', 'exists:areas,id'],
             'locations.*.is_primary' => ['nullable', 'boolean'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $locations = $this->input('locations', []);
+            if (! is_array($locations)) {
+                return;
+            }
+            foreach ($locations as $index => $row) {
+                $countryId = $row['country_id'] ?? null;
+                $cityId = $row['city_id'] ?? null;
+                $areaId = $row['area_id'] ?? null;
+                if (! $countryId || ! $cityId || ! $areaId) {
+                    continue;
+                }
+                $city = City::query()->find($cityId);
+                if (! $city || (int) $city->country_id !== (int) $countryId) {
+                    $validator->errors()->add(
+                        "locations.{$index}.city_id",
+                        __('The selected city does not belong to the selected country.')
+                    );
+                }
+                $area = Area::query()->find($areaId);
+                if (! $area || (int) $area->city_id !== (int) $cityId) {
+                    $validator->errors()->add(
+                        "locations.{$index}.area_id",
+                        __('The selected area does not belong to the selected city.')
+                    );
+                }
+            }
+        });
     }
 
     public function messages(): array

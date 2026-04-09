@@ -13,6 +13,9 @@ Route::prefix('settings')
 
             // institute
             include_once 'institute/institute.php';
+
+            // geography (countries / cities / areas)
+            include_once 'geography/geography.php';
             
             // rolepermission
             include_once 'rolepermission/rolepermission.php';

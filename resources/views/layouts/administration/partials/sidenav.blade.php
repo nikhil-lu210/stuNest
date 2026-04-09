@@ -71,6 +71,23 @@
                 </ul>
             </li>
         @endcanany
+
+        <!-- Geography -->
+        @canany (['Geography Read', 'Geography Create'])
+            <li class="menu-item {{ request()->is('administration/settings/geography*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-world"></i>
+                    <div data-i18n="Geography">{{ __('Geography') }}</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('Geography Read')
+                        <li class="menu-item {{ request()->is('administration/settings/geography') || request()->is('administration/settings/geography/countries*') || request()->is('administration/settings/geography/cities*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.settings.geography.index') }}" class="menu-link">{{ __('Data & import') }}</a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcanany
         
         <!-- Role & Permission -->
         @canany (['Permission Create', 'Permission Read', 'Role Create', 'Role Read'])

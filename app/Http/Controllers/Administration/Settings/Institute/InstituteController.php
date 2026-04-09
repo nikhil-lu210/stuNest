@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Administration\Settings\Institute;
 
 use Exception;
+use App\Models\Country;
 use App\Models\Institute;
 use App\Models\InstituteLocation;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,9 @@ class InstituteController extends Controller
 
     public function create()
     {
-        return view('administration.settings.institute.create');
+        $countries = Country::query()->active()->orderBy('name')->get();
+
+        return view('administration.settings.institute.create', compact('countries'));
     }
 
     public function store(InstituteStoreRequest $request)
@@ -40,9 +43,10 @@ class InstituteController extends Controller
                     $institute->locations()->create([
                         'name' => $row['name'],
                         'address_line_1' => $row['address_line_1'] ?? null,
-                        'city' => $row['city'] ?? null,
                         'postcode' => $row['postcode'] ?? null,
-                        'country' => ! empty($row['country']) ? strtoupper($row['country']) : 'GB',
+                        'country_id' => $row['country_id'],
+                        'city_id' => $row['city_id'],
+                        'area_id' => $row['area_id'],
                         'is_primary' => ! empty($row['is_primary']),
                         'sort_order' => $index,
                     ]);
@@ -63,6 +67,9 @@ class InstituteController extends Controller
     {
         $institute->load([
             'locations' => fn ($q) => $q->orderBy('sort_order')->orderBy('id'),
+            'locations.country',
+            'locations.city',
+            'locations.area',
             'representatives.user',
             'representatives.location',
         ]);
@@ -74,9 +81,19 @@ class InstituteController extends Controller
     {
         $institute->load([
             'locations' => fn ($q) => $q->orderBy('sort_order')->orderBy('id'),
+            'locations.country',
+            'locations.city',
+            'locations.area',
         ]);
+        $countryIds = $institute->locations->pluck('country_id')->filter()->unique();
+        $countries = Country::query()
+            ->where(function ($q) use ($countryIds) {
+                $q->where('is_active', true)->orWhereIn('id', $countryIds);
+            })
+            ->orderBy('name')
+            ->get();
 
-        return view('administration.settings.institute.edit', compact('institute'));
+        return view('administration.settings.institute.edit', compact('institute', 'countries'));
     }
 
     public function update(InstituteUpdateRequest $request, Institute $institute)
@@ -97,9 +114,10 @@ class InstituteController extends Controller
                         $location->update([
                             'name' => $row['name'],
                             'address_line_1' => $row['address_line_1'] ?? null,
-                            'city' => $row['city'] ?? null,
                             'postcode' => $row['postcode'] ?? null,
-                            'country' => ! empty($row['country']) ? strtoupper($row['country']) : 'GB',
+                            'country_id' => $row['country_id'],
+                            'city_id' => $row['city_id'],
+                            'area_id' => $row['area_id'],
                             'is_primary' => ! empty($row['is_primary']),
                             'sort_order' => $index,
                         ]);
@@ -108,9 +126,10 @@ class InstituteController extends Controller
                         $created = $institute->locations()->create([
                             'name' => $row['name'],
                             'address_line_1' => $row['address_line_1'] ?? null,
-                            'city' => $row['city'] ?? null,
                             'postcode' => $row['postcode'] ?? null,
-                            'country' => ! empty($row['country']) ? strtoupper($row['country']) : 'GB',
+                            'country_id' => $row['country_id'],
+                            'city_id' => $row['city_id'],
+                            'area_id' => $row['area_id'],
                             'is_primary' => ! empty($row['is_primary']),
                             'sort_order' => $index,
                         ]);

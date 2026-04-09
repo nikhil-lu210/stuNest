@@ -20,6 +20,7 @@ class RolesTableSeeder extends Seeder
             'HR Manager',
             'Team Leader',
             'Employee',
+            'Institute Representative',
         ];
 
         foreach ($roles as $role) {
@@ -42,6 +43,11 @@ class RolesTableSeeder extends Seeder
                     'User Read',
                     'User Update',
                     'User Delete',
+
+                    'Institute Create',
+                    'Institute Read',
+                    'Institute Update',
+                    'Institute Delete',
                 ];
             } elseif ($role === 'Super Admin') {
                 $permissions = [
@@ -59,6 +65,11 @@ class RolesTableSeeder extends Seeder
                     'User Read',
                     'User Update',
                     'User Delete',
+
+                    'Institute Create',
+                    'Institute Read',
+                    'Institute Update',
+                    'Institute Delete',
                 ];
             } elseif ($role === 'Admin') {
                 $permissions = [
@@ -70,6 +81,11 @@ class RolesTableSeeder extends Seeder
                     'User Read',
                     'User Update',
                     'User Delete',
+
+                    'Institute Create',
+                    'Institute Read',
+                    'Institute Update',
+                    'Institute Delete',
                 ];
             } elseif ($role === 'HR Manager') {
                 $permissions = [
@@ -89,6 +105,8 @@ class RolesTableSeeder extends Seeder
                 $permissions = [
                     'User Read',
                 ];
+            } elseif ($role === 'Institute Representative') {
+                $permissions = [];
             } else {
                 $permissions = [
                     'User Read',
@@ -96,7 +114,9 @@ class RolesTableSeeder extends Seeder
             }
 
             $roleInstance = Role::findByName($role);
-            $roleInstance->givePermissionTo($permissions);
+            if ($permissions !== []) {
+                $roleInstance->givePermissionTo($permissions);
+            }
         }
     }
 }

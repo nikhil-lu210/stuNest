@@ -13,6 +13,7 @@ use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -86,4 +87,9 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
         'deleted_at' => 'datetime',
     ];
+
+    public function instituteRepresentatives(): HasMany
+    {
+        return $this->hasMany(InstituteRepresentative::class);
+    }
 }

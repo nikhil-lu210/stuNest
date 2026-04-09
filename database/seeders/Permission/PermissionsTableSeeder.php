@@ -34,12 +34,25 @@ class PermissionsTableSeeder extends Seeder
 
             foreach ($permissions as $permission) {
                 $permissionName = "{$permissionModule->name} {$permission}";
-                
+
                 Permission::create([
                     'permission_module_id' => $permissionModule->id,
                     'name' => $permissionName,
                 ]);
             }
+        }
+
+        $instituteModule = PermissionModule::firstOrCreate(['name' => 'Institute']);
+        foreach (['Create', 'Read', 'Update', 'Delete'] as $permission) {
+            Permission::firstOrCreate(
+                [
+                    'name' => "{$instituteModule->name} {$permission}",
+                    'guard_name' => 'web',
+                ],
+                [
+                    'permission_module_id' => $instituteModule->id,
+                ]
+            );
         }
     }
 }

@@ -49,6 +49,28 @@
                 </ul>
             </li>
         @endcanany
+
+        <!-- Institutions -->
+        @canany (['Institute Create', 'Institute Read'])
+            <li class="menu-item {{ request()->is('administration/settings/institute*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-building-community"></i>
+                    <div data-i18n="Institutions">Institutions</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('Institute Read')
+                        <li class="menu-item {{ request()->is('administration/settings/institute/all*') || request()->is('administration/settings/institute/show*') || request()->is('administration/settings/institute/edit*') || request()->is('administration/settings/institute/*/representatives*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.settings.institute.index') }}" class="menu-link">{{ __('All Institutes') }}</a>
+                        </li>
+                    @endcan
+                    @can ('Institute Create')
+                        <li class="menu-item {{ request()->is('administration/settings/institute/create*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.settings.institute.create') }}" class="menu-link">{{ __('Register Institute') }}</a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcanany
         
         <!-- Role & Permission -->
         @canany (['Permission Create', 'Permission Read', 'Role Create', 'Role Read'])

@@ -2,14 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Administration\Settings\Geography\GeographyController;
-use App\Http\Controllers\Administration\Settings\Geography\GeographyApiController;
 
 Route::prefix('geography')
     ->name('geography.')
     ->group(function () {
-        Route::get('/api/countries', [GeographyApiController::class, 'countries'])->name('api.countries');
-        Route::get('/api/cities', [GeographyApiController::class, 'cities'])->name('api.cities');
-        Route::get('/api/areas', [GeographyApiController::class, 'areas'])->name('api.areas');
+        require __DIR__.'/geography_api.php';
 
         Route::get('/', [GeographyController::class, 'index'])->name('index')->can('Geography Read');
         Route::get('/import/sample', [GeographyController::class, 'downloadSample'])->name('import.sample')->can('Geography Read');

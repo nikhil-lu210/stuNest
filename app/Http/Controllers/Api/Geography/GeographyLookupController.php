@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Administration\Settings\Geography;
+namespace App\Http\Controllers\Api\Geography;
 
 use App\Models\Area;
 use App\Models\City;
@@ -8,7 +8,11 @@ use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class GeographyApiController extends Controller
+/**
+ * JSON endpoints for admin UI (Select2 / cascading dropdowns).
+ * Registered under web + auth; not the same as routes/api.php Sanctum group.
+ */
+class GeographyLookupController extends Controller
 {
     public function countries(Request $request)
     {

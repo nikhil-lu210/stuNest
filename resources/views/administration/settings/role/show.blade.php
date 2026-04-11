@@ -132,7 +132,7 @@
                                                 @if ($user->hasMedia('avatar'))
                                                     <img src="{{ $user->getFirstMediaUrl('avatar', 'thumb') }}" alt="{{ $user->name }} Avatar" class="rounded-circle">
                                                 @else
-                                                    <img src="https://fakeimg.pl/300/dddddd/?text=No-Image" alt="{{ $user->name }} No Avatar" class="rounded-circle">
+                                                    <img src="{{ file_exists(public_path('assets/img/no_image.svg')) ? asset('assets/img/no_image.svg') : 'https://placehold.co/400?text=No+Image' }}" alt="{{ $user->name }} No Avatar" class="rounded-circle">
                                                 @endif
                                             </div>
                                         </div>

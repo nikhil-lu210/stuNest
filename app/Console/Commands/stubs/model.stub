@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models\{{Name}};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\{{Name}}\Mutators\{{Name}}Mutators;
+use App\Models\{{Name}}\Accessors\{{Name}}Accessors;
+use App\Models\{{Name}}\Relations\{{Name}}Relations;
+use App\Models\{{Name}}\Scopes\{{Name}}Scopes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+
+{{ObserverImport}}
+{{ObservedByAttribute}}class {{Name}} extends Model
+{
+    use HasFactory, SoftDeletes{{SoftDeletesTrait}};
+
+    use {{Name}}Relations;
+    use {{Name}}Accessors, {{Name}}Mutators;
+    use {{Name}}Scopes;
+
+    protected $table = '{{TableName}}';
+
+    protected $fillable = [
+        //
+    ];
+
+    protected $casts = [
+        //
+    ];
+}

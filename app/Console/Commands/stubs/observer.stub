@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Observers\{{ObserverNamespace}};
+
+use App\Models\{{Name}}\{{Name}};
+
+class {{Name}}Observer
+{
+    public function created({{Name}} $model): void
+    {
+        //
+    }
+
+    public function updated({{Name}} $model): void
+    {
+        //
+    }
+
+    public function deleted({{Name}} $model): void
+    {
+        //
+    }
+
+    public function restored({{Name}} $model): void
+    {
+        //
+    }
+
+    public function forceDeleted({{Name}} $model): void
+    {
+        //
+    }
+}

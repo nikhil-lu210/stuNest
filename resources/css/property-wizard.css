@@ -6,6 +6,38 @@
     display: none !important;
 }
 
+/* Vuexy-style file input (wizard has no Bootstrap) */
+.form-control[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #18181b;
+    background-color: #fff;
+    border: 1px solid #e4e4e7;
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.form-control[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    border: 0;
+    border-radius: 0.75rem;
+    background-color: #eef2ff;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4f46e5;
+    cursor: pointer;
+}
+
+.form-control[type="file"]:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 1px #6366f1;
+}
+
 /* Select2 — align with Tailwind wizard (zinc / indigo) */
 .select2-container {
     z-index: 10050;

@@ -26,7 +26,7 @@
                         @case(2) {{ __('Specs') }} @break
                         @case(3) {{ __('Rent') }} @break
                         @case(4) {{ __('Match') }} @break
-                        @case(5) {{ __('Amenities') }} @break
+                        @case(5) {{ __('Amenities & photos') }} @break
                     @endswitch
                 </span>
             </li>
@@ -540,38 +540,116 @@
 
         {{-- Step 5 --}}
         @if ($currentStep === 5)
-            <div class="space-y-8">
-                <h2 class="text-lg font-semibold text-zinc-900">{{ __('Amenities') }}</h2>
-                <div class="grid gap-3 sm:grid-cols-2">
-                    @foreach ([
-                        'wifi' => __('Wi‑Fi'),
-                        'washing_machine' => __('Washing machine'),
-                        'tumble_dryer' => __('Tumble dryer'),
-                        'dishwasher' => __('Dishwasher'),
-                        'balcony_garden' => __('Balcony / garden'),
-                        'desk_in_room' => __('Desk in room'),
-                        'building_gym' => __('Building gym'),
-                        'bike_storage' => __('Bike storage'),
-                    ] as $val => $label)
-                        <label
-                            class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20">
-                            <input type="checkbox" wire:model="amenities" value="{{ $val }}"
-                                class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
-                        </label>
-                    @endforeach
+            <div class="space-y-10">
+                <div class="space-y-8">
+                    <h2 class="text-lg font-semibold text-zinc-900">{{ __('Amenities') }}</h2>
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        @foreach ([
+                            'wifi' => __('Wi‑Fi'),
+                            'washing_machine' => __('Washing machine'),
+                            'tumble_dryer' => __('Tumble dryer'),
+                            'dishwasher' => __('Dishwasher'),
+                            'balcony_garden' => __('Balcony / garden'),
+                            'desk_in_room' => __('Desk in room'),
+                            'building_gym' => __('Building gym'),
+                            'bike_storage' => __('Bike storage'),
+                        ] as $val => $label)
+                            <label
+                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20">
+                                <input type="checkbox" wire:model="amenities" value="{{ $val }}"
+                                    class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('amenities')
+                        <p class="text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
-                @error('amenities')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
-                @enderror
 
-                <div class="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50/80 p-8 text-center">
-                    <p class="text-sm font-medium text-zinc-800">{{ __('Photos') }}</p>
-                    <p class="mt-1 text-xs text-zinc-500">{{ __('Image upload will be available in a future update.') }}</p>
-                    <button type="button" disabled
-                        class="mt-4 inline-flex cursor-not-allowed items-center justify-center rounded-full bg-zinc-200 px-5 py-2.5 text-sm font-semibold text-zinc-500">
-                        {{ __('Upload photos') }}
-                    </button>
+                <div class="border-t border-zinc-100 pt-8"
+                    x-data="{
+                        photoCount: @entangle('photosCount').live,
+                        dragging: false,
+                        uploadFromDrop(e) {
+                            this.dragging = false;
+                            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+                            const maxAdd = Math.max(0, 10 - this.photoCount);
+                            const batch = files.slice(0, maxAdd);
+                            if (!batch.length) return;
+                            $wire.uploadMultiple('photos', batch, function () {}, function () {}, function () {}, function () {}, this.photoCount > 0);
+                        }
+                    }">
+                    <h2 class="text-lg font-semibold text-zinc-900">{{ __('Property photos') }}</h2>
+                    <p class="mt-1 text-sm text-zinc-500">{{ __('Upload between 3 and 10 images (max 5 MB each). JPG, PNG, or WebP.') }}</p>
+                    <p class="mt-1 text-xs font-medium text-zinc-600">
+                        <span>{{ __('Selected') }}:</span>
+                        <span x-text="photoCount"></span> / 10
+                    </p>
+
+                    {{-- Hidden: UI is the dashed zone only (no native "Choose file" row) --}}
+                    <input type="file" id="property-photos-input" wire:model="photos" multiple
+                        class="hidden" tabindex="-1" accept="image/*" aria-hidden="true">
+
+                    <div class="relative mt-4">
+                        <button type="button"
+                            x-on:click="document.getElementById('property-photos-input').click()"
+                            x-on:dragover.prevent="dragging = true"
+                            x-on:dragenter.prevent="dragging = true"
+                            x-on:dragleave.prevent="dragging = false"
+                            x-on:drop.prevent="uploadFromDrop($event)"
+                            :class="dragging ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20' : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/80'"
+                            class="flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-12 text-center transition">
+                            <div wire:loading.remove wire:target="photos" class="flex flex-col items-center gap-2">
+                                <svg class="h-10 w-10 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3A1.5 1.5 0 001.5 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
+                                <span class="text-sm font-semibold text-zinc-900">{{ __('Click to upload') }}</span>
+                                <span class="text-xs text-zinc-500">{{ __('or drag and drop images here') }}</span>
+                            </div>
+                            <div wire:loading wire:target="photos" class="flex flex-col items-center gap-2" role="status">
+                                <svg class="h-8 w-8 shrink-0 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="text-sm font-medium text-zinc-700">{{ __('Preparing previews…') }}</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    @error('photos')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @foreach ($errors->messages() as $key => $messages)
+                        @if (str_starts_with($key, 'photos.') && $key !== 'photos')
+                            @foreach ($messages as $message)
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @endforeach
+                        @endif
+                    @endforeach
+
+                    @if ($photos)
+                        <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                            @foreach ($photos as $photo)
+                                <div class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 shadow-sm"
+                                    wire:key="photo-{{ $photo->getFilename() }}">
+                                    <img src="{{ $photo->temporaryUrl() }}" alt=""
+                                        class="h-36 w-full object-cover">
+                                    <div class="pointer-events-none absolute inset-0 bg-zinc-900/0 transition group-hover:bg-zinc-900/35 group-focus-within:bg-zinc-900/35"></div>
+                                    <button type="button"
+                                        wire:click="$removeUpload('photos', @js($photo->getFilename()))"
+                                        wire:loading.attr="disabled"
+                                        class="pointer-events-auto absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-zinc-800 opacity-0 shadow-lg ring-1 ring-zinc-200/80 transition hover:bg-red-600 hover:text-white hover:ring-red-500 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 group-hover:opacity-100 group-focus-within:opacity-100"
+                                        title="{{ __('Remove') }}">
+                                        <span class="sr-only">{{ __('Remove') }}</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif

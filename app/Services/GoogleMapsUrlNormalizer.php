@@ -41,7 +41,8 @@ class GoogleMapsUrlNormalizer
             $lng = $m[2];
         }
 
-        if ($lat === null && preg_match('/@(-?\d+\.?\d*),(-?\d+\.?\d*)(?:,|$|[/?])/', $url, $m)) {
+        // Use # delimiters: a / inside [...] would otherwise close a /-delimited pattern.
+        if ($lat === null && preg_match('#@(-?\d+\.?\d*),(-?\d+\.?\d*)(?:,|$|[/?])#', $url, $m)) {
             $lat = $m[1];
             $lng = $m[2];
         }

@@ -9,11 +9,15 @@ use App\Models\Property\Property;
 use App\Services\GoogleMapsUrlNormalizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 
 class CreateListing extends Component
 {
+    use WithFileUploads;
     public int $currentStep = 1;
 
     public string $listing_category = '';
@@ -74,11 +78,26 @@ class CreateListing extends Component
     /** @var array<int, string> */
     public array $amenities = [];
 
+    /** @var array<int, \Illuminate\Http\UploadedFile> */
+    public array $photos = [];
+
+    public int $photosCount = 0;
+
     public function mount(): void
     {
         if ($this->isStudent()) {
             $this->listing_category = 'shared_room';
         }
+    }
+
+    public function hydrate(): void
+    {
+        $this->photosCount = count($this->photos);
+    }
+
+    public function updatedPhotos(): void
+    {
+        $this->photosCount = count($this->photos);
     }
 
     public function updatedCountryId(mixed $value): void
@@ -216,6 +235,11 @@ class CreateListing extends Component
             $this->validate($this->rulesForStep($s));
         }
 
+        $this->validate([
+            'photos' => ['required', 'array', 'min:3', 'max:10'],
+            'photos.*' => ['image', 'max:5120'],
+        ]);
+
         if ($this->bills_included !== 'some') {
             $this->included_bills = [];
         }
@@ -229,39 +253,51 @@ class CreateListing extends Component
             ? $maps['longitude']
             : $this->normalizeOptionalDecimal($this->longitude);
 
-        Property::create([
-            'user_id' => Auth::id(),
-            'country_id' => $this->country_id,
-            'city_id' => $this->city_id,
-            'area_id' => $this->area_id,
-            'map_link' => $this->map_link,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'distance_university_km' => $this->distance_university_km,
-            'distance_transit_km' => $this->distance_transit_km,
-            'bed_type' => $this->listing_category === 'shared_room' ? $this->bed_type : null,
-            'listing_category' => $this->listing_category,
-            'property_type' => $this->property_type,
-            'bedrooms' => $this->bedrooms,
-            'bathrooms' => $this->bathrooms,
-            'bathroom_type' => $this->bathroom_type,
-            'is_furnished' => $this->is_furnished,
-            'rent_duration' => $this->rent_duration,
-            'rent_amount' => (int) $this->rent_amount,
-            'bills_included' => $this->bills_included,
-            'included_bills' => $this->bills_included === 'some' ? $this->included_bills : [],
-            'min_contract_length' => $this->min_contract_length,
-            'provides_agreement' => $this->provides_agreement,
-            'deposit_required' => $this->deposit_required,
-            'rent_for' => $this->rent_for,
-            'suitable_for' => $this->suitable_for,
-            'flatmate_vibe' => $this->listing_category === 'shared_room' ? $this->flatmate_vibe : null,
-            'house_rules' => $this->house_rules,
-            'amenities' => $this->amenities,
-            'capacity' => max(1, (int) $this->bedrooms),
-            'available_beds' => max(1, (int) $this->bedrooms),
-            'status' => Property::STATUS_DRAFT,
-        ]);
+        DB::transaction(function () use ($latitude, $longitude) {
+            $property = Property::create([
+                'user_id' => Auth::id(),
+                'country_id' => $this->country_id,
+                'city_id' => $this->city_id,
+                'area_id' => $this->area_id,
+                'map_link' => $this->map_link,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'distance_university_km' => $this->distance_university_km,
+                'distance_transit_km' => $this->distance_transit_km,
+                'bed_type' => $this->listing_category === 'shared_room' ? $this->bed_type : null,
+                'listing_category' => $this->listing_category,
+                'property_type' => $this->property_type,
+                'bedrooms' => $this->bedrooms,
+                'bathrooms' => $this->bathrooms,
+                'bathroom_type' => $this->bathroom_type,
+                'is_furnished' => $this->is_furnished,
+                'rent_duration' => $this->rent_duration,
+                'rent_amount' => (int) $this->rent_amount,
+                'bills_included' => $this->bills_included,
+                'included_bills' => $this->bills_included === 'some' ? $this->included_bills : [],
+                'min_contract_length' => $this->min_contract_length,
+                'provides_agreement' => $this->provides_agreement,
+                'deposit_required' => $this->deposit_required,
+                'rent_for' => $this->rent_for,
+                'suitable_for' => $this->suitable_for,
+                'flatmate_vibe' => $this->listing_category === 'shared_room' ? $this->flatmate_vibe : null,
+                'house_rules' => $this->house_rules,
+                'amenities' => $this->amenities,
+                'capacity' => max(1, (int) $this->bedrooms),
+                'available_beds' => max(1, (int) $this->bedrooms),
+                'status' => Property::STATUS_DRAFT,
+            ]);
+
+            foreach ($this->photos as $photo) {
+                $property->addMedia($photo->getRealPath())->toMediaCollection('property_gallery');
+                if ($photo instanceof TemporaryUploadedFile) {
+                    $photo->delete();
+                }
+            }
+        });
+
+        $this->photos = [];
+        $this->photosCount = 0;
 
         session()->flash('success', __('Your property listing has been saved as a draft.'));
 

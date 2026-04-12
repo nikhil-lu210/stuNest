@@ -9,8 +9,12 @@ use App\Models\Property\Scopes\PropertyScopes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Property extends Model
+class Property extends Model implements HasMedia
 {
     public const STATUS_DRAFT = 'draft';
 
@@ -25,7 +29,30 @@ class Property extends Model
     public const STATUS_ARCHIVED = 'archived';
 
     use HasFactory;
+    use InteractsWithMedia;
     use SoftDeletes;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('property_gallery');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Crop, 600, 400)
+            ->format('webp')
+            ->quality(85)
+            ->nonQueued()
+            ->performOnCollections('property_gallery');
+
+        $this->addMediaConversion('optimized')
+            ->width(1920)
+            ->format('webp')
+            ->quality(85)
+            ->nonQueued()
+            ->performOnCollections('property_gallery');
+    }
 
     protected static function newFactory()
     {

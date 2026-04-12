@@ -62,7 +62,9 @@ class PropertyController extends Controller
 
         $property->load(['creator', 'country', 'city', 'area']);
 
-        return view('administration.property.show', compact('property'));
+        $gallery = $property->getMedia('property_gallery');
+
+        return view('administration.property.show', compact('property', 'gallery'));
     }
 
     public function citiesJson(Country $country): JsonResponse

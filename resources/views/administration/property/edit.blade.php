@@ -185,7 +185,7 @@
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label" for="rent_amount">{{ __('Rent amount') }} (£)</label>
+                        <label class="form-label" for="rent_amount">{{ __('Rent amount') }} (€)</label>
                         <input type="number" name="rent_amount" id="rent_amount" class="form-control" min="1" step="1" required value="{{ $o('rent_amount') }}">
                     </div>
                     <div class="col-md-4">

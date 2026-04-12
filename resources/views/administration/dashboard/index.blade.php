@@ -78,10 +78,10 @@
                     <div class="col-md-3 col-6">
                         <div class="d-flex align-items-center">
                             <div class="badge rounded-pill bg-label-success me-3 p-2">
-                                <i class="ti ti-currency-dollar ti-sm"></i>
+                                <i class="ti ti-currency-euro ti-sm"></i>
                             </div>
                             <div class="card-info">
-                                <h5 class="mb-0">$9745</h5>
+                                <h5 class="mb-0">€9745</h5>
                                 <small>Revenue</small>
                             </div>
                         </div>

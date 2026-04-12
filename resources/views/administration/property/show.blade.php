@@ -61,7 +61,7 @@
                     </div>
                     <div class="text-lg-end">
                         <div class="h5 mb-1 text-primary">
-                            £{{ number_format($property->rent_amount) }}
+                            €{{ number_format($property->rent_amount) }}
                             <span class="text-muted fs-6 fw-normal">/ {{ $fmt($property->rent_duration) }}</span>
                         </div>
                         <span class="text-muted small">{{ $fmt($property->listing_category) }} · {{ $fmt($property->property_type) }}</span>
@@ -214,12 +214,12 @@
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="ti ti-currency-pound me-1"></i>{{ __('Rent & contract') }}</h5>
+                        <h5 class="mb-0"><i class="ti ti-currency-euro me-1"></i>{{ __('Rent & contract') }}</h5>
                     </div>
                     <div class="card-body">
                         <dl class="row mb-0">
                             <dt class="col-sm-4 text-muted small">{{ __('Rent') }}</dt>
-                            <dd class="col-sm-8">£{{ number_format($property->rent_amount) }} / {{ $property->rent_duration }}</dd>
+                            <dd class="col-sm-8">€{{ number_format($property->rent_amount) }} / {{ $property->rent_duration }}</dd>
                             <dt class="col-sm-4 text-muted small">{{ __('Bills') }}</dt>
                             <dd class="col-sm-8">{{ $fmt($property->bills_included) }}</dd>
                             @if ($property->bills_included === 'some' && is_array($property->included_bills) && count($property->included_bills))

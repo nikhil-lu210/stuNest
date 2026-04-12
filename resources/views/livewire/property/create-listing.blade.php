@@ -348,7 +348,7 @@
                 <div>
                     <label class="mb-2 block text-sm font-medium text-zinc-700">{{ __('Rent amount') }}</label>
                     <div class="relative">
-                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-400">£</span>
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-400">€</span>
                         <input type="number" wire:model.live="rent_amount" min="1" step="1"
                             class="block w-full rounded-2xl border-zinc-200 py-3 pl-9 pr-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             placeholder="0">

@@ -45,7 +45,7 @@
                         <div>
                             <div class="flex justify-between items-start mb-1">
                                 <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">{{ $c['title'] }}</h3>
-                                <p class="font-semibold text-base shrink-0">£{{ $c['price'] }}<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                                <p class="font-semibold text-base shrink-0">€{{ $c['price'] }}<span class="text-gray-500 font-normal text-sm">/pw</span></p>
                             </div>
                             <p class="text-gray-500 text-sm mb-1 truncate">{{ $c['line1'] }}</p>
                             <p class="text-gray-400 text-sm">{{ $c['line2'] }}</p>
@@ -64,16 +64,16 @@
             <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Map View" class="w-full h-full min-h-[420px] object-cover opacity-60 mix-blend-multiply grayscale" onerror="this.onerror=null;this.src='https://picsum.photos/1200/800'">
             <div class="absolute inset-0 p-4">
                 <div class="absolute top-[25%] left-[30%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
-                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">£285</div>
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">€285</div>
                 </div>
                 <div class="absolute top-[45%] left-[50%] group cursor-pointer transition-transform hover:scale-105 hover:z-10">
-                    <div class="bg-black text-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-black scale-110">£320</div>
+                    <div class="bg-black text-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-black scale-110">€320</div>
                 </div>
                 <div class="absolute top-[60%] left-[20%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
-                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">£210</div>
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">€210</div>
                 </div>
                 <div class="absolute top-[35%] right-[25%] group cursor-pointer transition-transform hover:scale-105 hover:z-20">
-                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">£395</div>
+                    <div class="bg-white px-3 py-1.5 rounded-full shadow-lg font-bold text-sm border border-gray-200 group-hover:bg-black group-hover:text-white transition-colors">€395</div>
                 </div>
             </div>
             <div class="absolute right-6 bottom-8 flex flex-col gap-2">

@@ -140,7 +140,7 @@
                 <div class="sticky top-28 bg-white border border-gray-200 rounded-2xl p-6 shadow-[0_12px_24px_-10px_rgba(0,0,0,0.1)]">
                     <div class="flex items-end justify-between mb-6">
                         <div>
-                            <span class="text-2xl font-bold">£{{ $listing['price_week'] }}</span>
+                            <span class="text-2xl font-bold">€{{ $listing['price_week'] }}</span>
                             <span class="text-gray-500 font-medium"> / week</span>
                         </div>
                         <div class="text-sm font-medium flex items-center gap-1">
@@ -176,8 +176,8 @@
 
                     <div class="space-y-3 text-gray-600 mb-6 text-sm">
                         <div class="flex justify-between">
-                            <span>£{{ $listing['price_week'] }} × 51 weeks</span>
-                            <span>£14,535</span>
+                            <span>€{{ $listing['price_week'] }} × 51 weeks</span>
+                            <span>€14,535</span>
                         </div>
                         <div class="flex justify-between">
                             <span>Utility bills</span>
@@ -185,13 +185,13 @@
                         </div>
                         <div class="flex justify-between">
                             <span>{{ config('app.name') }} service fee</span>
-                            <span>£0</span>
+                            <span>€0</span>
                         </div>
                     </div>
 
                     <div class="border-t border-gray-200 pt-4 flex justify-between font-semibold text-lg text-gray-900">
                         <span>Total contract value</span>
-                        <span>£14,535</span>
+                        <span>€14,535</span>
                     </div>
                 </div>
             </div>
@@ -200,7 +200,7 @@
 
     <div class="lg:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 px-6 z-50 flex items-center justify-between">
         <div>
-            <div class="text-lg font-bold">£{{ $listing['price_week'] }} <span class="text-sm font-medium text-gray-500 font-normal">/ week</span></div>
+            <div class="text-lg font-bold">€{{ $listing['price_week'] }} <span class="text-sm font-medium text-gray-500 font-normal">/ week</span></div>
             <div class="text-sm font-medium underline text-gray-900 cursor-pointer">14 Sep · 51 Weeks</div>
         </div>
         <a href="{{ route('login') }}" class="bg-black text-white px-8 py-3 rounded-xl font-semibold hover:bg-gray-800 active:scale-95 transition-all">

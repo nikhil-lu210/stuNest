@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="mt-2 border-t border-gray-100 pt-2">
-                        <p class="font-semibold text-lg">£{{ $item['price'] }} <span class="text-gray-500 text-sm font-normal">/pw</span></p>
+                        <p class="font-semibold text-lg">€{{ $item['price'] }} <span class="text-gray-500 text-sm font-normal">/pw</span></p>
                     </div>
                 </a>
             @endforeach

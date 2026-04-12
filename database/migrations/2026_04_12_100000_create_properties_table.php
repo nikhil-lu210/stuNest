@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_furnished')->default(false);
 
             $table->string('rent_duration', 16);
-            $table->unsignedInteger('rent_amount')->comment('Amount in minor currency units or whole pounds per product decision');
+            $table->unsignedInteger('rent_amount')->comment('Amount in minor currency units or whole euros per product decision');
             $table->string('bills_included', 16);
             $table->json('included_bills')->nullable();
             $table->string('min_contract_length', 32);

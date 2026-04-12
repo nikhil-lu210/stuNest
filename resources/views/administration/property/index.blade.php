@@ -55,7 +55,7 @@
                                         <td>{{ str_replace('_', ' ', ucfirst($property->property_type)) }}</td>
                                         <td>{{ $property->bedrooms }}{{ $property->bedrooms >= 6 ? '+' : '' }}</td>
                                         <td>
-                                            £{{ number_format($property->rent_amount) }}
+                                            €{{ number_format($property->rent_amount) }}
                                             <small class="text-muted">/ {{ $property->rent_duration }}</small>
                                         </td>
                                         <td>

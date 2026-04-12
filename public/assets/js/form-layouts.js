@@ -101,11 +101,14 @@ $(function () {
     });
   }
 
-  // Select2 Country
+  // Select2 (legacy `.select2` class) — skip if global admin Select2 already initialized
   var select2 = $('.select2');
   if (select2.length) {
     select2.each(function () {
       var $this = $(this);
+      if ($this.hasClass('select2-hidden-accessible')) {
+        return;
+      }
       $this.wrap('<div class="position-relative"></div>').select2({
         placeholder: 'Select value',
         dropdownParent: $this.parent()

@@ -2,6 +2,8 @@
 
 namespace App\Notifications\Administration;
 
+use App\Models\User;
+use App\Support\SystemRoles;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Notifications\Notification;
@@ -42,11 +44,18 @@ class NewUserRegistrationNotification extends Notification
     public function toArray(object $notifiable): array
     {
         $url = URL::route('administration.settings.user.show.profile', ['user' => $this->user->id]);
+        $roleName = $this->user->roles[0]->name ?? '';
+        $canNameRole = $roleName === ''
+            || $roleName !== SystemRoles::DEVELOPER_NAME
+            || ($notifiable instanceof User && SystemRoles::viewerIsDeveloper($notifiable));
+
         return [
             'url'   => $url,
             'icon'   => 'user',
             'title'   => 'New User Assigned',
-            'message'     => 'A New '. $this->user->roles[0]->name . ' Has Been Assigned.',
+            'message' => $canNameRole && $roleName !== ''
+                ? 'A New '. $roleName . ' Has Been Assigned.'
+                : __('A new user has been assigned.'),
         ];
     }
 }

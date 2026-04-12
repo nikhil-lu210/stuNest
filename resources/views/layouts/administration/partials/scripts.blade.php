@@ -20,6 +20,9 @@
 <!-- Main JS -->
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
+<script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+@vite(['resources/js/admin-select2.js'])
+
 <!-- Page JS -->
 @yield('script_links')
 

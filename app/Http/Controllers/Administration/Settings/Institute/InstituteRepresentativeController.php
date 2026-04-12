@@ -37,7 +37,6 @@ class InstituteRepresentativeController extends Controller
                     'first_name' => $request->first_name,
                     'middle_name' => $request->middle_name,
                     'last_name' => $request->last_name,
-                    'name' => $fullName,
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                 ]);
@@ -46,7 +45,7 @@ class InstituteRepresentativeController extends Controller
                     $user->addMedia($request->avatar)->toMediaCollection('avatar');
                 }
 
-                $role = Role::findByName('Institute Representative');
+                $role = Role::findByName('Institute Representative', 'institute');
                 $user->assignRole($role);
 
                 InstituteRepresentative::create([

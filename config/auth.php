@@ -40,6 +40,27 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        /*
+         * Client portals (Tailwind / clients_theme dashboards). Same users table; Spatie roles
+         * use matching guard_name on the roles table — see RolesTableSeeder.
+         */
+        'student' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'landlord' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'agent' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'institute' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
     ],
 
     /*

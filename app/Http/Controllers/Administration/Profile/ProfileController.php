@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Support\SystemRoles;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Administration\Profile\ProfileUpdateRequest;
 use App\Http\Requests\Administration\Profile\Security\PasswordUpdateRequest;
@@ -51,7 +52,7 @@ class ProfileController extends Controller
     }
 
     public function edit() {
-        $roles = Role::all();
+        $roles = SystemRoles::administrationRolesQuery(Auth::user())->get();
         $user = Auth::user();
 
         return view('administration.profile.edit', compact(['roles', 'user']));
@@ -81,8 +82,8 @@ class ProfileController extends Controller
                 }
 
                 if(isset($request->role_id)) {
-                    // Sync the user's role
                     $role = Role::findOrFail($request->role_id);
+                    $this->authorize('view', $role);
                     $user->syncRoles([$role]);
                 }
             }, 5);

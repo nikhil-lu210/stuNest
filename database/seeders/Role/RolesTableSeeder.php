@@ -4,133 +4,51 @@ namespace Database\Seeders\Role;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RolesTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Administration / Vuexy (guard: web) vs client portals (dedicated guards).
      */
     public function run(): void
     {
-        $roles = [
-            'Developer',
-            'Super Admin',
-            'Admin',
-            'HR Manager',
-            'Team Leader',
-            'Employee',
-            'Institute Representative',
+        $definitions = [
+            [
+                'name' => 'Developer',
+                'guard' => 'web',
+                'permissions' => [
+                    'Permission Create', 'Permission Read', 'Permission Update', 'Permission Delete',
+                    'Role Create', 'Role Read', 'Role Update', 'Role Delete',
+                    'User Create', 'User Read', 'User Update', 'User Delete',
+                    'Institute Create', 'Institute Read', 'Institute Update', 'Institute Delete',
+                    'Geography Create', 'Geography Read', 'Geography Update', 'Geography Delete',
+                ],
+            ],
+            [
+                'name' => 'Super Admin',
+                'guard' => 'web',
+                'permissions' => [
+                    'Permission Create', 'Permission Read', 'Permission Update', 'Permission Delete',
+                    'Role Create', 'Role Read', 'Role Update', 'Role Delete',
+                    'User Create', 'User Read', 'User Update', 'User Delete',
+                    'Institute Create', 'Institute Read', 'Institute Update', 'Institute Delete',
+                    'Geography Create', 'Geography Read', 'Geography Update', 'Geography Delete',
+                ],
+            ],
+            ['name' => 'Institute Representative', 'guard' => 'institute', 'permissions' => []],
+            ['name' => 'Student', 'guard' => 'student', 'permissions' => []],
+            ['name' => 'Landlord', 'guard' => 'landlord', 'permissions' => []],
+            ['name' => 'Agent', 'guard' => 'agent', 'permissions' => []],
         ];
 
-        foreach ($roles as $role) {
-            Role::create(['name' => $role]);
+        foreach ($definitions as $def) {
+            $roleInstance = Role::firstOrCreate(
+                ['name' => $def['name'], 'guard_name' => $def['guard']],
+            );
 
-            // Assign permissions to roles based on the module
-            if ($role === 'Developer') {
-                $permissions = [
-                    'Permission Create',
-                    'Permission Read',
-                    'Permission Update',
-                    'Permission Delete',
-                    
-                    'Role Create',
-                    'Role Read',
-                    'Role Update',
-                    'Role Delete',
-                    
-                    'User Create',
-                    'User Read',
-                    'User Update',
-                    'User Delete',
-
-                    'Institute Create',
-                    'Institute Read',
-                    'Institute Update',
-                    'Institute Delete',
-
-                    'Geography Create',
-                    'Geography Read',
-                    'Geography Update',
-                    'Geography Delete',
-                ];
-            } elseif ($role === 'Super Admin') {
-                $permissions = [
-                    'Permission Create',
-                    'Permission Read',
-                    'Permission Update',
-                    'Permission Delete',
-                    
-                    'Role Create',
-                    'Role Read',
-                    'Role Update',
-                    'Role Delete',
-                    
-                    'User Create',
-                    'User Read',
-                    'User Update',
-                    'User Delete',
-
-                    'Institute Create',
-                    'Institute Read',
-                    'Institute Update',
-                    'Institute Delete',
-
-                    'Geography Create',
-                    'Geography Read',
-                    'Geography Update',
-                    'Geography Delete',
-                ];
-            } elseif ($role === 'Admin') {
-                $permissions = [
-                    'Permission Read',
-                    
-                    'Role Read',
-                    
-                    'User Create',
-                    'User Read',
-                    'User Update',
-                    'User Delete',
-
-                    'Institute Create',
-                    'Institute Read',
-                    'Institute Update',
-                    'Institute Delete',
-
-                    'Geography Create',
-                    'Geography Read',
-                    'Geography Update',
-                    'Geography Delete',
-                ];
-            } elseif ($role === 'HR Manager') {
-                $permissions = [
-                    'Permission Read',
-                    
-                    'Role Read',
-                    
-                    'User Create',
-                    'User Read',
-                    'User Update',
-                ];
-            } elseif ($role === 'Team Leader') {
-                $permissions = [
-                    'User Read',
-                ];
-            } elseif ($role === 'Employee') {
-                $permissions = [
-                    'User Read',
-                ];
-            } elseif ($role === 'Institute Representative') {
-                $permissions = [];
-            } else {
-                $permissions = [
-                    'User Read',
-                ];
-            }
-
-            $roleInstance = Role::findByName($role);
+            $permissions = $def['permissions'];
             if ($permissions !== []) {
-                $roleInstance->givePermissionTo($permissions);
+                $roleInstance->syncPermissions($permissions);
             }
         }
     }

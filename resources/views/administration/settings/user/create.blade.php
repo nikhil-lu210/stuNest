@@ -7,11 +7,6 @@
 
 @section('page_title', __('Create New User'))
 
-@section('css_links')
-    {{--  External CSS  --}}
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
-@endsection
-
 @section('custom_css')
     {{--  External CSS  --}}
     <style>
@@ -46,7 +41,7 @@
                 <h5 class="mb-0">Create New User</h5>
         
                 <div class="card-header-elements ms-auto">
-                    <a href="{{ route('administration.settings.user.index') }}" class="btn btn-sm btn-primary">
+                    <a href="{{ route('administration.users.index') }}" class="btn btn-sm btn-primary">
                         <span class="tf-icon ti ti-circle ti-xs me-1"></span>
                         All Users
                     </a>
@@ -177,7 +172,6 @@
 
 @section('script_links')
     {{--  External Javascript Links --}}
-    <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
     <script src="{{asset('assets/js/form-layouts.js')}}"></script>
 @endsection
 

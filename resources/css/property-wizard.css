@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Select2 — align with Tailwind wizard (zinc / indigo) */
+.select2-container {
+    z-index: 10050;
+}
+
+.select2-container--default .select2-selection--single {
+    height: auto;
+    min-height: 2.625rem;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border-radius: 1rem;
+    border-color: #e4e4e7;
+    background-color: #fff;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.50rem;
+    padding-left: 0;
+    color: #18181b;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    right: 0.5rem;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 1px #6366f1;
+}
+
+.select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #fafafa;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.select2-dropdown {
+    border-radius: 1rem;
+    border-color: #e4e4e7;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #4f46e5;
+}
+

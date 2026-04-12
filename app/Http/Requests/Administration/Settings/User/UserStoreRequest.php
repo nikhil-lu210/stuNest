@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Administration\Settings\User;
 
+use App\Support\SystemRoles;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Spatie\Permission\Models\Role;
 
 class UserStoreRequest extends FormRequest
 {
@@ -45,6 +47,19 @@ class UserStoreRequest extends FormRequest
             'last_name' => ['required', 'string'],
             'email' => ['required', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role_id' => [
+                'required',
+                'integer',
+                Rule::exists('roles', 'id')->where(function ($query) {
+                    $query->where('guard_name', SystemRoles::WEB_GUARD);
+                }),
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $role = Role::query()->find($value);
+                    if ($role && SystemRoles::isDeveloperRole($role) && ! SystemRoles::viewerIsDeveloper($this->user())) {
+                        $fail(__('Invalid role.'));
+                    }
+                },
+            ],
         ];
     }
 

@@ -21,46 +21,29 @@ class UsersTableSeeder extends Seeder
             'userid' => strtoupper(Str::random(8)),
             'first_name' => 'Demo',
             'last_name' => 'Developer',
-            'name' => 'Demo Developer',
             'email' => 'developer@mail.com',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ]);
         // Assign a role to the developer
-        $developerRole = Role::findByName('Developer');
+        $developerRole = Role::findByName('Developer', 'web');
         $developer->assignRole($developerRole);
-        
-        
+        $developer->forceFill(['developer_anchor' => true])->saveQuietly();
+
         // Create a superAdmin
         $superAdmin = User::create([
             'userid' => strtoupper(Str::random(8)),
             'first_name' => 'Demo',
             'last_name' => 'Super Admin',
-            'name' => 'Demo Super Admin',
             'email' => 'superadmin@mail.com',
             'password' => Hash::make('12345678'),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ]);
         // Assign a role to the superAdmin
-        $superAdminRole = Role::findByName('Super Admin');
+        $superAdminRole = Role::findByName('Super Admin', 'web');
         $superAdmin->assignRole($superAdminRole);
-        
-        
-        // Create a admin
-        $admin = User::create([
-            'userid' => strtoupper(Str::random(8)),
-            'first_name' => 'Demo',
-            'last_name' => 'Admin',
-            'name' => 'Demo Admin',
-            'email' => 'admin@mail.com',
-            'password' => Hash::make('12345678'),
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(10),
-        ]);
-        // Assign a role to the admin
-        $adminRole = Role::findByName('Admin');
-        $admin->assignRole($adminRole);
+        $superAdmin->forceFill(['super_admin_anchor' => true])->saveQuietly();
     }
 }

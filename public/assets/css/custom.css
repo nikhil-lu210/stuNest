@@ -1,3 +1,10 @@
+/* Select2 — rendered label line height (override theme + vendor; all single-select) */
+.light-style .select2-container--default .select2-selection--single .select2-selection__rendered,
+.dark-style .select2-container--default .select2-selection--single .select2-selection__rendered,
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 1.50rem;
+}
+
 .menu-vertical .menu-sub {
     margin-left: 10px;
 }

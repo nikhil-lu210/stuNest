@@ -18,7 +18,9 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/custom_css/jquery-confirm/jquery-confirm.min.css') }}">
 
-{{-- custom css --}}
+<link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+
+{{-- custom css (after vendors so app overrides apply) --}}
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
 
 <!-- Page CSS -->

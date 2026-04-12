@@ -7,6 +7,9 @@ export default defineConfig({
             input: [
                 'resources/sass/app.scss',
                 'resources/js/app.js',
+                'resources/js/property-wizard.js',
+                'resources/js/admin-create-user.js',
+                'resources/js/admin-select2.js',
             ],
             refresh: true,
         }),

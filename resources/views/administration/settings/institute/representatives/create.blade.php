@@ -2,10 +2,6 @@
 
 @section('page_title', __('Add Institute Representative'))
 
-@section('css_links')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-@endsection
-
 @section('page_name')
     <b class="text-uppercase">{{ __('Add Institute Representative') }}</b>
 @endsection
@@ -38,7 +34,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-12">
                             <label class="form-label">{{ __('Branch') }} <strong class="text-danger">*</strong></label>
-                            <select name="institute_location_id" class="form-select @error('institute_location_id') is-invalid @enderror" required>
+                            <select name="institute_location_id" class="form-select @error('institute_location_id') is-invalid @enderror" data-placeholder="{{ __('Select branch') }}" data-min-search-options="8" required>
                                 <option value="" disabled {{ old('institute_location_id') ? '' : 'selected' }}>{{ __('Select branch') }}</option>
                                 @foreach ($institute->locations as $loc)
                                     <option value="{{ $loc->id }}" @selected(old('institute_location_id') == $loc->id)>{{ $loc->name }}</option>
@@ -136,10 +132,6 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('script_links')
-    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 @endsection
 
 @section('custom_script')

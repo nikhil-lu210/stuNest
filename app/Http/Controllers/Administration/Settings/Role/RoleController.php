@@ -8,6 +8,7 @@ use App\Models\PermissionModule;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Support\SystemRoles;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Administration\Settings\Role\RoleStoreRequest;
 use App\Http\Requests\Administration\Settings\Role\RoleUpdateRequest;
@@ -64,6 +65,8 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $this->authorize('view', $role);
+
         $permissionModules = PermissionModule::whereHas('permissions.roles', function ($query) use ($role) {
             $query->where('name', $role->name);
         })->with(['permissions' => function ($query) use ($role) {
@@ -81,6 +84,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $this->authorize('update', $role);
+
         $modules = PermissionModule::with(['permissions'])->get();
         // dd($modules);
         return view('administration.settings.role.edit', compact(['modules', 'role']));
@@ -91,7 +96,8 @@ class RoleController extends Controller
      */
     public function update(RoleUpdateRequest $request, Role $role)
     {
-        // dd($request->all(), $role);
+        $this->authorize('update', $role);
+
         try {
             DB::transaction(function() use ($request, $role) {
                 $role->update([
@@ -119,6 +125,15 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        dd($role);
+        $this->authorize('delete', $role);
+
+        try {
+            $role->delete();
+            toast(__('Role has been removed.'), 'success');
+        } catch (\RuntimeException $e) {
+            toast($e->getMessage(), 'error');
+        }
+
+        return redirect()->back();
     }
 }

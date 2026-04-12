@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Administration\Profile;
 
+use App\Support\SystemRoles;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Spatie\Permission\Models\Role;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -23,7 +25,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         $id = auth()->user()->id;
-        return [
+        $rules = [
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'first_name' => ['required', 'string'],
             'middle_name' => ['nullable', 'string'],
@@ -34,6 +36,34 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique('users')->ignore($id)
             ],
         ];
+
+        if (auth()->user()->hasRole(['Developer', 'Super Admin'])) {
+            $rules['role_id'] = [
+                'required',
+                'integer',
+                Rule::exists('roles', 'id')->where(function ($query) {
+                    $query->where('guard_name', SystemRoles::WEB_GUARD);
+                }),
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $role = Role::query()->find($value);
+                    $subject = auth()->user();
+                    if (! $role || ! $subject) {
+                        return;
+                    }
+                    if (SystemRoles::isDeveloperRole($role) && ! SystemRoles::viewerIsDeveloper($subject)) {
+                        $fail(__('Invalid role.'));
+                    }
+                    if ($subject->developer_anchor && ! SystemRoles::isDeveloperRole($role)) {
+                        $fail(__('This user\'s role cannot be changed.'));
+                    }
+                    if ($subject->super_admin_anchor && ! SystemRoles::isSuperAdminRole($role)) {
+                        $fail(__('This user\'s role cannot be changed.'));
+                    }
+                },
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages()

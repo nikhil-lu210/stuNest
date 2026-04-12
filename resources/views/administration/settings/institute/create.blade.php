@@ -2,10 +2,6 @@
 
 @section('page_title', __('Register Institute'))
 
-@section('css_links')
-    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
-@endsection
-
 @section('page_name')
     <b class="text-uppercase">{{ __('Register Institute') }}</b>
 @endsection
@@ -72,7 +68,7 @@
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label class="form-label">{{ __('Country') }} <strong class="text-danger">*</strong></label>
-                                        <select name="locations[{{ $i }}][country_id]" class="form-select geo-country" data-placeholder="{{ __('Select country') }}" required>
+                                        <select name="locations[{{ $i }}][country_id]" class="form-select geo-country geo-managed" data-placeholder="{{ __('Select country') }}" required>
                                             <option value="">{{ __('Select country') }}</option>
                                             @foreach ($countries as $c)
                                                 <option value="{{ $c->id }}" @selected((string)($loc['country_id'] ?? '') === (string)$c->id)>{{ $c->name }} ({{ $c->iso_code }})</option>
@@ -81,11 +77,11 @@
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label class="form-label">{{ __('City') }} <strong class="text-danger">*</strong></label>
-                                        <select name="locations[{{ $i }}][city_id]" class="form-select geo-city" data-placeholder="{{ __('Select city') }}" required></select>
+                                        <select name="locations[{{ $i }}][city_id]" class="form-select geo-city geo-managed" data-placeholder="{{ __('Select city') }}" required></select>
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label class="form-label">{{ __('Area') }} <strong class="text-danger">*</strong></label>
-                                        <select name="locations[{{ $i }}][area_id]" class="form-select geo-area" data-placeholder="{{ __('Select area') }}" required></select>
+                                        <select name="locations[{{ $i }}][area_id]" class="form-select geo-area geo-managed" data-placeholder="{{ __('Select area') }}" required></select>
                                     </div>
                                     <div class="mb-3 col-md-4 d-flex align-items-end">
                                         <div class="form-check w-100">
@@ -130,7 +126,7 @@
             </div>
             <div class="mb-3 col-md-4">
                 <label class="form-label">{{ __('Country') }} <strong class="text-danger">*</strong></label>
-                <select name="locations[__INDEX__][country_id]" class="form-select geo-country" required>
+                <select name="locations[__INDEX__][country_id]" class="form-select geo-country geo-managed" required>
                     <option value="">{{ __('Select country') }}</option>
                     @foreach ($countries as $c)
                         <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->iso_code }})</option>
@@ -139,11 +135,11 @@
             </div>
             <div class="mb-3 col-md-4">
                 <label class="form-label">{{ __('City') }} <strong class="text-danger">*</strong></label>
-                <select name="locations[__INDEX__][city_id]" class="form-select geo-city" required></select>
+                <select name="locations[__INDEX__][city_id]" class="form-select geo-city geo-managed" required></select>
             </div>
             <div class="mb-3 col-md-4">
                 <label class="form-label">{{ __('Area') }} <strong class="text-danger">*</strong></label>
-                <select name="locations[__INDEX__][area_id]" class="form-select geo-area" required></select>
+                <select name="locations[__INDEX__][area_id]" class="form-select geo-area geo-managed" required></select>
             </div>
             <div class="mb-3 col-md-4 d-flex align-items-end">
                 <div class="form-check w-100">
@@ -165,10 +161,6 @@
         </div>
     </div>
 </template>
-@endsection
-
-@section('script_links')
-    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 @endsection
 
 @section('custom_script')

@@ -7,11 +7,6 @@
 
 @section('page_title', __('Update Profile'))
 
-@section('css_links')
-    {{--  External CSS  --}}
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
-@endsection
-
 @section('custom_css')
     {{--  External CSS  --}}
     <style>
@@ -158,7 +153,6 @@
 
 @section('script_links')
     {{--  External Javascript Links --}}
-    <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
     <script src="{{asset('assets/js/form-layouts.js')}}"></script>
 @endsection
 

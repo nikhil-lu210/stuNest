@@ -16,152 +16,163 @@
     <div class="menu-inner-shadow"></div>
 
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ request()->is('administration/dashboard*') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('administration.dashboard.*') ? 'active' : '' }}">
             <a href="{{ route('administration.dashboard.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboard">Dashboard</div>
+                <div data-i18n="Dashboard">{{ __('Dashboard') }}</div>
             </a>
         </li>
 
-        <!-- Settings -->
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Settings</span>
+        <li class="menu-item {{ request()->routeIs('administration.properties.*') ? 'active open' : '' }}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-home-plus"></i>
+                <div data-i18n="Property Listings">{{ __('Property listings') }}</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('administration.properties.pending') ? 'active' : '' }}">
+                    <a href="{{ route('administration.properties.pending') }}" class="menu-link">{{ __('Pending review') }}</a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('administration.properties.live') ? 'active' : '' }}">
+                    <a href="{{ route('administration.properties.live') }}" class="menu-link">{{ __('Live properties') }}</a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('administration.properties.rented') ? 'active' : '' }}">
+                    <a href="{{ route('administration.properties.rented') }}" class="menu-link">{{ __('Rented') }}</a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('administration.properties.drafts_archived') ? 'active' : '' }}">
+                    <a href="{{ route('administration.properties.drafts_archived') }}" class="menu-link">{{ __('Drafts / archived') }}</a>
+                </li>
+                @can('create', \App\Models\Property\Property::class)
+                    <li class="menu-item {{ request()->routeIs('administration.properties.create') ? 'active' : '' }}">
+                        <a href="{{ route('administration.properties.create') }}" class="menu-link">{{ __('Create listing') }}</a>
+                    </li>
+                @endcan
+            </ul>
         </li>
 
-        <!-- User Management -->
-        @canany (['User Create', 'User Read']) 
-            <li class="menu-item {{ request()->is('administration/settings/user*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('administration.tenancies.*') ? 'active' : '' }}">
+            <a href="{{ route('administration.tenancies.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-file-check"></i>
+                <div data-i18n="Tenancies & Applications">{{ __('Tenancies & applications') }}</div>
+            </a>
+        </li>
+
+        @canany (['User Create', 'User Read'])
+            <li class="menu-item {{ request()->routeIs('administration.users.*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons ti ti-user-shield"></i>
-                    <div data-i18n="User Management">User Management</div>
+                    <i class="menu-icon tf-icons ti ti-users"></i>
+                    <div data-i18n="Administration">{{ __('Administration') }}</div>
                 </a>
                 <ul class="menu-sub">
-                    @can ('User Read') 
-                        <li class="menu-item {{ request()->is('administration/settings/user/all*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.user.index') }}" class="menu-link">All Users</a>
+                    @can ('User Read')
+                        <li class="menu-item {{ request()->routeIs('administration.users.index') ? 'active' : '' }}">
+                            <a href="{{ route('administration.users.index') }}" class="menu-link">{{ __('All Users') }}</a>
                         </li>
                     @endcan
                     @can ('User Create')
-                        <li class="menu-item {{ request()->is('administration/settings/user/create*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.user.create') }}" class="menu-link">Create New User</a>
+                        <li class="menu-item {{ request()->routeIs('administration.users.create') ? 'active' : '' }}">
+                            <a href="{{ route('administration.users.create') }}" class="menu-link">{{ __('Create administration user') }}</a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+
+            <li class="menu-item {{ request()->routeIs('administration.landlords.*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-building-community"></i>
+                    <div data-i18n="Landlord">{{ __('Landlord') }}</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('User Read')
+                        <li class="menu-item {{ request()->routeIs('administration.landlords.index') ? 'active' : '' }}">
+                            <a href="{{ route('administration.landlords.index') }}" class="menu-link">{{ __('All Landlords') }}</a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('administration.landlords.pending') ? 'active' : '' }}">
+                            <a href="{{ route('administration.landlords.pending') }}" class="menu-link">{{ __('Pending Landlords') }}</a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('administration.landlords.rejected') ? 'active' : '' }}">
+                            <a href="{{ route('administration.landlords.rejected') }}" class="menu-link">{{ __('Rejected Landlords') }}</a>
+                        </li>
+                    @endcan
+                    @can ('User Create')
+                        <li class="menu-item {{ request()->routeIs('administration.landlords.create') ? 'active' : '' }}">
+                            <a href="{{ route('administration.landlords.create') }}" class="menu-link">{{ __('Create New Landlord') }}</a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+
+            <li class="menu-item {{ request()->routeIs('administration.agents.*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-briefcase"></i>
+                    <div data-i18n="Agent">{{ __('Agent') }}</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('User Read')
+                        <li class="menu-item {{ request()->routeIs('administration.agents.index') ? 'active' : '' }}">
+                            <a href="{{ route('administration.agents.index') }}" class="menu-link">{{ __('All Agents') }}</a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('administration.agents.pending') ? 'active' : '' }}">
+                            <a href="{{ route('administration.agents.pending') }}" class="menu-link">{{ __('Pending Agents') }}</a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('administration.agents.rejected') ? 'active' : '' }}">
+                            <a href="{{ route('administration.agents.rejected') }}" class="menu-link">{{ __('Rejected Agents') }}</a>
+                        </li>
+                    @endcan
+                    @can ('User Create')
+                        <li class="menu-item {{ request()->routeIs('administration.agents.create') ? 'active' : '' }}">
+                            <a href="{{ route('administration.agents.create') }}" class="menu-link">{{ __('Create New Agent') }}</a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+
+            <li class="menu-item {{ request()->routeIs('administration.students.*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-school"></i>
+                    <div data-i18n="Student">{{ __('Student') }}</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('User Read')
+                        <li class="menu-item {{ request()->routeIs('administration.students.index') ? 'active' : '' }}">
+                            <a href="{{ route('administration.students.index') }}" class="menu-link">{{ __('All Students') }}</a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('administration.students.unverified') ? 'active' : '' }}">
+                            <a href="{{ route('administration.students.unverified') }}" class="menu-link">{{ __('Unverified Students') }}</a>
+                        </li>
+                    @endcan
+                    @can ('User Create')
+                        <li class="menu-item {{ request()->routeIs('administration.students.create') ? 'active' : '' }}">
+                            <a href="{{ route('administration.students.create') }}" class="menu-link">{{ __('Create New Student') }}</a>
                         </li>
                     @endcan
                 </ul>
             </li>
         @endcanany
 
-        <!-- Institutions -->
-        @canany (['Institute Create', 'Institute Read'])
-            <li class="menu-item {{ request()->is('administration/settings/institute*') ? 'active open' : '' }}">
+        @canany (['Institute Create', 'Institute Read', 'Geography Read', 'Geography Create', 'Permission Create', 'Permission Read', 'Role Create', 'Role Read'])
+            <li class="menu-item {{ request()->is('administration/settings/institute*') || request()->is('administration/settings/geography*') || request()->is('administration/settings/rolepermission*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons ti ti-building-community"></i>
-                    <div data-i18n="Institutions">Institutions</div>
+                    <i class="menu-icon tf-icons ti ti-settings"></i>
+                    <div>{{ __('System settings') }}</div>
                 </a>
                 <ul class="menu-sub">
                     @can ('Institute Read')
-                        <li class="menu-item {{ request()->is('administration/settings/institute/all*') || request()->is('administration/settings/institute/show*') || request()->is('administration/settings/institute/edit*') || request()->is('administration/settings/institute/*/representatives*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.institute.index') }}" class="menu-link">{{ __('All Institutes') }}</a>
+                        <li class="menu-item {{ request()->is('administration/settings/institute*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.settings.institute.index') }}" class="menu-link">{{ __('Institutions') }}</a>
                         </li>
                     @endcan
-                    @can ('Institute Create')
-                        <li class="menu-item {{ request()->is('administration/settings/institute/create*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.institute.create') }}" class="menu-link">{{ __('Register Institute') }}</a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcanany
-
-        <!-- Geography -->
-        @canany (['Geography Read', 'Geography Create'])
-            <li class="menu-item {{ request()->is('administration/settings/geography*') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons ti ti-world"></i>
-                    <div data-i18n="Geography">{{ __('Geography') }}</div>
-                </a>
-                <ul class="menu-sub">
                     @can ('Geography Read')
-                        <li class="menu-item {{ request()->is('administration/settings/geography') || request()->is('administration/settings/geography/countries*') || request()->is('administration/settings/geography/cities*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.geography.index') }}" class="menu-link">{{ __('Data & import') }}</a>
+                        <li class="menu-item {{ request()->is('administration/settings/geography*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.settings.geography.index') }}" class="menu-link">{{ __('Geography') }}</a>
                         </li>
                     @endcan
-                </ul>
-            </li>
-        @endcanany
-        
-        <!-- Role & Permission -->
-        @canany (['Permission Create', 'Permission Read', 'Role Create', 'Role Read'])
-            <li class="menu-item {{ request()->is('administration/settings/rolepermission*') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons ti ti-lock"></i>
-                    <div data-i18n="Role & Permission">Role & Permission</div>
-                </a>
-                <ul class="menu-sub">
-                    @canany (['Role Create', 'Role Read'])
-                        <li class="menu-item {{ request()->is('administration/settings/rolepermission/role*') ? 'active open' : '' }}">
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <div data-i18n="Role">Role</div>
-                            </a>
-                            <ul class="menu-sub">
-                                @can ('Role Read') 
-                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/role/all*') ? 'active' : '' }}">
-                                        <a href="{{ route('administration.settings.rolepermission.role.index') }}" class="menu-link">
-                                            <div data-i18n="All Roles">All Roles</div>
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can ('Role Create') 
-                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/role/create') ? 'active' : '' }}">
-                                        <a href="{{ route('administration.settings.rolepermission.role.create') }}" class="menu-link">
-                                            <div data-i18n="Create Role">Create Role</div>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcanany
-                    
-                    @canany (['Permission Create', 'Permission Read'])
-                        <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission*') ? 'active open' : '' }}">
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <div data-i18n="Permissions">Permissions</div>
-                            </a>
-                            <ul class="menu-sub">
-                                @can ('Permission Read') 
-                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission/all*') ? 'active' : '' }}">
-                                        <a href="{{ route('administration.settings.rolepermission.permission.index') }}" class="menu-link">
-                                            <div data-i18n="All Permission">All Permission</div>
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can ('Permission Create') 
-                                    <li class="menu-item {{ request()->is('administration/settings/rolepermission/permission/create*') ? 'active' : '' }}">
-                                        <a href="{{ route('administration.settings.rolepermission.permission.create') }}" class="menu-link">
-                                            <div data-i18n="Create Permission">Create Permission</div>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
+                    @canany (['Role Read', 'Permission Read'])
+                        <li class="menu-item {{ request()->is('administration/settings/rolepermission*') ? 'active' : '' }}">
+                            <a href="{{ auth()->user()->can('Role Read') ? route('administration.settings.rolepermission.role.index') : route('administration.settings.rolepermission.permission.index') }}" class="menu-link">{{ __('Roles & permissions') }}</a>
                         </li>
                     @endcanany
                 </ul>
             </li>
         @endcanany
-        
-        <!-- Shortcuts -->
-        <li class="menu-item {{ request()->is('administration/shortcuts*') ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons ti ti-share-3"></i>
-                <div data-i18n="Shortcuts">Shortcuts</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->is('administration/shortcut') ? 'active' : '' }}">
-                    <a href="#" class="menu-link">My Shortcuts</a>
-                </li>
-                <li class="menu-item {{ request()->is('administration/shortcuts/create*') ? 'active' : '' }}">
-                    <a href="#" class="menu-link">Add Shortcut</a>
-                </li>
-            </ul>
-        </li>
     </ul>
 </aside>

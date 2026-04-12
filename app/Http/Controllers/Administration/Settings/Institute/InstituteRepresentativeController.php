@@ -14,6 +14,26 @@ use App\Http\Requests\Administration\Settings\Institute\InstituteRepresentativeS
 
 class InstituteRepresentativeController extends Controller
 {
+    public function index()
+    {
+        $representatives = InstituteRepresentative::query()
+            ->with(['institute', 'location', 'user'])
+            ->orderByDesc('id')
+            ->get();
+
+        return view('administration.settings.institute.representatives.index', compact('representatives'));
+    }
+
+    /**
+     * Choose an institute, then continue to the per-institute representative create form.
+     */
+    public function createEntry()
+    {
+        $institutes = Institute::query()->orderBy('name')->get();
+
+        return view('administration.settings.institute.representatives.create-entry', compact('institutes'));
+    }
+
     public function create(Institute $institute)
     {
         $institute->load([
@@ -57,7 +77,7 @@ class InstituteRepresentativeController extends Controller
 
             toast('Institute representative has been created.', 'success');
 
-            return redirect()->route('administration.settings.institute.show', $institute);
+            return redirect()->route('administration.institute.show', $institute);
         } catch (Exception $e) {
             alert('Error.', $e->getMessage(), 'error');
 
@@ -85,6 +105,6 @@ class InstituteRepresentativeController extends Controller
             alert('Error.', $e->getMessage(), 'error');
         }
 
-        return redirect()->route('administration.settings.institute.show', $institute);
+        return redirect()->route('administration.institute.show', $institute);
     }
 }

@@ -7,8 +7,8 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item">{{ __('Institutions') }}</li>
-    <li class="breadcrumb-item"><a href="{{ route('administration.settings.institute.show', $institute) }}">{{ $institute->name }}</a></li>
+    <li class="breadcrumb-item">{{ __('Institute') }}</li>
+    <li class="breadcrumb-item"><a href="{{ route('administration.institute.show', $institute) }}">{{ $institute->name }}</a></li>
     <li class="breadcrumb-item active">{{ __('Edit') }}</li>
 @endsection
 
@@ -48,14 +48,14 @@
             <div class="card-header header-elements">
                 <h5 class="mb-0">{{ __('Edit Institute') }}</h5>
                 <div class="card-header-elements ms-auto">
-                    <a href="{{ route('administration.settings.institute.show', $institute) }}" class="btn btn-sm btn-primary">
+                    <a href="{{ route('administration.institute.show', $institute) }}" class="btn btn-sm btn-primary">
                         <span class="tf-icon ti ti-arrow-left ti-xs me-1"></span>
                         {{ __('Back') }}
                     </a>
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('administration.settings.institute.update', $institute) }}" method="post" autocomplete="off">
+                <form action="{{ route('administration.institute.update', $institute) }}" method="post" autocomplete="off">
                     @csrf
                     <div class="row">
                         <div class="mb-3 col-md-6">

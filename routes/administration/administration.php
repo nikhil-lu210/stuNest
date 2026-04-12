@@ -20,6 +20,17 @@ Route::prefix('administration')
             // Profile
             include_once 'profile/profile.php';
 
+            // Legacy institute URLs (bookmarks): /administration/settings/institute/... → /administration/institute/...
+            Route::get('settings/institute', function () {
+                return redirect()->route('administration.institute.index', [], 301);
+            });
+            Route::get('settings/institute/{path}', function (string $path) {
+                return redirect('/administration/institute/'.$path, 301);
+            })->where('path', '.*');
+
+            // Institute (URL: /administration/institute/... — not under /settings)
+            include_once 'institute/institute.php';
+
             // settings
             include_once 'settings/settings.php';
 

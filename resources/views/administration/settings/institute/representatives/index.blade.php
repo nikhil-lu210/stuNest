@@ -3,25 +3,20 @@
 @section('meta_tags')
 @endsection
 
-@section('page_title', __('Institutes'))
+@section('page_title', __('All Representatives'))
 
 @section('css_links')
     <link href="{{ asset('assets/css/custom_css/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/custom_css/datatables/datatable.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
-@section('custom_css')
-    <style>
-    </style>
-@endsection
-
 @section('page_name')
-    <b class="text-uppercase">{{ __('All Institutes') }}</b>
+    <b class="text-uppercase">{{ __('All Representatives') }}</b>
 @endsection
 
 @section('breadcrumb')
     <li class="breadcrumb-item">{{ __('Institute') }}</li>
-    <li class="breadcrumb-item active">{{ __('All Institutes') }}</li>
+    <li class="breadcrumb-item active">{{ __('All Representatives') }}</li>
 @endsection
 
 @section('content')
@@ -29,12 +24,12 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header header-elements">
-                <h5 class="mb-0">{{ __('All Institutes') }}</h5>
+                <h5 class="mb-0">{{ __('All Representatives') }}</h5>
                 <div class="card-header-elements ms-auto">
-                    @can('Institute Create')
-                        <a href="{{ route('administration.institute.create') }}" class="btn btn-sm btn-primary">
+                    @can('Institute Update')
+                        <a href="{{ route('administration.institute.representatives.create.entry') }}" class="btn btn-sm btn-primary">
                             <span class="tf-icon ti ti-plus ti-xs me-1"></span>
-                            {{ __('Create Institute') }}
+                            {{ __('Create New Representative') }}
                         </a>
                     @endcan
                 </div>
@@ -44,29 +39,33 @@
                     <thead>
                         <tr>
                             <th>{{ __('Sl.') }}</th>
+                            <th>{{ __('Institute') }}</th>
+                            <th>{{ __('Branch') }}</th>
                             <th>{{ __('Name') }}</th>
-                            <th>{{ __('Email code') }}</th>
-                            <th>{{ __('Branches') }}</th>
-                            <th>{{ __('Representatives') }}</th>
+                            <th>{{ __('Email') }}</th>
                             <th>{{ __('Action') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($institutes as $key => $institute)
+                        @foreach ($representatives as $key => $rep)
                             <tr>
-                                <th>#{{ serial($institutes, $key) }}</th>
-                                <td>{{ $institute->name }}</td>
-                                <td><code>{{ $institute->email_code }}</code></td>
-                                <td>{{ $institute->locations_count }}</td>
-                                <td>{{ $institute->representatives_count }}</td>
+                                <th>#{{ serial($representatives, $key) }}</th>
+                                <td>{{ $rep->institute?->name ?? '—' }}</td>
+                                <td>{{ $rep->location?->name ?? '—' }}</td>
+                                <td>{{ $rep->user?->name ?? '—' }}</td>
+                                <td>{{ $rep->user?->email ?? '—' }}</td>
                                 <td>
-                                    <a href="{{ route('administration.institute.show', $institute) }}" class="btn btn-sm btn-icon item-edit" data-bs-toggle="tooltip" title="{{ __('View') }}">
-                                        <i class="text-primary ti ti-info-hexagon"></i>
-                                    </a>
-                                    @can('Institute Update')
-                                        <a href="{{ route('administration.institute.edit', $institute) }}" class="btn btn-sm btn-icon" data-bs-toggle="tooltip" title="{{ __('Edit') }}">
-                                            <i class="text-primary ti ti-pencil"></i>
+                                    @if ($rep->institute)
+                                        <a href="{{ route('administration.institute.show', $rep->institute) }}" class="btn btn-sm btn-icon item-edit" data-bs-toggle="tooltip" title="{{ __('View institute') }}">
+                                            <i class="text-primary ti ti-info-hexagon"></i>
                                         </a>
+                                    @endif
+                                    @can('Institute Update')
+                                        @if ($rep->institute)
+                                            <a href="{{ route('administration.institute.representatives.destroy', [$rep->institute, $rep]) }}" class="btn btn-sm btn-label-danger confirm-danger">
+                                                {{ __('Remove') }}
+                                            </a>
+                                        @endif
                                     @endcan
                                 </td>
                             </tr>

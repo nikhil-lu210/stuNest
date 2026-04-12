@@ -55,7 +55,7 @@ class InstituteController extends Controller
 
             toast('Institute has been registered.', 'success');
 
-            return redirect()->route('administration.settings.institute.index');
+            return redirect()->route('administration.institute.index');
         } catch (Exception $e) {
             alert('Error.', $e->getMessage(), 'error');
 
@@ -148,7 +148,7 @@ class InstituteController extends Controller
 
             toast('Institute has been updated.', 'success');
 
-            return redirect()->route('administration.settings.institute.show', $institute);
+            return redirect()->route('administration.institute.show', $institute);
         } catch (Exception $e) {
             alert('Error.', $e->getMessage(), 'error');
 

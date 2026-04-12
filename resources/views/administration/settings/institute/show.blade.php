@@ -7,8 +7,8 @@
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item">{{ __('Institutions') }}</li>
-    <li class="breadcrumb-item"><a href="{{ route('administration.settings.institute.index') }}">{{ __('All Institutes') }}</a></li>
+    <li class="breadcrumb-item">{{ __('Institute') }}</li>
+    <li class="breadcrumb-item"><a href="{{ route('administration.institute.index') }}">{{ __('All Institutes') }}</a></li>
     <li class="breadcrumb-item active">{{ $institute->name }}</li>
 @endsection
 
@@ -20,12 +20,12 @@
                 <h5 class="mb-0">{{ __('Institute details') }}</h5>
                 <div class="card-header-elements ms-auto">
                     @can('Institute Update')
-                        <a href="{{ route('administration.settings.institute.edit', $institute) }}" class="btn btn-sm btn-primary me-1">
+                        <a href="{{ route('administration.institute.edit', $institute) }}" class="btn btn-sm btn-primary me-1">
                             <i class="ti ti-pencil me-1"></i>{{ __('Edit') }}
                         </a>
                     @endcan
                     @can('Institute Update')
-                        <a href="{{ route('administration.settings.institute.representatives.create', $institute) }}" class="btn btn-sm btn-label-primary">
+                        <a href="{{ route('administration.institute.representatives.create', $institute) }}" class="btn btn-sm btn-label-primary">
                             <i class="ti ti-user-plus me-1"></i>{{ __('Add representative') }}
                         </a>
                     @endcan
@@ -118,7 +118,7 @@
                                     <td>{{ $rep->user?->email }}</td>
                                     <td>
                                         @can('Institute Update')
-                                            <a href="{{ route('administration.settings.institute.representatives.destroy', [$institute, $rep]) }}" class="btn btn-sm btn-label-danger confirm-danger">
+                                            <a href="{{ route('administration.institute.representatives.destroy', [$institute, $rep]) }}" class="btn btn-sm btn-label-danger confirm-danger">
                                                 {{ __('Remove') }}
                                             </a>
                                         @endcan

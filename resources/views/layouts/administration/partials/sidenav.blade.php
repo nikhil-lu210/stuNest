@@ -56,6 +56,46 @@
             </a>
         </li>
 
+        @canany (['Institute Read', 'Institute Create', 'Institute Update'])
+            <li class="menu-item {{ request()->routeIs('administration.institute.*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-books"></i>
+                    <div data-i18n="Institute">{{ __('Institute') }}</div>
+                </a>
+                <ul class="menu-sub">
+                    @can ('Institute Read')
+                        <li class="menu-item {{ request()->is('administration/institute/all*') ? 'active' : '' }}">
+                            <a href="{{ route('administration.institute.index') }}" class="menu-link">{{ __('All Institutes') }}</a>
+                        </li>
+                    @endcan
+                    @can ('Institute Create')
+                        <li class="menu-item {{ request()->routeIs('administration.institute.create') ? 'active' : '' }}">
+                            <a href="{{ route('administration.institute.create') }}" class="menu-link">{{ __('Create Institute') }}</a>
+                        </li>
+                    @endcan
+                    @canany (['Institute Read', 'Institute Update'])
+                        <li class="menu-item {{ request()->routeIs('administration.institute.representatives.*') ? 'active open' : '' }}">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <div data-i18n="Representative">{{ __('Representative') }}</div>
+                            </a>
+                            <ul class="menu-sub">
+                                @can ('Institute Read')
+                                    <li class="menu-item {{ request()->routeIs('administration.institute.representatives.index') ? 'active' : '' }}">
+                                        <a href="{{ route('administration.institute.representatives.index') }}" class="menu-link">{{ __('All Representatives') }}</a>
+                                    </li>
+                                @endcan
+                                @can ('Institute Update')
+                                    <li class="menu-item {{ request()->routeIs(['administration.institute.representatives.create', 'administration.institute.representatives.create.entry']) ? 'active' : '' }}">
+                                        <a href="{{ route('administration.institute.representatives.create.entry') }}" class="menu-link">{{ __('Create New Representative') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcanany
+                </ul>
+            </li>
+        @endcanany
+
         @canany (['User Create', 'User Read'])
             <li class="menu-item {{ request()->routeIs('administration.users.*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -149,18 +189,13 @@
             </li>
         @endcanany
 
-        @canany (['Institute Create', 'Institute Read', 'Geography Read', 'Geography Create', 'Permission Create', 'Permission Read', 'Role Create', 'Role Read'])
-            <li class="menu-item {{ request()->is('administration/settings/institute*') || request()->is('administration/settings/geography*') || request()->is('administration/settings/rolepermission*') ? 'active open' : '' }}">
+        @canany (['Geography Read', 'Geography Create', 'Permission Create', 'Permission Read', 'Role Create', 'Role Read'])
+            <li class="menu-item {{ request()->is('administration/settings/geography*') || request()->is('administration/settings/rolepermission*') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-settings"></i>
                     <div>{{ __('System settings') }}</div>
                 </a>
                 <ul class="menu-sub">
-                    @can ('Institute Read')
-                        <li class="menu-item {{ request()->is('administration/settings/institute*') ? 'active' : '' }}">
-                            <a href="{{ route('administration.settings.institute.index') }}" class="menu-link">{{ __('Institutions') }}</a>
-                        </li>
-                    @endcan
                     @can ('Geography Read')
                         <li class="menu-item {{ request()->is('administration/settings/geography*') ? 'active' : '' }}">
                             <a href="{{ route('administration.settings.geography.index') }}" class="menu-link">{{ __('Geography') }}</a>

@@ -8,6 +8,7 @@ use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\GeographyImportService;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class GeographyController extends Controller
@@ -75,6 +76,69 @@ class GeographyController extends Controller
         return response()->download($path, 'geography-import-sample.json', [
             'Content-Type' => 'application/json',
         ]);
+    }
+
+    public function storeCountry(Request $request)
+    {
+        $validated = $request->validate([
+            'iso_code' => ['required', 'string', 'size:2', 'regex:/^[A-Za-z]{2}$/', 'unique:countries,iso_code'],
+            'name' => ['required', 'string', 'max:255'],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        Country::create([
+            'iso_code' => strtoupper($validated['iso_code']),
+            'name' => $validated['name'],
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        toast(__('Country added.'), 'success');
+
+        return redirect()->route('administration.settings.geography.index');
+    }
+
+    public function storeCity(Request $request, Country $country)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', Rule::unique('cities')->where('country_id', $country->id)],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        $nextOrder = (int) ($country->cities()->max('sort_order') ?? 0) + 1;
+        $sortOrder = $validated['sort_order'] ?? $nextOrder;
+
+        $country->cities()->create([
+            'name' => $validated['name'],
+            'sort_order' => $sortOrder,
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        toast(__('City added.'), 'success');
+
+        return redirect()->route('administration.settings.geography.countries.show', $country);
+    }
+
+    public function storeArea(Request $request, City $city)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', Rule::unique('areas')->where('city_id', $city->id)],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
+        ]);
+
+        $nextOrder = (int) ($city->areas()->max('sort_order') ?? 0) + 1;
+        $sortOrder = $validated['sort_order'] ?? $nextOrder;
+
+        $city->areas()->create([
+            'name' => $validated['name'],
+            'sort_order' => $sortOrder,
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        toast(__('Area added.'), 'success');
+
+        return redirect()->route('administration.settings.geography.cities.show', $city);
     }
 
     public function toggleCountry(Country $country)

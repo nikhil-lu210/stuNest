@@ -51,6 +51,13 @@
         <div class="card">
             <div class="card-header header-elements">
                 <h5 class="mb-0">{{ __('Countries') }}</h5>
+                @can('Geography Create')
+                    <div class="card-header-elements ms-auto">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addCountryModal">
+                            <i class="ti ti-plus me-1"></i>{{ __('Add country') }}
+                        </button>
+                    </div>
+                @endcan
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -93,7 +100,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted">{{ __('No countries yet. Import JSON or run the Cyprus seeder.') }}</td>
+                                    <td colspan="5" class="text-center text-muted">{{ __('No countries yet. Add one, import JSON, or run the Cyprus seeder.') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -103,4 +110,61 @@
         </div>
     </div>
 </div>
+
+@can('Geography Create')
+<div class="modal fade" id="addCountryModal" tabindex="-1" aria-labelledby="addCountryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCountryModalLabel">{{ __('Add country') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('Close') }}"></button>
+            </div>
+            <form method="post" action="{{ route('administration.settings.geography.countries.store') }}" autocomplete="off">
+                @csrf
+                <input type="hidden" name="_form" value="country">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="country_iso">{{ __('ISO code') }} <span class="text-danger">*</span></label>
+                        <input type="text" name="iso_code" id="country_iso" value="{{ old('iso_code') }}" class="form-control @error('iso_code') is-invalid @enderror" maxlength="2" required placeholder="{{ __('e.g. CY') }}" style="text-transform: uppercase;">
+                        @error('iso_code')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="country_name">{{ __('Name') }} <span class="text-danger">*</span></label>
+                        <input type="text" name="name" id="country_name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-check">
+                        <input type="hidden" name="is_active" value="0">
+                        <input class="form-check-input" type="checkbox" name="is_active" value="1" id="country_is_active" @checked(old('is_active', '1') == '1')>
+                        <label class="form-check-label" for="country_is_active">{{ __('Enabled') }}</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endcan
+@endsection
+
+@section('custom_script')
+@can('Geography Create')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    @if ($errors->any() && old('_form') === 'country')
+    var el = document.getElementById('addCountryModal');
+    if (el && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        new bootstrap.Modal(el).show();
+    }
+    @endif
+});
+</script>
+@endcan
 @endsection

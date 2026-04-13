@@ -91,21 +91,15 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('administration/settings/user/show/attendance*') ? 'active' : '' }}" href="{{ route('administration.settings.user.show.attendance', ['user' => $user]) }}">
-                    <i class="ti-xs ti ti-clock-dollar me-1"></i> 
-                    Attendance
+                <a class="nav-link {{ request()->is('administration/settings/user/show/applications*') ? 'active' : '' }}" href="{{ route('administration.settings.user.show.applications', ['user' => $user]) }}">
+                    <i class="ti-xs ti ti-file-text me-1"></i> 
+                    Applications
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('administration/settings/user/show/break*') ? 'active' : '' }}" href="{{ route('administration.settings.user.show.break', ['user' => $user]) }}">
-                    <i class="ti-xs ti ti-hourglass-empty me-1"></i> 
-                    Breaks
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ request()->is('administration/settings/user/show/task*') ? 'active' : '' }}" href="#">
-                    <i class="ti-xs ti ti-subtask me-1"></i> 
-                    Tasks
+                <a class="nav-link {{ request()->is('administration/settings/user/show/favorites*') ? 'active' : '' }}" href="{{ route('administration.settings.user.show.favorites', ['user' => $user]) }}">
+                    <i class="ti-xs ti ti-heart me-1"></i> 
+                    Favorites
                 </a>
             </li>
         </ul>

@@ -19,6 +19,6 @@ Route::controller(UserController::class)
             Route::get('/destroy/{user}', 'destroy')->name('destroy')->can('User Delete');
             
             Route::get('/show/profile/{user}', 'showProfile')->name('show.profile')->can('User Read');
-            Route::get('/show/attendance/{user}', 'showAttendance')->name('show.attendance')->can('User Read');
-            Route::get('/show/break/{user}', 'showBreak')->name('show.break')->can('User Read');
+            Route::get('/show/applications/{user}', 'showApplications')->name('show.applications')->can('User Read');
+            Route::get('/show/favorites/{user}', 'showFavorites')->name('show.favorites')->can('User Read');
         });

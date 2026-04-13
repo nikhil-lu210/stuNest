@@ -138,23 +138,23 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display property applications for the user (placeholder).
      */
-    public function showAttendance(User $user)
+    public function showApplications(User $user)
     {
         $this->authorize('view', $user);
 
-        return view('administration.settings.user.includes.attendance', compact(['user']));
+        return view('administration.settings.user.includes.applications', compact(['user']));
     }
 
     /**
-     * Display the specified resource.
+     * Display saved favorites for the user (placeholder).
      */
-    public function showBreak(User $user)
+    public function showFavorites(User $user)
     {
         $this->authorize('view', $user);
 
-        return view('administration.settings.user.includes.break', compact(['user']));
+        return view('administration.settings.user.includes.favorites', compact(['user']));
     }
 
     /**

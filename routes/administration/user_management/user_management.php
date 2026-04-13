@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Administration\UserManagement\AgentController;
+use App\Http\Controllers\Administration\UserManagement\LandlordController;
 use App\Http\Controllers\Administration\UserManagement\StudentController;
 use App\Http\Controllers\Administration\UserManagement\UserDirectoryController;
 
@@ -15,12 +16,8 @@ Route::controller(UserDirectoryController::class)->group(function () {
         Route::get('/', 'landlordsIndex')->name('index')->can('User Read');
         Route::get('/pending', 'landlordsPending')->name('pending')->can('User Read');
         Route::get('/rejected', 'landlordsRejected')->name('rejected')->can('User Read');
-        Route::view('/create', 'administration.user.client-create-placeholder', [
-            'title' => __('Create landlord account'),
-            'portalLabel' => __('Landlord'),
-            'themeFile' => 'landlord_dashboard.html',
-            'guardName' => 'landlord',
-        ])->name('create')->can('User Create');
+        Route::get('/create', [LandlordController::class, 'create'])->name('create')->can('User Create');
+        Route::post('/create', [LandlordController::class, 'store'])->name('store')->can('User Create');
     });
 
     Route::prefix('agents')->name('agents.')->group(function () {

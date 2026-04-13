@@ -80,7 +80,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex flex-column">
-                                            <a href="{{ route('administration.settings.user.show.profile', ['user' => $user]) }}" class="emp_name text-truncate">{{ $user->name }}</a>
+                                            <a href="{{ route($showRouteName, ['user' => $user]) }}" class="emp_name text-truncate">{{ $user->name }}</a>
                                             <small class="emp_post text-truncate text-muted">{{ $user->roles->first()?->name ?? '—' }}</small>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                                             <i class="text-primary ti ti-dots-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end m-0">
-                                            <a href="{{ route('administration.settings.user.edit', ['user' => $user]) }}" class="dropdown-item">
+                                            <a href="{{ route($editRouteName, ['user' => $user]) }}" class="dropdown-item">
                                                 <i class="text-primary ti ti-pencil"></i>
                                                 {{ __('Edit') }}
                                             </a>
@@ -121,7 +121,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <a href="{{ route('administration.settings.user.show.profile', ['user' => $user]) }}" class="btn btn-sm btn-icon item-edit" data-bs-toggle="tooltip" title="{{ __('Show Details') }}">
+                                    <a href="{{ route($showRouteName, ['user' => $user]) }}" class="btn btn-sm btn-icon item-edit" data-bs-toggle="tooltip" title="{{ __('Show Details') }}">
                                         <i class="text-primary ti ti-info-hexagon"></i>
                                     </a>
                                 </td>

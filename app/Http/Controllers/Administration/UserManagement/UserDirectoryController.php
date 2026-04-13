@@ -28,6 +28,8 @@ class UserDirectoryController extends Controller
         Collection $users,
         ?string $createRouteName = null,
         ?string $createLabel = null,
+        ?string $editRouteName = null,
+        ?string $showRouteName = null,
     ): View {
         return view('administration.user-management.directory-index', [
             'pageTitleMeta' => $pageTitleMeta,
@@ -38,6 +40,8 @@ class UserDirectoryController extends Controller
             'users' => $users,
             'createRoute' => $createRouteName ? route($createRouteName) : null,
             'createLabel' => $createLabel,
+            'editRouteName' => $editRouteName ?? 'administration.settings.user.edit',
+            'showRouteName' => $showRouteName ?? 'administration.settings.user.show.profile',
         ]);
     }
 
@@ -68,6 +72,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Landlord'),
             'administration.landlords.create',
             __('Create New Landlord'),
+            'administration.landlords.edit',
+            'administration.landlords.show',
         );
     }
 
@@ -82,6 +88,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Landlord', User::ACCOUNT_STATUS_PENDING),
             'administration.landlords.create',
             __('Create New Landlord'),
+            'administration.landlords.edit',
+            'administration.landlords.show',
         );
     }
 
@@ -96,6 +104,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Landlord', User::ACCOUNT_STATUS_REJECTED),
             'administration.landlords.create',
             __('Create New Landlord'),
+            'administration.landlords.edit',
+            'administration.landlords.show',
         );
     }
 

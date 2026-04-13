@@ -16,8 +16,13 @@ Route::controller(UserDirectoryController::class)->group(function () {
         Route::get('/', 'landlordsIndex')->name('index')->can('User Read');
         Route::get('/pending', 'landlordsPending')->name('pending')->can('User Read');
         Route::get('/rejected', 'landlordsRejected')->name('rejected')->can('User Read');
+        Route::get('/show/{user}', [LandlordController::class, 'show'])->name('show')->can('User Read');
+        Route::get('/show/{user}/applications', [LandlordController::class, 'showApplications'])->name('show.applications')->can('User Read');
+        Route::get('/show/{user}/favorites', [LandlordController::class, 'showFavorites'])->name('show.favorites')->can('User Read');
         Route::get('/create', [LandlordController::class, 'create'])->name('create')->can('User Create');
         Route::post('/create', [LandlordController::class, 'store'])->name('store')->can('User Create');
+        Route::get('/{user}/edit', [LandlordController::class, 'edit'])->name('edit')->can('User Update');
+        Route::put('/{user}', [LandlordController::class, 'update'])->name('update')->can('User Update');
     });
 
     Route::prefix('agents')->name('agents.')->group(function () {

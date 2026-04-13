@@ -50,6 +50,8 @@ class UserController extends Controller
             'users' => $users,
             'createRoute' => route('administration.users.create'),
             'createLabel' => __('Create administration user'),
+            'editRouteName' => 'administration.settings.user.edit',
+            'showRouteName' => 'administration.settings.user.show.profile',
         ]);
     }
 

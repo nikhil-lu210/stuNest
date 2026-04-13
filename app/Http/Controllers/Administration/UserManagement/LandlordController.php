@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Administration\UserManagement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UserManagement\StoreLandlordRequest;
+use App\Http\Requests\Administration\UserManagement\UpdateLandlordRequest;
 use App\Mail\WelcomeUserMail;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
@@ -18,6 +19,38 @@ class LandlordController extends Controller
     public function create(): View
     {
         return view('administration.user-management.landlord.create');
+    }
+
+    public function show(User $user): View
+    {
+        $this->authorize('view', $user);
+        $this->assertLandlord($user);
+
+        return view('administration.user-management.landlord.profile', compact('user'));
+    }
+
+    public function showApplications(User $user): View
+    {
+        $this->authorize('view', $user);
+        $this->assertLandlord($user);
+
+        return view('administration.user-management.landlord.applications', compact('user'));
+    }
+
+    public function showFavorites(User $user): View
+    {
+        $this->authorize('view', $user);
+        $this->assertLandlord($user);
+
+        return view('administration.user-management.landlord.favorites', compact('user'));
+    }
+
+    public function edit(User $user): View
+    {
+        $this->authorize('update', $user);
+        $this->assertLandlord($user);
+
+        return view('administration.user-management.landlord.edit', compact('user'));
     }
 
     public function store(StoreLandlordRequest $request): RedirectResponse
@@ -63,6 +96,41 @@ class LandlordController extends Controller
         return redirect()
             ->route('administration.landlords.index')
             ->with('success', __('Landlord account created. A welcome email with sign-in details has been queued.'));
+    }
+
+    public function update(UpdateLandlordRequest $request, User $user): RedirectResponse
+    {
+        $this->authorize('update', $user);
+        $this->assertLandlord($user);
+
+        $validated = $request->validated();
+
+        $user->fill([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'whatsapp' => ! empty($validated['whatsapp']) ? $validated['whatsapp'] : null,
+            'billing_address' => ! empty($validated['billing_address']) ? $validated['billing_address'] : null,
+            'account_status' => $validated['account_status'],
+        ]);
+
+        if (! empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()
+            ->route('administration.landlords.index')
+            ->with('success', __('Landlord account updated.'));
+    }
+
+    protected function assertLandlord(User $user): void
+    {
+        if (! $user->hasRole('Landlord')) {
+            abort(404);
+        }
     }
 
     protected function generateUniqueUserid(): string

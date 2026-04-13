@@ -29,8 +29,13 @@ Route::controller(UserDirectoryController::class)->group(function () {
         Route::get('/', 'agentsIndex')->name('index')->can('User Read');
         Route::get('/pending', 'agentsPending')->name('pending')->can('User Read');
         Route::get('/rejected', 'agentsRejected')->name('rejected')->can('User Read');
+        Route::get('/show/{user}', [AgentController::class, 'show'])->name('show')->can('User Read');
+        Route::get('/show/{user}/applications', [AgentController::class, 'showApplications'])->name('show.applications')->can('User Read');
+        Route::get('/show/{user}/favorites', [AgentController::class, 'showFavorites'])->name('show.favorites')->can('User Read');
         Route::get('/create', [AgentController::class, 'create'])->name('create')->can('User Create');
         Route::post('/create', [AgentController::class, 'store'])->name('store')->can('User Create');
+        Route::get('/{user}/edit', [AgentController::class, 'edit'])->name('edit')->can('User Update');
+        Route::put('/{user}', [AgentController::class, 'update'])->name('update')->can('User Update');
     });
 
     Route::prefix('students')->name('students.')->group(function () {

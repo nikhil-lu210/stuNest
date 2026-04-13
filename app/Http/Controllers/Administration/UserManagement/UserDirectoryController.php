@@ -120,6 +120,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Agent'),
             'administration.agents.create',
             __('Create New Agent'),
+            'administration.agents.edit',
+            'administration.agents.show',
         );
     }
 
@@ -134,6 +136,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Agent', User::ACCOUNT_STATUS_PENDING),
             'administration.agents.create',
             __('Create New Agent'),
+            'administration.agents.edit',
+            'administration.agents.show',
         );
     }
 
@@ -148,6 +152,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Agent', User::ACCOUNT_STATUS_REJECTED),
             'administration.agents.create',
             __('Create New Agent'),
+            'administration.agents.edit',
+            'administration.agents.show',
         );
     }
 

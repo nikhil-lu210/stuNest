@@ -8,3 +8,13 @@
     padding-top: 0.375rem;
     padding-bottom: 0.375rem;
 }
+
+/* Dropdown appended to .col-* or .card — stay within column width on small screens */
+.select2-dropdown.admin-select2-dropdown {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.select2-container--default .select2-results > .select2-results__options {
+    max-height: 16rem;
+}

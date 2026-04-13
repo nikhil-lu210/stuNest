@@ -5,12 +5,34 @@
  *
  * Search box appears when there are at least `data-min-search-options` options (default 12).
  * Set `data-allow-clear="true"` for clearable selects.
+ *
+ * Dropdown parent: modal → Bootstrap column → card → body. Using the column keeps the
+ * dropdown aligned to the field width on responsive layouts (avoids full-card-wide menus).
  */
 import '../css/admin-select2.css';
 
+function resolveDropdownParent($el) {
+    const $ = window.jQuery;
+    const $modal = $el.closest('.modal');
+    if ($modal.length) {
+        return $modal;
+    }
+    const $col = $el.closest('[class*="col-"]');
+    if ($col.length) {
+        return $col;
+    }
+    const $card = $el.closest('.card');
+    if ($card.length) {
+        return $card;
+    }
+    return $(document.body);
+}
+
 function buildOptions($el) {
     const $ = window.jQuery;
-    const dropdownParent = $el.closest('.modal').length ? $el.closest('.modal') : $(document.body);
+    const dropdownParent = resolveDropdownParent($el);
+    $el.data('adminSelect2DropdownParent', dropdownParent);
+
     const allowClear = $el.attr('data-allow-clear') === 'true';
     const placeholder = $el.attr('data-placeholder') || '';
     const rawMin = $el.attr('data-min-search-options');
@@ -27,8 +49,50 @@ function buildOptions($el) {
         allowClear,
         placeholder: placeholder || undefined,
         dropdownParent,
+        dropdownCssClass: 'admin-select2-dropdown',
         minimumResultsForSearch: minSearch,
     };
+}
+
+function syncOpenDropdownWidth($el) {
+    const $ = window.jQuery;
+    const $container = $el.next('.select2-container');
+    if (!$container.length) {
+        return;
+    }
+    const w = $container.outerWidth();
+    if (!w) {
+        return;
+    }
+    const $dropdownParent = $el.data('adminSelect2DropdownParent');
+    let $dropdown = $();
+    if ($dropdownParent && $dropdownParent.length) {
+        $dropdown = $dropdownParent.find('.select2-dropdown').last();
+    }
+    if (!$dropdown.length) {
+        $dropdown = $container.find('.select2-dropdown');
+    }
+    if (!$dropdown.length) {
+        $dropdown = $('.select2-container--open').last().find('.select2-dropdown');
+    }
+    if ($dropdown.length) {
+        $dropdown.css({
+            width: w,
+            maxWidth: '100%',
+            minWidth: 0,
+            boxSizing: 'border-box',
+        });
+    }
+}
+
+function bindWidthSync($el) {
+    const $ = window.jQuery;
+    $el.off('select2:open.adminSelect2').on('select2:open.adminSelect2', function () {
+        const self = $(this);
+        window.requestAnimationFrame(function () {
+            syncOpenDropdownWidth(self);
+        });
+    });
 }
 
 function initAdminSelect2() {
@@ -43,6 +107,7 @@ function initAdminSelect2() {
             return;
         }
         $el.select2(buildOptions($el));
+        bindWidthSync($el);
     });
 }
 

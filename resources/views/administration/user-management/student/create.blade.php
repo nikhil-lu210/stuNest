@@ -13,14 +13,16 @@
 
 @section('custom_css')
     <style>
-        /* Student create: keep Select2 dropdown within the column (no horizontal page overflow) */
+        /* Student create: min-width:0 on cols prevents grid overflow without clipping Select2 menus */
         .student-account-create {
-            overflow-x: clip;
             max-width: 100%;
         }
-        .student-account-create #student-create-card {
-            position: relative;
-            max-width: 100%;
+        .student-account-create [class*="col-"] {
+            min-width: 0;
+        }
+        .student-account-create #student-create-card,
+        .student-account-create #student-create-card .card-body {
+            overflow: visible;
         }
         .student-account-create .student-select-col .select2-container {
             width: 100% !important;

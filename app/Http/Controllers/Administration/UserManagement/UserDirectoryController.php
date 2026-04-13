@@ -173,6 +173,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Student'),
             'administration.students.create',
             __('Create New Student'),
+            'administration.students.edit',
+            'administration.students.show',
         );
     }
 
@@ -187,6 +189,8 @@ class UserDirectoryController extends Controller
             $this->usersWithRole('Student', User::ACCOUNT_STATUS_UNVERIFIED),
             'administration.students.create',
             __('Create New Student'),
+            'administration.students.edit',
+            'administration.students.show',
         );
     }
 }

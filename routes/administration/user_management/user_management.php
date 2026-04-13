@@ -41,8 +41,13 @@ Route::controller(UserDirectoryController::class)->group(function () {
     Route::prefix('students')->name('students.')->group(function () {
         Route::get('/', 'studentsIndex')->name('index')->can('User Read');
         Route::get('/unverified', 'studentsUnverified')->name('unverified')->can('User Read');
-        Route::get('/branches', [StudentController::class, 'getBranches'])->name('branches')->can('User Create');
+        Route::get('/show/{user}', [StudentController::class, 'show'])->name('show')->can('User Read');
+        Route::get('/show/{user}/applications', [StudentController::class, 'showApplications'])->name('show.applications')->can('User Read');
+        Route::get('/show/{user}/favorites', [StudentController::class, 'showFavorites'])->name('show.favorites')->can('User Read');
+        Route::get('/branches', [StudentController::class, 'getBranches'])->name('branches');
         Route::get('/create', [StudentController::class, 'create'])->name('create')->can('User Create');
         Route::post('/create', [StudentController::class, 'store'])->name('store')->can('User Create');
+        Route::get('/{user}/edit', [StudentController::class, 'edit'])->name('edit')->can('User Update');
+        Route::put('/{user}', [StudentController::class, 'update'])->name('update')->can('User Update');
     });
 });

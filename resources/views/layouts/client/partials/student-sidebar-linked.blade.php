@@ -64,18 +64,60 @@
     </div>
 </aside>
 
-<header class="md:hidden fixed top-0 w-full h-16 bg-white border-b border-gray-200 z-50 flex items-center justify-between px-4">
+<header class="md:hidden fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 overflow-visible">
     <a href="{{ route('client.home') }}" class="flex items-center gap-2">
         <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
             <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
         </div>
     </a>
-    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-        @if ($avatarUrl)
-            <img src="{{ $avatarUrl }}" alt="" class="w-full h-full object-cover">
-        @else
-            <span class="text-xs font-semibold text-gray-600">{{ strtoupper(mb_substr($user->first_name ?? '?', 0, 1)) }}</span>
-        @endif
+    <div class="relative shrink-0" x-data="{ openProfile: false }">
+        <button
+            type="button"
+            class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 ring-2 ring-transparent transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
+            @click="openProfile = !openProfile"
+            aria-haspopup="true"
+            x-bind:aria-expanded="openProfile"
+            aria-label="{{ __('Account menu') }}"
+        >
+            @if ($avatarUrl)
+                <img src="{{ $avatarUrl }}" alt="" class="h-full w-full object-cover">
+            @else
+                <span class="text-xs font-semibold text-gray-600">{{ strtoupper(mb_substr($user->first_name ?? '?', 0, 1)) }}</span>
+            @endif
+        </button>
+        <div
+            x-show="openProfile"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 translate-y-1"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-1"
+            @click.outside="openProfile = false"
+            x-cloak
+            class="absolute right-4 mt-2 w-48 rounded-xl border border-gray-100 bg-white shadow-xl z-[100]"
+        >
+            <div class="border-b border-gray-100 px-3 py-2.5">
+                <p class="truncate text-sm font-semibold text-gray-900">{{ $user->name }}</p>
+                <p class="mt-0.5 truncate text-xs text-gray-500">{{ $user->email }}</p>
+            </div>
+            <a
+                href="{{ route('client.student.settings') }}"
+                class="block px-3 py-2.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                @click="openProfile = false"
+            >
+                {{ __('Settings') }}
+            </a>
+            <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-100">
+                @csrf
+                <button
+                    type="submit"
+                    class="w-full px-3 py-2.5 text-left text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                >
+                    {{ __('Log out') }}
+                </button>
+            </form>
+        </div>
     </div>
 </header>
 

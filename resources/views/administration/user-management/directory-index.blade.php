@@ -25,6 +25,16 @@
 @endsection
 
 @section('content')
+@if (session('success'))
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-12">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <i class="ti ti-check me-2"></i>{{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ __('Close') }}"></button>
+            </div>
+        </div>
+    </div>
+@endif
 <div class="row">
     <div class="col-md-12">
         <div class="card mb-4">

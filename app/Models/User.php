@@ -14,9 +14,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\InstituteLocation;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Scopes\HideDeveloperRoleUsersScope;
+use App\Support\StudentCountryList;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -97,6 +99,9 @@ class User extends Authenticatable implements HasMedia
         'account_status',
         'dob',
         'institution_id',
+        'country_code',
+        'institute_location_id',
+        'whatsapp',
         'student_id_number',
         'course_level',
         'graduation_year',
@@ -146,6 +151,14 @@ class User extends Authenticatable implements HasMedia
         return implode(' ', $parts);
     }
 
+    /**
+     * Student nationality label from static ISO list (resources/data/countries.json).
+     */
+    public function getStudentCountryNameAttribute(): ?string
+    {
+        return StudentCountryList::nameForCode($this->country_code);
+    }
+
     public function instituteRepresentatives(): HasMany
     {
         return $this->hasMany(InstituteRepresentative::class);
@@ -154,6 +167,11 @@ class User extends Authenticatable implements HasMedia
     public function institution(): BelongsTo
     {
         return $this->belongsTo(Institute::class, 'institution_id');
+    }
+
+    public function instituteLocation(): BelongsTo
+    {
+        return $this->belongsTo(InstituteLocation::class, 'institute_location_id');
     }
 
     /**

@@ -5,7 +5,7 @@
 
 {{ __('An administrator has created an account for you on :app.', ['app' => config('app.name')]) }}
 
-{{ __('You can sign in with your email address and this temporary password:') }}
+{{ __('You can sign in with your email address and the password below:') }}
 
 <x-mail::panel>
 {{ $plainPassword }}

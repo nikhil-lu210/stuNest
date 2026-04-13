@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Administration\UserManagement\StudentController;
 use App\Http\Controllers\Administration\UserManagement\UserDirectoryController;
 
 Route::controller(UserDirectoryController::class)->group(function () {
@@ -36,11 +37,8 @@ Route::controller(UserDirectoryController::class)->group(function () {
     Route::prefix('students')->name('students.')->group(function () {
         Route::get('/', 'studentsIndex')->name('index')->can('User Read');
         Route::get('/unverified', 'studentsUnverified')->name('unverified')->can('User Read');
-        Route::view('/create', 'administration.user.client-create-placeholder', [
-            'title' => __('Create student account'),
-            'portalLabel' => __('Student'),
-            'themeFile' => 'student_dashboard.html',
-            'guardName' => 'student',
-        ])->name('create')->can('User Create');
+        Route::get('/branches', [StudentController::class, 'getBranches'])->name('branches')->can('User Create');
+        Route::get('/create', [StudentController::class, 'create'])->name('create')->can('User Create');
+        Route::post('/create', [StudentController::class, 'store'])->name('store')->can('User Create');
     });
 });

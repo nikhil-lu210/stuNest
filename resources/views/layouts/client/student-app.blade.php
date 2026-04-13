@@ -16,13 +16,16 @@
     <link rel="stylesheet" href="{{ asset('clients/css/dashboard.css') }}">
     @stack('styles')
 
+    @livewireStyles
     <script src="https://unpkg.com/lucide@latest"></script>
     @stack('head')
 </head>
-<body class="@yield('body_class', 'bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden')">
+<body class="@yield('body_class', 'bg-gray-50 font-sans text-gray-900 antialiased flex h-screen w-full min-h-0 min-w-0 overflow-hidden')">
     @yield('content')
 
     @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @livewireScripts
     <script>
         if (window.lucide && typeof lucide.createIcons === 'function') {
             lucide.createIcons();

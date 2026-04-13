@@ -111,6 +111,7 @@ class User extends Authenticatable implements HasMedia
         'license_number',
         'office_address',
         'job_title',
+        'preferences',
     ];
 
     /**
@@ -135,6 +136,7 @@ class User extends Authenticatable implements HasMedia
         'graduation_year' => 'integer',
         'developer_anchor' => 'boolean',
         'super_admin_anchor' => 'boolean',
+        'preferences' => 'array',
     ];
 
     /**

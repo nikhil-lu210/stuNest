@@ -20,4 +20,31 @@ class DashboardController extends Controller
             'user' => $user,
         ]);
     }
+
+    public function settings(): View
+    {
+        $user = Auth::user();
+        abort_unless($user && $user->hasRole('Student'), 403);
+
+        $user->loadMissing(['institution']);
+
+        return view('client.student.settings', [
+            'user' => $user,
+        ]);
+    }
+
+    public function notifications(): View
+    {
+        $user = Auth::user();
+        abort_unless($user && $user->hasRole('Student'), 403);
+
+        $user->loadMissing(['institution']);
+
+        $notifications = $user->notifications()->latest()->paginate(20);
+
+        return view('client.student.notifications.index', [
+            'user' => $user,
+            'notifications' => $notifications,
+        ]);
+    }
 }

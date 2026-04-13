@@ -20,6 +20,9 @@
 
 @section('custom_css')
     <style>
+        body {
+            overflow-x: clip;
+        }
         .landlord-account-edit {
             max-width: 100%;
             overflow-x: clip;

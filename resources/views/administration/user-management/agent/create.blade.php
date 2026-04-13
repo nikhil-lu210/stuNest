@@ -17,6 +17,9 @@
 
 @section('custom_css')
     <style>
+        body {
+            overflow-x: clip;
+        }
         /* Bootstrap grid: min-width 0 prevents flex blowout */
         .agent-account-create {
             max-width: 100%;

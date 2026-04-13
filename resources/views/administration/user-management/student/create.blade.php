@@ -13,6 +13,9 @@
 
 @section('custom_css')
     <style>
+        body {
+            overflow-x: clip;
+        }
         /* Student create: min-width:0 on cols prevents grid overflow without clipping Select2 menus */
         .student-account-create {
             max-width: 100%;

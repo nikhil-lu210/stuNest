@@ -17,6 +17,9 @@
 
 @section('custom_css')
     <style>
+        body {
+            overflow-x: clip;
+        }
         .landlord-account-create {
             max-width: 100%;
             overflow-x: clip;

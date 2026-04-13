@@ -205,4 +205,33 @@ class User extends Authenticatable implements HasMedia
             $q->whereIn('name', $roleNames);
         });
     }
+
+    /**
+     * Staff may use the Vuexy administration area (Spatie roles registered with guard `web`).
+     */
+    public function hasAdministrationAccess(): bool
+    {
+        return $this->roles->contains(fn ($role) => $role->guard_name === 'web');
+    }
+
+    /**
+     * Primary client portal URL for login redirect and when access to administration is denied.
+     */
+    public function clientPortalHomeUrl(): string
+    {
+        if ($this->hasRole('Student')) {
+            return route('client.student.dashboard');
+        }
+        if ($this->hasRole('Landlord')) {
+            return route('client.landlord.dashboard');
+        }
+        if ($this->hasRole('Agent')) {
+            return route('client.agent.dashboard');
+        }
+        if ($this->hasRole('Institute Representative')) {
+            return route('client.institute.dashboard');
+        }
+
+        return route('client.home');
+    }
 }

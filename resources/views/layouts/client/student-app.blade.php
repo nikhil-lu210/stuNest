@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name').' | Premium Student Housing')</title>
+    <title>@yield('title', config('app.name'))</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,13 +13,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{{ asset('clients/js/tailwind-config.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('clients/css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('clients/css/dashboard.css') }}">
     @stack('styles')
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     @stack('head')
 </head>
-<body class="@yield('body_class', 'bg-white font-sans text-gray-900 antialiased')">
+<body class="@yield('body_class', 'bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden')">
     @yield('content')
 
     @stack('scripts')

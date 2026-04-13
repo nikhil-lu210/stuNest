@@ -1,5 +1,9 @@
 /* StuNest — global utilities (works with Tailwind CDN) */
 
+[x-cloak] {
+  display: none !important;
+}
+
 ::selection {
   background-color: #111827;
   color: #ffffff;

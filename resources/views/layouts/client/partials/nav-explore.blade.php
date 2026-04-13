@@ -35,10 +35,7 @@
                     <i data-lucide="user" class="w-4 h-4 sm:hidden"></i>
                 </a>
             @else
-                <form method="POST" action="{{ route('logout') }}" class="inline flex items-center">
-                    @csrf
-                    <button type="submit" class="text-sm font-medium text-gray-600 hover:text-gray-900">Log out</button>
-                </form>
+                @include('layouts.client.partials.nav-user-menu')
             @endguest
         </div>
     </div>

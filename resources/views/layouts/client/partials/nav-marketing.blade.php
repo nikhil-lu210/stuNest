@@ -14,7 +14,7 @@
             <a href="{{ url('/register?role=landlord') }}" class="text-gray-900 hover:text-gray-600 transition-colors">List a property</a>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 md:gap-4">
             @guest
                 <a href="{{ route('login') }}" class="hidden md:block text-sm font-medium hover:text-gray-600 transition-colors px-4 py-2">
                     Log in
@@ -23,11 +23,7 @@
                     Sign up
                 </a>
             @else
-                <span class="hidden md:inline text-sm text-gray-600 truncate max-w-[10rem]">{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}" class="inline hidden sm:block">
-                    @csrf
-                    <button type="submit" class="text-sm font-medium text-gray-600 hover:text-gray-900">Log out</button>
-                </form>
+                @include('layouts.client.partials.nav-user-menu')
             @endguest
             <a href="{{ route('client.explore') }}" class="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Search">
                 <i data-lucide="search" class="w-6 h-6"></i>

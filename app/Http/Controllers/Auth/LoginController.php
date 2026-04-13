@@ -22,13 +22,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -36,5 +29,22 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Staff (Spatie roles on `web` guard) go to Vuexy; marketplace users to their client portal.
+     */
+    protected function redirectTo(): string
+    {
+        $user = auth()->user();
+        if (! $user) {
+            return RouteServiceProvider::HOME;
+        }
+
+        if ($user->hasAdministrationAccess()) {
+            return RouteServiceProvider::HOME;
+        }
+
+        return $user->clientPortalHomeUrl();
     }
 }

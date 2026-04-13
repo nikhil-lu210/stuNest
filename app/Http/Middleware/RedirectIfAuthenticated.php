@@ -21,8 +21,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // return redirect(RouteServiceProvider::HOME);
-                return redirect()->intended();
+                $user = Auth::guard($guard)->user();
+                $fallback = $user && $user->hasAdministrationAccess()
+                    ? RouteServiceProvider::HOME
+                    : ($user?->clientPortalHomeUrl() ?? RouteServiceProvider::HOME);
+
+                return redirect()->intended($fallback);
             }
         }
 

@@ -6,6 +6,10 @@ use App\Http\Controllers\Client\Student\Dashboard\DashboardController;
 /* ==============================================
 ===============< Student Routes >==============
 ===============================================*/
-Route::controller(DashboardController::class)->prefix('student')->name('student.')->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
-});
+Route::controller(DashboardController::class)
+    ->prefix('student')
+    ->name('student.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/dashboard', 'index')->name('dashboard');
+    });

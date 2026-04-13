@@ -26,7 +26,7 @@
                         @case(2) {{ __('Specs') }} @break
                         @case(3) {{ __('Rent') }} @break
                         @case(4) {{ __('Match') }} @break
-                        @case(5) {{ __('Amenities & photos') }} @break
+                        @case(5) {{ __('Amenities, photos & publish') }} @break
                     @endswitch
                 </span>
             </li>
@@ -581,7 +581,7 @@
                         }
                     }">
                     <h2 class="text-lg font-semibold text-zinc-900">{{ __('Property photos') }}</h2>
-                    <p class="mt-1 text-sm text-zinc-500">{{ __('Upload between 3 and 10 images (max 5 MB each). JPG, PNG, or WebP.') }}</p>
+                    <p class="mt-1 text-sm text-zinc-500">{{ __('Upload between 3 and 10 images. Combined file size must not exceed 10 MB. JPG, PNG, or WebP.') }}</p>
                     <p class="mt-1 text-xs font-medium text-zinc-600">
                         <span>{{ __('Selected') }}:</span>
                         <span x-text="photoCount"></span> / 10
@@ -631,18 +631,20 @@
                     @if ($photos)
                         <div class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                             @foreach ($photos as $photo)
-                                <div class="group relative overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 shadow-sm"
+                                <div class="group relative rounded-xl border border-zinc-200 bg-zinc-100 shadow-sm"
                                     wire:key="photo-{{ $photo->getFilename() }}">
-                                    <img src="{{ $photo->temporaryUrl() }}" alt=""
-                                        class="h-36 w-full object-cover">
-                                    <div class="pointer-events-none absolute inset-0 bg-zinc-900/0 transition group-hover:bg-zinc-900/35 group-focus-within:bg-zinc-900/35"></div>
+                                    {{-- overflow-hidden only on the image stack so the remove button is not clipped --}}
+                                    <div class="relative h-36 w-full overflow-hidden rounded-t-xl">
+                                        <img src="{{ $photo->temporaryUrl() }}" alt=""
+                                            class="h-full w-full object-cover">
+                                        <div class="pointer-events-none absolute inset-0 bg-zinc-900/0 transition group-hover:bg-zinc-900/30"></div>
+                                    </div>
                                     <button type="button"
                                         wire:click="$removeUpload('photos', @js($photo->getFilename()))"
                                         wire:loading.attr="disabled"
-                                        class="pointer-events-auto absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-zinc-800 opacity-0 shadow-lg ring-1 ring-zinc-200/80 transition hover:bg-red-600 hover:text-white hover:ring-red-500 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 group-hover:opacity-100 group-focus-within:opacity-100"
-                                        title="{{ __('Remove') }}">
-                                        <span class="sr-only">{{ __('Remove') }}</span>
-                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                                        aria-label="{{ __('Remove image') }}"
+                                        class="absolute right-2 top-2 z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-zinc-200/80 bg-white text-zinc-800 shadow-md transition hover:border-red-500 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
@@ -650,6 +652,13 @@
                             @endforeach
                         </div>
                     @endif
+                </div>
+
+                <div class="border-t border-zinc-100 pt-8">
+                    <h2 class="text-lg font-semibold text-zinc-900">{{ __('Publish or save as draft') }}</h2>
+                    <p class="mt-1 text-sm text-zinc-500">
+                        {{ __('Publishing makes the listing live for seekers. Draft keeps it in your account until you publish it later.') }}
+                    </p>
                 </div>
             </div>
         @endif
@@ -662,18 +671,24 @@
                 {{ __('Back') }}
             </button>
 
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
                 @if ($currentStep < 5)
                     <button type="button" wire:click="nextStep"
                         class="inline-flex justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500">
                         {{ __('Continue') }}
                     </button>
                 @else
-                    <button type="button" wire:click="submitListing"
+                    <button type="button" wire:click="submitDraft"
+                        wire:loading.attr="disabled"
+                        class="inline-flex justify-center rounded-full border border-zinc-300 bg-white px-6 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 disabled:opacity-60">
+                        <span wire:loading.remove wire:target="submitDraft">{{ __('Save as draft') }}</span>
+                        <span wire:loading wire:target="submitDraft">{{ __('Saving…') }}</span>
+                    </button>
+                    <button type="button" wire:click="submitPublished"
                         wire:loading.attr="disabled"
                         class="inline-flex justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:opacity-60">
-                        <span wire:loading.remove wire:target="submitListing">{{ __('Save listing') }}</span>
-                        <span wire:loading wire:target="submitListing">{{ __('Saving…') }}</span>
+                        <span wire:loading.remove wire:target="submitPublished">{{ __('Publish') }}</span>
+                        <span wire:loading wire:target="submitPublished">{{ __('Publishing…') }}</span>
                     </button>
                 @endif
             </div>

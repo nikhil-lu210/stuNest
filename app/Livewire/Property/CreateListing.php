@@ -18,6 +18,10 @@ use Livewire\WithFileUploads;
 class CreateListing extends Component
 {
     use WithFileUploads;
+
+    /** Combined size limit for all property photos (bytes). */
+    private const PHOTOS_MAX_TOTAL_BYTES = 10 * 1024 * 1024;
+
     public int $currentStep = 1;
 
     public string $listing_category = '';
@@ -83,6 +87,9 @@ class CreateListing extends Component
 
     public int $photosCount = 0;
 
+    /** User choice on the final step: save without publishing, or publish live. */
+    public string $save_as = 'draft';
+
     public function mount(): void
     {
         if ($this->isStudent()) {
@@ -98,6 +105,22 @@ class CreateListing extends Component
     public function updatedPhotos(): void
     {
         $this->photosCount = count($this->photos);
+        $this->resetValidation('photos');
+        if ($this->getPhotosTotalBytes() > self::PHOTOS_MAX_TOTAL_BYTES) {
+            $this->addError('photos', __('The total size of all photos must not exceed 10 MB.'));
+        }
+    }
+
+    private function getPhotosTotalBytes(): int
+    {
+        $total = 0;
+        foreach ($this->photos as $file) {
+            if ($file instanceof TemporaryUploadedFile) {
+                $total += $file->getSize();
+            }
+        }
+
+        return $total;
     }
 
     public function updatedCountryId(mixed $value): void
@@ -224,20 +247,52 @@ class CreateListing extends Component
             5 => [
                 'amenities' => ['required', 'array', 'min:1'],
                 'amenities.*' => [Rule::in(['wifi', 'washing_machine', 'tumble_dryer', 'dishwasher', 'balcony_garden', 'desk_in_room', 'building_gym', 'bike_storage'])],
+                'save_as' => ['required', Rule::in(['draft', 'published'])],
             ],
             default => [],
         };
     }
 
-    public function submitListing(): void
+    public function submitDraft(): void
     {
+        $this->submitListing('draft');
+    }
+
+    public function submitPublished(): void
+    {
+        $this->submitListing('published');
+    }
+
+    protected function submitListing(string $saveAs = 'draft'): void
+    {
+        $this->save_as = in_array($saveAs, ['draft', 'published'], true) ? $saveAs : 'draft';
+
         for ($s = 1; $s <= 5; $s++) {
             $this->validate($this->rulesForStep($s));
         }
 
         $this->validate([
-            'photos' => ['required', 'array', 'min:3', 'max:10'],
-            'photos.*' => ['image', 'max:5120'],
+            'photos' => [
+                'required',
+                'array',
+                'min:3',
+                'max:10',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (! is_array($value)) {
+                        return;
+                    }
+                    $total = 0;
+                    foreach ($value as $file) {
+                        if ($file instanceof TemporaryUploadedFile) {
+                            $total += $file->getSize();
+                        }
+                    }
+                    if ($total > self::PHOTOS_MAX_TOTAL_BYTES) {
+                        $fail(__('The total size of all photos must not exceed 10 MB.'));
+                    }
+                },
+            ],
+            'photos.*' => ['image'],
         ]);
 
         if ($this->bills_included !== 'some') {
@@ -285,7 +340,9 @@ class CreateListing extends Component
                 'amenities' => $this->amenities,
                 'capacity' => max(1, (int) $this->bedrooms),
                 'available_beds' => max(1, (int) $this->bedrooms),
-                'status' => Property::STATUS_DRAFT,
+                'status' => $this->save_as === 'published'
+                    ? Property::STATUS_PUBLISHED
+                    : Property::STATUS_DRAFT,
             ]);
 
             foreach ($this->photos as $photo) {
@@ -299,7 +356,12 @@ class CreateListing extends Component
         $this->photos = [];
         $this->photosCount = 0;
 
-        session()->flash('success', __('Your property listing has been saved as a draft.'));
+        session()->flash(
+            'success',
+            $this->save_as === 'published'
+                ? __('Your property listing has been published.')
+                : __('Your property listing has been saved as a draft.')
+        );
 
         $this->redirect(route('administration.dashboard.index'));
     }

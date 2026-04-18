@@ -1,50 +1,80 @@
 @php
     $exploreFilters = $filters ?? ['q' => '', 'move_in' => '', 'guests' => 1];
-    $exploreGuestCount = (int) ($exploreFilters['guests'] ?? 1);
-    $exploreGuestCount = max(1, min(10, $exploreGuestCount ?: 1));
-    $exploreLocationLabel = ($exploreFilters['q'] ?? '') !== '' ? $exploreFilters['q'] : __('London');
-    $exploreMoveIn = $exploreFilters['move_in'] ?? '';
-    try {
-        $exploreMoveInLabel = $exploreMoveIn !== '' ? \Illuminate\Support\Carbon::parse($exploreMoveIn)->format('M Y') : __('Add dates');
-    } catch (\Throwable $e) {
-        $exploreMoveInLabel = __('Add dates');
-    }
-    $exploreGuestLabel = $exploreGuestCount === 1 ? '1 '.__('student') : $exploreGuestCount.' '.__('students');
+    $filterState = $filterState ?? [
+        'price_min' => '',
+        'price_max' => '',
+        'distance_max' => '',
+        'country_id' => '',
+        'property_type' => '',
+        'listing_category' => '',
+        'ensuite' => false,
+        'gym' => false,
+        'bills' => false,
+        'furnished' => false,
+        'wifi' => false,
+    ];
+    $countriesForFilter = $countriesForFilter ?? collect();
+    $citiesForFilter = $citiesForFilter ?? collect();
+    $areasForFilter = $areasForFilter ?? collect();
+    $toggleExploreFilter = function (string $key): string {
+        $q = request()->except('page');
+        if (request()->boolean($key)) {
+            unset($q[$key]);
+        } else {
+            $q[$key] = 1;
+        }
+
+        return route('client.explore').'?'.http_build_query(array_filter($q, fn ($v) => $v !== null && $v !== ''));
+    };
+    $togglePropertyType = function (string $type): string {
+        $q = request()->except('page');
+        unset($q['studio']);
+        if (($q['property_type'] ?? '') === $type) {
+            unset($q['property_type']);
+        } else {
+            $q['property_type'] = $type;
+        }
+
+        return route('client.explore').'?'.http_build_query(array_filter($q, fn ($v) => $v !== null && $v !== ''));
+    };
 @endphp
-{{-- Explore / listing header with search bar + filters --}}
-<header class="border-b border-gray-100 bg-white z-50 shrink-0">
-    <div class="px-6 h-20 flex items-center justify-between gap-4">
-        <a href="{{ route('client.home') }}" class="flex items-center gap-2 w-48 shrink-0">
-            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-            </div>
-            <span class="text-xl font-bold tracking-tight hidden lg:block">{{ config('app.name') }}.</span>
-        </a>
-
-        <a href="{{ route('client.explore', array_filter(['q' => $exploreFilters['q'] ?? null, 'move_in' => $exploreMoveIn ?: null, 'guests' => $exploreGuestCount])) }}" class="hidden md:flex items-center bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md transition-shadow duration-300 py-2 px-4 cursor-pointer max-w-xl min-w-0 flex-1 justify-center">
-            <span class="text-sm font-semibold px-4 border-r border-gray-200 truncate">{{ $exploreLocationLabel }}</span>
-            <span class="text-sm font-medium text-gray-500 px-4 border-r border-gray-200 shrink-0">{{ $exploreMoveInLabel }}</span>
-            <span class="text-sm font-medium text-gray-500 px-4 shrink-0 truncate">{{ $exploreGuestLabel }}</span>
-            <div class="bg-black text-white p-2 rounded-full ml-2 shrink-0">
-                <i data-lucide="search" class="w-4 h-4"></i>
-            </div>
-        </a>
-
-        <div class="md:hidden flex-1 flex justify-center min-w-0">
-            <a href="{{ route('client.explore', array_filter(['q' => $exploreFilters['q'] ?? null, 'move_in' => $exploreMoveIn ?: null, 'guests' => $exploreGuestCount])) }}" class="flex items-center gap-2 bg-gray-50 rounded-full py-2 px-4 border border-gray-100 w-full max-w-sm min-w-0">
-                <i data-lucide="search" class="w-4 h-4 text-gray-500 shrink-0"></i>
-                <span class="text-sm font-medium truncate">{{ $exploreLocationLabel }}</span>
+{{-- Explore header: primary nav + auth (filters live in the row below; no location/date/guest pill) --}}
+<header
+    class="border-b border-gray-100 bg-white z-50 shrink-0"
+    x-data="{ exploreNavOpen: false }"
+    x-on:keydown.escape.window="exploreNavOpen = false"
+    x-on:click.outside="exploreNavOpen = false"
+>
+    <div class="px-6 h-20 flex w-full items-center justify-between gap-3 md:gap-4">
+        <div class="flex min-w-0 flex-1 items-center gap-4 lg:gap-8">
+            <a href="{{ route('client.home') }}" class="flex shrink-0 items-center gap-2" @click="exploreNavOpen = false">
+                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
+                </div>
+                <span class="text-xl font-bold tracking-tight hidden lg:inline">{{ config('app.name') }}.</span>
             </a>
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium" aria-label="{{ __('Primary') }}">
+                <a href="{{ route('client.explore') }}" class="text-gray-900 transition-colors hover:text-gray-600 whitespace-nowrap">{{ __('Explore') }}</a>
+                <a href="{{ route('client.home') }}#how-it-works" class="text-gray-900 transition-colors hover:text-gray-600 whitespace-nowrap">{{ __('How it works') }}</a>
+            </nav>
         </div>
 
-        <div class="flex items-center justify-end gap-3 w-48 shrink-0">
-            <a href="{{ url('/register?role=landlord') }}" class="hidden lg:block text-sm font-medium hover:text-gray-600 transition-colors whitespace-nowrap">
-                List your property
-            </a>
+        <div class="flex shrink-0 items-center justify-end gap-1 sm:gap-2">
+            <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-900 transition-colors hover:bg-gray-100 md:hidden"
+                x-bind:aria-expanded="exploreNavOpen"
+                aria-controls="explore-nav-mobile-menu"
+                aria-label="{{ __('Open menu') }}"
+                @click="exploreNavOpen = !exploreNavOpen"
+            >
+                <i data-lucide="menu" class="h-6 w-6" x-show="!exploreNavOpen" x-cloak></i>
+                <i data-lucide="x" class="h-6 w-6" x-show="exploreNavOpen" x-cloak></i>
+            </button>
             @guest
-                <a href="{{ route('login') }}" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">Log in</a>
+                <a href="{{ route('login') }}" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">{{ __('Log in') }}</a>
                 <a href="{{ route('register') }}" class="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors">
-                    <span class="hidden sm:inline">Sign up</span>
+                    <span class="hidden sm:inline">{{ __('Sign up') }}</span>
                     <i data-lucide="user" class="w-4 h-4 sm:hidden"></i>
                 </a>
             @else
@@ -53,19 +83,174 @@
         </div>
     </div>
 
+    {{-- Mobile: same links as marketing nav (without List a property) --}}
+    <div
+        id="explore-nav-mobile-menu"
+        x-show="exploreNavOpen"
+        x-cloak
+        x-transition
+        class="md:hidden border-t border-gray-100 bg-white px-6 py-3"
+    >
+        <div class="flex flex-col gap-1">
+            <a
+                href="{{ route('client.explore') }}"
+                class="rounded-xl px-4 py-3 text-base font-medium text-gray-900 transition-colors hover:bg-gray-50"
+                @click="exploreNavOpen = false"
+            >
+                {{ __('Explore') }}
+            </a>
+            <a
+                href="{{ route('client.home') }}#how-it-works"
+                class="rounded-xl px-4 py-3 text-base font-medium text-gray-900 transition-colors hover:bg-gray-50"
+                @click="exploreNavOpen = false"
+            >
+                {{ __('How it works') }}
+            </a>
+        </div>
+    </div>
+
     @if ($showFilters ?? true)
-    <div class="px-6 py-4 flex items-center gap-3 overflow-x-auto no-scrollbar border-t border-gray-50">
-        <button type="button" class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">
-            <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
-            Filters
-        </button>
-        <div class="w-px h-6 bg-gray-200 shrink-0 mx-2"></div>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Price</button>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">En-suite</button>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Studio</button>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Gym</button>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Bills Included</button>
-        <button type="button" class="filter-btn border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0">Distance to Uni</button>
+    @php
+        $pillOn = 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800';
+        $pillOff = 'border-gray-200 bg-white text-gray-900 hover:border-black';
+        $priceFilterActive = ($exploreFilters['price_min'] ?? '') !== '' || ($exploreFilters['price_max'] ?? '') !== '' || ($exploreFilters['rent_period'] ?? '') !== '';
+        $distanceFilterActive = ($exploreFilters['distance_max'] ?? '') !== '' || ($exploreFilters['distance_transit_max'] ?? '') !== '';
+        $studioPillActive = request('property_type') === 'studio' || request()->boolean('studio');
+        $fi = 'block w-full rounded-2xl border border-gray-200 bg-white py-3 px-4 text-sm font-medium text-gray-900 shadow-sm transition placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10';
+        $sel = 'block w-full cursor-pointer appearance-none rounded-2xl border border-gray-200 bg-white py-3 px-4 pr-10 text-sm font-medium text-gray-900 shadow-sm transition focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10';
+        $rpOn = 'border-gray-900 bg-gray-50 ring-2 ring-gray-900/10';
+        $rpOff = 'border-gray-200 bg-white hover:border-gray-300';
+        $geoCities = $citiesForFilter->map(fn ($c) => ['id' => $c->id, 'name' => $c->name])->values();
+        $geoAreas = $areasForFilter->map(fn ($a) => ['id' => $a->id, 'name' => $a->name])->values();
+    @endphp
+    <div
+        x-data="exploreFilterUi(@js($filterState), { citiesUrlPrefix: '{{ url('/explore/cities') }}/', areasUrlPrefix: '{{ url('/explore/areas') }}/', initialCities: @json($geoCities), initialAreas: @json($geoAreas) })"
+        class="px-6 py-4 border-t border-gray-50 relative z-40"
+    >
+        <div class="flex items-center gap-3 overflow-x-auto no-scrollbar">
+            <button
+                type="button"
+                class="flex items-center gap-2 border border-gray-200 rounded-full px-4 py-2 text-sm font-medium hover:border-black transition-colors whitespace-nowrap shrink-0 bg-white"
+                @click="filtersOpen = true; syncFromUrl(); $nextTick(() => { if (window.lucide) lucide.createIcons(); })"
+            >
+                <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                {{ __('Filters') }}
+            </button>
+            <div class="w-px h-6 bg-gray-200 shrink-0 mx-2"></div>
+
+            <div class="relative shrink-0">
+                <button
+                    type="button"
+                    class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
+                    :class="(priceOpen || {{ $priceFilterActive ? 'true' : 'false' }}) ? '{{ $pillOn }}' : '{{ $pillOff }}'"
+                    @click="distanceOpen = false; priceOpen = !priceOpen; if (priceOpen && !rentPeriod && (priceMin || priceMax)) { rentPeriod = 'week' }"
+                >
+                    {{ __('Price') }}
+                </button>
+                <div
+                    x-show="priceOpen"
+                    x-cloak
+                    x-transition
+                    @click.outside="priceOpen = false"
+                    class="absolute left-0 top-full mt-2 w-[min(100vw-2rem,22rem)] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl z-50"
+                >
+                    <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">{{ __('Rent amount') }}</p>
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <button type="button" @click="rentPeriod = 'day'" :class="rentPeriod === 'day' ? '{{ $rpOn }}' : '{{ $rpOff }}'" class="rounded-2xl border px-2 py-2.5 text-xs font-semibold transition">{{ __('Daily') }}</button>
+                        <button type="button" @click="rentPeriod = 'week'" :class="rentPeriod === 'week' ? '{{ $rpOn }}' : '{{ $rpOff }}'" class="rounded-2xl border px-2 py-2.5 text-xs font-semibold transition">{{ __('Weekly') }}</button>
+                        <button type="button" @click="rentPeriod = 'month'" :class="rentPeriod === 'month' ? '{{ $rpOn }}' : '{{ $rpOff }}'" class="rounded-2xl border px-2 py-2.5 text-xs font-semibold transition">{{ __('Monthly') }}</button>
+                    </div>
+                    <div class="flex gap-3 mb-4">
+                        <label class="flex-1 text-xs font-medium text-gray-600">{{ __('Min') }} (€)
+                            <input type="number" min="0" x-model="priceMin" class="mt-1.5 {{ $fi }}" placeholder="0">
+                        </label>
+                        <label class="flex-1 text-xs font-medium text-gray-600">{{ __('Max') }} (€)
+                            <input type="number" min="0" x-model="priceMax" class="mt-1.5 {{ $fi }}" placeholder="—">
+                        </label>
+                    </div>
+                    <button type="button" class="w-full rounded-full bg-gray-900 text-white text-sm font-medium py-2.5 hover:bg-black" @click="applyPrice(); priceOpen = false">
+                        {{ __('Apply') }}
+                    </button>
+                </div>
+            </div>
+
+            <a href="{{ $toggleExploreFilter('ensuite') }}" class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request()->boolean('ensuite') ? $pillOn : $pillOff }}">
+                {{ __('En-suite') }}
+            </a>
+            <a href="{{ $togglePropertyType('studio') }}" class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ $studioPillActive ? $pillOn : $pillOff }}">
+                {{ __('Studio') }}
+            </a>
+            <a href="{{ $toggleExploreFilter('gym') }}" class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request()->boolean('gym') ? $pillOn : $pillOff }}">
+                {{ __('Gym') }}
+            </a>
+            <a href="{{ $toggleExploreFilter('bills') }}" class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap shrink-0 {{ request()->boolean('bills') ? $pillOn : $pillOff }}">
+                {{ __('Bills Included') }}
+            </a>
+
+            <div class="relative shrink-0">
+                <button
+                    type="button"
+                    class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
+                    :class="(distanceOpen || {{ $distanceFilterActive ? 'true' : 'false' }}) ? '{{ $pillOn }}' : '{{ $pillOff }}'"
+                    @click="distanceOpen = !distanceOpen; priceOpen = false"
+                >
+                    {{ __('Distance to Uni') }}
+                </button>
+                <div
+                    x-show="distanceOpen"
+                    x-cloak
+                    x-transition
+                    @click.outside="distanceOpen = false"
+                    class="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl z-50"
+                >
+                    <p class="text-xs font-medium text-gray-500 mb-2">{{ __('Max distance from campus') }}</p>
+                    <label class="block text-xs font-medium text-gray-600">{{ __('Kilometres') }}
+                        <input type="number" min="0" step="0.1" x-model="distanceMax" class="mt-1.5 {{ $fi }}" placeholder="{{ __('e.g. 5') }}">
+                    </label>
+                    <label class="mt-3 block text-xs font-medium text-gray-600">{{ __('Max distance to transit') }}
+                        <input type="number" min="0" step="0.1" x-model="distanceTransitMax" class="mt-1.5 {{ $fi }}" placeholder="{{ __('e.g. 0.5') }}">
+                    </label>
+                    <button type="button" class="mt-4 w-full rounded-full bg-gray-900 text-white text-sm font-medium py-2.5 hover:bg-black" @click="applyDistance(); distanceOpen = false">
+                        {{ __('Apply') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            x-show="filtersOpen"
+            x-cloak
+            x-transition
+            class="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4"
+        >
+            <div class="absolute inset-0 bg-black/40" @click="filtersOpen = false"></div>
+            <div
+                class="relative w-full md:max-w-2xl lg:max-w-3xl rounded-t-3xl md:rounded-2xl bg-white shadow-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 z-10"
+                @click.stop
+            >
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold tracking-tight text-gray-900">{{ __('All filters') }}</h2>
+                    <button type="button" class="p-2 rounded-full hover:bg-gray-100" @click="filtersOpen = false" aria-label="{{ __('Close') }}">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                @include('client.explore.partials.filter-modal', [
+                    'countriesForFilter' => $countriesForFilter,
+                    'fi' => $fi,
+                    'sel' => $sel,
+                    'rpOn' => $rpOn,
+                    'rpOff' => $rpOff,
+                ])
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button type="button" class="flex-1 rounded-full border border-gray-200 py-3 text-sm font-medium hover:bg-gray-50" @click="clearFilterParams()">
+                        {{ __('Clear filters') }}
+                    </button>
+                    <button type="button" class="flex-1 rounded-full bg-gray-900 text-white py-3 text-sm font-medium hover:bg-black" @click="applyAllFromPanel()">
+                        {{ __('Apply') }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     @endif
 </header>

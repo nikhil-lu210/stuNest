@@ -43,7 +43,7 @@
                 </li>
                 @can('create', \App\Models\Property\Property::class)
                     <li class="menu-item {{ request()->routeIs('administration.properties.create') ? 'active' : '' }}">
-                        <a href="{{ route('administration.properties.create') }}" target="_blank" class="menu-link">{{ __('Create listing') }}</a>
+                        <a href="{{ route('administration.properties.create') }}" target="_blank" class="menu-link">{{ __('List your property') }}</a>
                     </li>
                 @endcan
             </ul>

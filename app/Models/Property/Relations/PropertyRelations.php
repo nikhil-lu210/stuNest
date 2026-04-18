@@ -34,4 +34,9 @@ trait PropertyRelations
     {
         return $this->hasMany(Application::class);
     }
+
+    public function savedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'saved_properties')->withTimestamps();
+    }
 }

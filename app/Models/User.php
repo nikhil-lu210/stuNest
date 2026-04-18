@@ -15,6 +15,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\InstituteLocation;
+use App\Models\Property\Property;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Scopes\HideDeveloperRoleUsersScope;
@@ -174,6 +176,14 @@ class User extends Authenticatable implements HasMedia
     public function instituteLocation(): BelongsTo
     {
         return $this->belongsTo(InstituteLocation::class, 'institute_location_id');
+    }
+
+    /**
+     * Published listings saved by this user (student wishlist).
+     */
+    public function savedProperties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'saved_properties')->withTimestamps();
     }
 
     /**

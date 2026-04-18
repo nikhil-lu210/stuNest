@@ -8,14 +8,14 @@
                 <span class="text-lg font-bold tracking-tight">{{ config('app.name') }}.</span>
             </a>
             <p class="text-gray-500 text-sm mb-6">
-                Elevating the student living experience in London.
+                {{ __('Elevating the student living experience — verified homes near campus.') }}
             </p>
         </div>
 
         <div>
             <h4 class="font-semibold mb-4 text-sm uppercase tracking-wider">Explore</h4>
             <ul class="space-y-3 text-gray-500 text-sm">
-                <li><a href="{{ route('client.explore') }}" class="hover:text-black transition-colors">Search London</a></li>
+                <li><a href="{{ route('client.explore') }}" class="hover:text-black transition-colors">{{ __('Search stays') }}</a></li>
                 <li><a href="{{ route('client.listing.show', ['slug' => 'example-studio']) }}" class="hover:text-black transition-colors">Example listing</a></li>
                 <li><a href="{{ url('/register?role=student') }}" class="hover:text-black transition-colors">Student sign up</a></li>
                 <li><a href="{{ route('client.home') }}" class="hover:text-black transition-colors">Home</a></li>

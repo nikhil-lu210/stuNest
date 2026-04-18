@@ -43,7 +43,7 @@ class ListingController extends Controller
                     'isSaved' => $isSaved,
                     'galleryUrls' => $this->galleryUrls($property),
                     'amenityRows' => $this->amenityRows($property),
-                    'aboutText' => $this->aboutText($property),
+                    'aboutPlace' => $this->aboutPlaceFromProperty($property),
                 ]);
             }
 
@@ -141,54 +141,181 @@ class ListingController extends Controller
         return $rows;
     }
 
-    private function aboutText(Property $property): string
+    /**
+     * @return array<int, array{title: string, rows: array<int, array{icon: string, label: string, value: string}>}>
+     */
+    private function aboutPlaceFromProperty(Property $property): array
     {
-        $lines = [];
+        $spaceRows = [];
 
-        $lines[] = __('This :category is listed for :audience.', [
-            'category' => Str::headline(str_replace('_', ' ', (string) $property->listing_category)),
-            'audience' => $property->rent_for
-                ? Str::headline(str_replace('_', ' ', (string) $property->rent_for))
-                : __('Students'),
-        ]);
+        $bedrooms = (int) $property->bedrooms;
+        $bathrooms = (int) $property->bathrooms;
+        $bedLbl = $bedrooms === 1 ? __('Bedroom') : __('Bedrooms');
+        $bathPhrase = match ((string) $property->bathroom_type) {
+            'shared' => $bathrooms.' '.($bathrooms === 1 ? __('shared bathroom') : __('shared bathrooms')),
+            'private_ensuite' => $bathrooms.' '.($bathrooms === 1 ? __('private / ensuite bathroom') : __('private / ensuite bathrooms')),
+            default => $bathrooms.' '.($bathrooms === 1 ? __('Bathroom') : __('Bathrooms')),
+        };
+        $spaceRows[] = [
+            'icon' => 'layout-template',
+            'label' => __('Bedrooms & bathrooms'),
+            'value' => $bedrooms.' '.$bedLbl.' • '.$bathPhrase,
+        ];
 
-        $lines[] = __(':beds bedroom(s), :baths bathroom(s), :furn.', [
-            'beds' => $property->bedrooms,
-            'baths' => $property->bathrooms,
-            'furn' => $property->is_furnished ? __('Furnished') : __('Unfurnished'),
-        ]);
+        $spaceRows[] = [
+            'icon' => 'sofa',
+            'label' => __('Furnishing'),
+            'value' => $property->is_furnished ? __('Fully furnished') : __('Unfurnished'),
+        ];
 
-        if ($property->bathroom_type) {
-            $lines[] = __('Bathroom: :type.', ['type' => Str::headline(str_replace('_', ' ', (string) $property->bathroom_type))]);
+        if ($property->bed_type) {
+            $spaceRows[] = [
+                'icon' => 'bed-double',
+                'label' => __('Bed type'),
+                'value' => match ((string) $property->bed_type) {
+                    'single' => __('Single bed'),
+                    'shared_double' => __('Shared double'),
+                    default => Str::headline(str_replace('_', ' ', (string) $property->bed_type)),
+                },
+            ];
         }
 
-        $lines[] = __('Rent is shown per :period (see sidebar). Bills: :bills.', [
-            'period' => match ($property->rent_duration) {
-                'day' => __('day'),
-                'month' => __('month'),
-                default => __('week'),
-            },
-            'bills' => match ($property->bills_included) {
-                'all' => __('All included'),
-                'some' => __('Some included'),
-                'none' => __('Not included'),
-                default => (string) $property->bills_included,
-            },
-        ]);
+        $tenantRows = [];
 
         $sf = is_array($property->suitable_for) ? $property->suitable_for : [];
         if ($sf !== []) {
             $labels = array_map(fn ($v) => Str::headline(str_replace('_', ' ', (string) $v)), $sf);
-            $lines[] = __('Suitable for: :list.', ['list' => implode(', ', $labels)]);
+            $tenantRows[] = [
+                'icon' => 'graduation-cap',
+                'label' => __('Suitable for'),
+                'value' => implode(' & ', $labels),
+            ];
         }
 
-        $lines[] = __('Minimum contract: :len.', ['len' => $this->contractLengthLabel($property->min_contract_length)]);
-
-        if ($property->provides_agreement) {
-            $lines[] = __('Written tenancy agreement available.');
+        if ($property->rent_for) {
+            $tenantRows[] = [
+                'icon' => 'users',
+                'label' => __('Household preference'),
+                'value' => $this->rentForLabel((string) $property->rent_for),
+            ];
         }
 
-        return implode("\n\n", array_filter($lines));
+        if ($property->listing_category === 'shared_room' && $property->flatmate_vibe) {
+            $tenantRows[] = [
+                'icon' => 'heart',
+                'label' => __('Flatmate vibe'),
+                'value' => match ((string) $property->flatmate_vibe) {
+                    'all_male' => __('All male'),
+                    'all_female' => __('All female'),
+                    'mixed' => __('Mixed'),
+                    default => Str::headline(str_replace('_', ' ', (string) $property->flatmate_vibe)),
+                },
+            ];
+        }
+
+        $rules = is_array($property->house_rules) ? $property->house_rules : [];
+        $ruleLabels = [];
+        foreach ($rules as $rule) {
+            $ruleLabels[] = $this->houseRuleLabel((string) $rule);
+        }
+        if ($ruleLabels !== []) {
+            $tenantRows[] = [
+                'icon' => 'clipboard-list',
+                'label' => __('House rules'),
+                'value' => implode(' • ', $ruleLabels),
+            ];
+        }
+
+        $financialRows = [];
+
+        $financialRows[] = [
+            'icon' => 'plug',
+            'label' => __('Bills'),
+            'value' => match ((string) $property->bills_included) {
+                'all' => __('All bills included'),
+                'some' => __('Some bills included'),
+                'none' => __('Bills not included'),
+                default => Str::headline(str_replace('_', ' ', (string) $property->bills_included)),
+            },
+        ];
+
+        $financialRows[] = [
+            'icon' => 'calendar',
+            'label' => __('Minimum stay'),
+            'value' => $this->contractLengthLabel($property->min_contract_length).' '.__('minimum'),
+        ];
+
+        $financialRows[] = [
+            'icon' => 'file-text',
+            'label' => __('Tenancy agreement'),
+            'value' => $property->provides_agreement
+                ? __('Written tenancy agreement provided')
+                : __('Contact landlord for agreement details'),
+        ];
+
+        $sections = [
+            [
+                'title' => __('The Space'),
+                'rows' => $spaceRows,
+            ],
+            [
+                'title' => __('Tenant preferences'),
+                'rows' => $tenantRows,
+            ],
+            [
+                'title' => __('Financials & contract'),
+                'rows' => $financialRows,
+            ],
+        ];
+
+        return array_values(array_filter($sections, fn (array $s) => count($s['rows']) > 0));
+    }
+
+    private function rentForLabel(string $rentFor): string
+    {
+        return match ($rentFor) {
+            'only_boys' => __('Only boys'),
+            'only_girls' => __('Only girls'),
+            'couples' => __('Couples welcome'),
+            'anyone' => __('Anyone welcome'),
+            default => Str::headline(str_replace('_', ' ', $rentFor)),
+        };
+    }
+
+    private function houseRuleLabel(string $rule): string
+    {
+        return match ($rule) {
+            'pet_friendly' => __('Pet friendly'),
+            'smoking_allowed' => __('Smoking allowed'),
+            'quiet_house' => __('Quiet house'),
+            default => Str::headline(str_replace('_', ' ', $rule)),
+        };
+    }
+
+    /**
+     * @param  array<string, mixed>  $listing
+     * @return array<int, array{title: string, rows: array<int, array{icon: string, label: string, value: string}>}>
+     */
+    private function aboutPlaceFromDemoListing(array $listing): array
+    {
+        $property = new Property;
+        $property->forceFill([
+            'bedrooms' => (int) ($listing['bedrooms'] ?? 1),
+            'bathrooms' => (int) ($listing['bathrooms'] ?? 1),
+            'bathroom_type' => (string) ($listing['bathroom_type'] ?? 'shared'),
+            'is_furnished' => (bool) ($listing['is_furnished'] ?? false),
+            'bed_type' => $listing['bed_type'] ?? null,
+            'listing_category' => (string) ($listing['listing_category'] ?? 'shared_room'),
+            'suitable_for' => $listing['suitable_for'] ?? [],
+            'rent_for' => (string) ($listing['rent_for'] ?? 'anyone'),
+            'flatmate_vibe' => $listing['flatmate_vibe'] ?? null,
+            'house_rules' => $listing['house_rules'] ?? [],
+            'bills_included' => (string) ($listing['bills_included'] ?? 'all'),
+            'min_contract_length' => (string) ($listing['min_contract_length'] ?? 'flexible'),
+            'provides_agreement' => (bool) ($listing['provides_agreement'] ?? false),
+        ]);
+
+        return $this->aboutPlaceFromProperty($property);
     }
 
     private function contractLengthLabel(string $value): string
@@ -239,7 +366,11 @@ class ListingController extends Controller
             'deposit_required' => '1_month',
             'deposit_label' => __('1 month rent'),
             'provides_agreement' => true,
-            'rent_for' => 'students',
+            'rent_for' => 'only_girls',
+            'bed_type' => 'single',
+            'flatmate_vibe' => 'mixed',
+            'suitable_for' => ['undergraduates', 'postgraduates'],
+            'house_rules' => ['quiet_house'],
             'distance_campus' => __('Near campus'),
             'distance_transit' => null,
         ];
@@ -260,7 +391,7 @@ class ListingController extends Controller
                 ['icon' => 'washing-machine', 'label' => __('Laundry facilities')],
                 ['icon' => 'dumbbell', 'label' => __('Building gym')],
             ],
-            'aboutText' => __('The Oxford Studio is a beautifully designed, self-contained living space created specifically for students who want a premium experience.'),
+            'aboutPlace' => $this->aboutPlaceFromDemoListing($listing),
         ]);
     }
 }

@@ -190,17 +190,25 @@
                 </div>
 
                 <div class="py-8 border-b border-gray-200">
-                    <h2 class="text-xl font-semibold mb-4">{{ __('About this place') }}</h2>
-                    <div id="desc-text" class="text-gray-600 leading-relaxed whitespace-pre-line line-clamp-3">{{ $aboutText }}</div>
-                    <button
-                        type="button"
-                        id="read-more-btn"
-                        class="font-semibold underline mt-4 text-gray-900 hover:text-gray-600 flex items-center gap-1"
-                        data-label-more="{{ __('Show more') }}"
-                        data-label-less="{{ __('Show less') }}"
-                    >
-                        {{ __('Show more') }} <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                    </button>
+                    <h2 class="text-xl font-semibold mb-6 text-gray-900">{{ __('About this place') }}</h2>
+                    @forelse (($aboutPlace ?? []) as $section)
+                        <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider {{ $loop->first ? 'mt-0' : 'mt-6' }} mb-3">{{ $section['title'] }}</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
+                            @foreach ($section['rows'] as $row)
+                                <div class="flex items-start gap-3">
+                                    <span class="mt-0.5 shrink-0 text-gray-400" aria-hidden="true">
+                                        <i data-lucide="{{ $row['icon'] }}" class="h-5 w-5"></i>
+                                    </span>
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-gray-900">{{ $row['label'] }}</p>
+                                        <p class="text-base text-gray-600 mt-0.5">{{ $row['value'] }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @empty
+                        <p class="text-base text-gray-600">{{ __('Details for this listing will appear here when available.') }}</p>
+                    @endforelse
                 </div>
 
                 <div class="py-8 border-b border-gray-200">
@@ -353,22 +361,6 @@
     @endif
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var readMoreBtn = document.getElementById('read-more-btn');
-            var descText = document.getElementById('desc-text');
-            if (readMoreBtn && descText) {
-                var more = readMoreBtn.getAttribute('data-label-more') || 'Show more';
-                var less = readMoreBtn.getAttribute('data-label-less') || 'Show less';
-                readMoreBtn.addEventListener('click', function () {
-                    if (descText.classList.contains('line-clamp-3')) {
-                        descText.classList.remove('line-clamp-3');
-                        this.innerHTML = less + ' <i data-lucide="chevron-up" class="w-4 h-4"></i>';
-                    } else {
-                        descText.classList.add('line-clamp-3');
-                        this.innerHTML = more + ' <i data-lucide="chevron-right" class="w-4 h-4"></i>';
-                    }
-                    if (window.lucide) lucide.createIcons();
-                });
-            }
             var shareBtn = document.getElementById('listing-share-btn');
             if (shareBtn) {
                 shareBtn.addEventListener('click', function () {

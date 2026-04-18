@@ -12,6 +12,7 @@ Route::controller(DashboardController::class)
     ->middleware('auth')
     ->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
+        Route::get('/saved', 'saved')->name('saved');
         Route::get('/settings', 'settings')->name('settings');
         Route::get('/notifications', 'notifications')->name('notifications');
     });

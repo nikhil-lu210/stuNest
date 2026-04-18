@@ -48,14 +48,6 @@
                     <livewire:student.student-applications-list />
                 </div>
 
-                <div id="saved-tab" class="tab-content">
-                    <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-12 text-center text-gray-500">
-                        <i data-lucide="heart" class="w-12 h-12 mx-auto mb-3 text-gray-300"></i>
-                        <p class="font-medium text-gray-900">{{ __('No saved properties') }}</p>
-                        <p class="text-sm mt-1">{{ __('Save listings you like from search to see them here.') }}</p>
-                    </div>
-                </div>
-
                 <div id="messages-tab" class="tab-content">
                     <div class="flex flex-col items-center justify-center h-64 text-center">
                         <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -79,13 +71,11 @@
 
             const titles = {
                 'applications-tab': @json(__('Applications')),
-                'saved-tab': @json(__('Saved Properties')),
                 'messages-tab': @json(__('Messages')),
             };
 
             const hashToTab = {
                 '': 'applications-tab',
-                '#saved-tab': 'saved-tab',
                 '#messages-tab': 'messages-tab',
             };
 

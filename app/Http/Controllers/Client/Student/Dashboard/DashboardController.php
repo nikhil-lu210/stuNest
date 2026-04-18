@@ -21,6 +21,18 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function saved(): View
+    {
+        $user = Auth::user();
+        abort_unless($user && $user->hasStudentRole(), 403);
+
+        $user->loadMissing(['institution']);
+
+        return view('client.student.saved', [
+            'user' => $user,
+        ]);
+    }
+
     public function settings(): View
     {
         $user = Auth::user();

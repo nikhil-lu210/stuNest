@@ -1,18 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\Student\Dashboard\DashboardController;
+use App\Livewire\Property\CreateListing;
+use Illuminate\Support\Facades\Route;
 
 /* ==============================================
 ===============< Student Routes >==============
 ===============================================*/
-Route::controller(DashboardController::class)
+Route::middleware('auth')
     ->prefix('student')
     ->name('student.')
-    ->middleware('auth')
     ->group(function () {
-        Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/saved', 'saved')->name('saved');
-        Route::get('/settings', 'settings')->name('settings');
-        Route::get('/notifications', 'notifications')->name('notifications');
+        Route::controller(DashboardController::class)->group(function () {
+            Route::get('/dashboard', 'index')->name('dashboard');
+            Route::get('/saved', 'saved')->name('saved');
+            Route::get('/settings', 'settings')->name('settings');
+            Route::get('/notifications', 'notifications')->name('notifications');
+        });
+
+        Route::get('/create-listing', CreateListing::class)->name('create-listing');
     });

@@ -92,6 +92,10 @@ class CreateListing extends Component
 
     public function mount(): void
     {
+        if (request()->routeIs('client.student.create-listing')) {
+            abort_unless($this->isStudent(), 403);
+        }
+
         if ($this->isStudent()) {
             $this->listing_category = 'shared_room';
         }
@@ -157,9 +161,21 @@ class CreateListing extends Component
         }
     }
 
+    /**
+     * Student listers: spare seat / shared room only (column slug + Spatie role).
+     */
     public function isStudent(): bool
     {
-        return Auth::user()?->hasRole('Student') ?? false;
+        $user = Auth::user();
+        if (! $user) {
+            return false;
+        }
+
+        if (($user->role ?? null) === 'student') {
+            return true;
+        }
+
+        return $user->hasStudentRole();
     }
 
     public function nextStep(): void
@@ -299,6 +315,10 @@ class CreateListing extends Component
             $this->included_bills = [];
         }
 
+        if ($this->isStudent()) {
+            $this->listing_category = 'shared_room';
+        }
+
         $maps = app(GoogleMapsUrlNormalizer::class)->normalize($this->map_link);
         $this->map_link = $maps['url'];
         $latitude = ($maps['latitude'] !== null && $maps['longitude'] !== null)
@@ -363,7 +383,11 @@ class CreateListing extends Component
                 : __('Your property listing has been saved as a draft.')
         );
 
-        $this->redirect(route('administration.dashboard.index'));
+        $this->redirect(
+            $this->isStudent()
+                ? route('client.student.dashboard')
+                : route('administration.dashboard.index')
+        );
     }
 
     protected function normalizeOptionalDecimal(?string $value): ?string
@@ -386,7 +410,9 @@ class CreateListing extends Component
                 ? Area::query()->active()->where('city_id', $this->city_id)->orderBy('name')->get()
                 : collect(),
         ])->layout('layouts.property-wizard', [
-            'title' => __('Create property listing'),
+            'title' => $this->isStudent()
+                ? __('List a Room/Seat')
+                : __('Create property listing'),
         ]);
     }
 }

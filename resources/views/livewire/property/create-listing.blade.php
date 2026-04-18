@@ -1,15 +1,9 @@
 <div>
     <header class="mb-10 text-center">
         <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">{{ __('StuNest') }}</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">{{ __('Create a listing') }}</h1>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">{{ $this->isStudent() ? __('List a Room/Seat') : __('Create a listing') }}</h1>
         <p class="mt-2 text-sm text-zinc-500">{{ __('Answer a few steps — no long descriptions needed.') }}</p>
     </header>
-
-    @if ($this->isStudent())
-        <div class="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-            {{ __('As a student, you can only list a shared room.') }}
-        </div>
-    @endif
 
     {{-- Progress --}}
     <ol class="mb-10 flex items-center justify-between gap-2">
@@ -37,10 +31,10 @@
         {{-- Step 1: Category + location + distances --}}
         @if ($currentStep === 1)
             <div class="space-y-8">
-                <div class="space-y-4">
-                    <h2 class="text-lg font-semibold text-zinc-900">{{ __('What are you listing?') }}</h2>
-                    <div class="grid gap-3 sm:grid-cols-2">
-                        @if (! $this->isStudent())
+                @if (! $this->isStudent())
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-semibold text-zinc-900">{{ __('What are you listing?') }}</h2>
+                        <div class="grid gap-3 sm:grid-cols-2">
                             <button type="button" wire:click="$set('listing_category', 'entire_place')"
                                 @class([
                                     'group flex flex-col rounded-2xl border p-5 text-left transition',
@@ -50,23 +44,26 @@
                                 <span class="text-base font-semibold text-zinc-900">{{ __('Entire place') }}</span>
                                 <span class="mt-1 text-sm text-zinc-500">{{ __('A private home or flat for one household.') }}</span>
                             </button>
-                        @endif
-                        <button type="button" wire:click="$set('listing_category', 'shared_room')"
-                            @class([
-                                'group flex flex-col rounded-2xl border p-5 text-left transition',
-                                'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $listing_category === 'shared_room',
-                                'border-zinc-200 bg-white hover:border-zinc-300' => $listing_category !== 'shared_room',
-                            ])>
-                            <span class="text-base font-semibold text-zinc-900">{{ __('A shared room') }}</span>
-                            <span class="mt-1 text-sm text-zinc-500">{{ __('A room in a shared flat or house.') }}</span>
-                        </button>
+                            <button type="button" wire:click="$set('listing_category', 'shared_room')"
+                                @class([
+                                    'group flex flex-col rounded-2xl border p-5 text-left transition',
+                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $listing_category === 'shared_room',
+                                    'border-zinc-200 bg-white hover:border-zinc-300' => $listing_category !== 'shared_room',
+                                ])>
+                                <span class="text-base font-semibold text-zinc-900">{{ __('A shared room') }}</span>
+                                <span class="mt-1 text-sm text-zinc-500">{{ __('A room in a shared flat or house.') }}</span>
+                            </button>
+                        </div>
+                        @error('listing_category')
+                            <p class="text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
-                    @error('listing_category')
-                        <p class="text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+                @endif
 
-                <div class="border-t border-zinc-100 pt-6">
+                <div @class([
+                    'border-t border-zinc-100 pt-6' => ! $this->isStudent(),
+                    'pt-0' => $this->isStudent(),
+                ])>
                     <h3 class="text-base font-semibold text-zinc-900">{{ __('Location') }}</h3>
                     <p class="mt-1 text-sm text-zinc-500">{{ __('Choose country, city, and area — lists update as you go.') }}</p>
                     <div class="mt-4 grid gap-4 sm:grid-cols-3">

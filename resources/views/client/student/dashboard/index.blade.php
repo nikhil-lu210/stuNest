@@ -45,12 +45,7 @@
                 @endif
 
                 <div id="applications-tab" class="tab-content active">
-                    <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-8 text-center text-gray-500">
-                        <i data-lucide="inbox" class="w-10 h-10 mx-auto mb-3 text-gray-300"></i>
-                        <p class="font-medium text-gray-900">{{ __('No applications yet') }}</p>
-                        <p class="text-sm mt-1 max-w-md mx-auto">{{ __('When you apply for a property, your progress and actions will show here.') }}</p>
-                        <a href="{{ route('client.home') }}" class="inline-block mt-4 text-sm font-semibold text-black hover:underline">{{ __('Browse listings') }}</a>
-                    </div>
+                    <livewire:student.student-applications-list />
                 </div>
 
                 <div id="saved-tab" class="tab-content">

@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index(): View|RedirectResponse
     {
         $user = Auth::user();
-        abort_unless($user && $user->hasRole('Student'), 403);
+        abort_unless($user && $user->hasStudentRole(), 403);
 
         $user->loadMissing(['institution']);
 
@@ -24,7 +24,7 @@ class DashboardController extends Controller
     public function settings(): View
     {
         $user = Auth::user();
-        abort_unless($user && $user->hasRole('Student'), 403);
+        abort_unless($user && $user->hasStudentRole(), 403);
 
         $user->loadMissing(['institution']);
 
@@ -36,7 +36,7 @@ class DashboardController extends Controller
     public function notifications(): View
     {
         $user = Auth::user();
-        abort_unless($user && $user->hasRole('Student'), 403);
+        abort_unless($user && $user->hasStudentRole(), 403);
 
         $user->loadMissing(['institution']);
 

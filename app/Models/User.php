@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\InstituteLocation;
+use App\Models\Application;
 use App\Models\Property\Property;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -187,6 +188,14 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * Property booking applications (student).
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class, 'user_id');
+    }
+
+    /**
      * Filter by Spatie role name (e.g. "Landlord", "Student", "Agent").
      *
      * Kept separate from Spatie's scopeRole() so User::role(...) continues to work.
@@ -227,11 +236,19 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
+     * Whether the user has the Student Spatie role (works when logged in via `web` or `student` guard).
+     */
+    public function hasStudentRole(): bool
+    {
+        return $this->roles()->where('name', 'Student')->exists();
+    }
+
+    /**
      * Primary client portal URL for login redirect and when access to administration is denied.
      */
     public function clientPortalHomeUrl(): string
     {
-        if ($this->hasRole('Student')) {
+        if ($this->hasStudentRole()) {
             return route('client.student.dashboard');
         }
         if ($this->hasRole('Landlord')) {

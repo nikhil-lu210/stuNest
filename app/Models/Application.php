@@ -19,6 +19,9 @@ class Application extends Model
     protected $fillable = [
         'property_id',
         'user_id',
+        'proposed_move_in',
+        'proposed_duration_weeks',
+        'message_to_landlord',
         'status',
         'accepted_at',
     ];
@@ -27,6 +30,8 @@ class Application extends Model
     {
         return [
             'accepted_at' => 'datetime',
+            'proposed_move_in' => 'date',
+            'proposed_duration_weeks' => 'integer',
         ];
     }
 

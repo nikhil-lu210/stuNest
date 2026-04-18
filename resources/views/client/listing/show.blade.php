@@ -285,9 +285,18 @@
                         </div>
                     </div>
 
-                    <a href="{{ $loginApplyUrl }}" class="block w-full text-center bg-black text-white py-3.5 rounded-xl font-semibold text-lg hover:bg-gray-800 transition-transform active:scale-95 mb-4">
-                        {{ __('Apply to book') }}
-                    </a>
+                    @if ($hasProperty)
+                        @livewire('property.apply-status-block', [
+                            'propertyId' => $property->id,
+                            'variant' => 'sidebar',
+                            'loginApplyUrl' => $loginApplyUrl,
+                            'existingApplicationId' => $existingApplication?->id,
+                        ], key('apply-status-sidebar-'.$property->id))
+                    @else
+                        <a href="{{ $loginApplyUrl }}" class="block w-full text-center bg-black text-white py-3.5 rounded-xl font-semibold text-lg hover:bg-gray-800 transition-transform active:scale-95 mb-4">
+                            {{ __('Apply to book') }}
+                        </a>
+                    @endif
 
                     <p class="text-center text-gray-500 text-sm mb-6">{{ __('No charge on :app — contract and deposit are agreed with the landlord.', ['app' => config('app.name')]) }}</p>
 
@@ -324,15 +333,33 @@
         </div>
     </main>
 
-    <div class="lg:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 px-6 z-50 flex items-center justify-between gap-4">
-        <div class="min-w-0">
-            <div class="text-lg font-bold">€{{ $rentAmount }} <span class="text-sm font-medium text-gray-500 font-normal">/ {{ $rentPeriodLabel }}</span></div>
-            <div class="text-sm text-gray-600 truncate">{{ $listing['min_contract_label'] ?? '' }}</div>
-        </div>
-        <a href="{{ $loginApplyUrl }}" class="shrink-0 bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 active:scale-95 transition-all">
-            {{ __('Apply') }}
-        </a>
+    <div class="lg:hidden fixed bottom-0 left-0 z-50 w-full border-t border-gray-200 bg-white p-4 px-6">
+        @if ($hasProperty)
+            @livewire('property.apply-status-block', [
+                'propertyId' => $property->id,
+                'variant' => 'mobile',
+                'loginApplyUrl' => $loginApplyUrl,
+                'existingApplicationId' => $existingApplication?->id,
+                'rentAmount' => $rentAmount,
+                'rentPeriodLabel' => $rentPeriodLabel,
+                'listingMinContractLabel' => $listing['min_contract_label'] ?? '',
+            ], key('apply-status-mobile-'.$property->id))
+        @else
+            <div class="flex items-center justify-between gap-4">
+                <div class="min-w-0">
+                    <div class="text-lg font-bold">€{{ $rentAmount }} <span class="text-sm font-medium text-gray-500 font-normal">/ {{ $rentPeriodLabel }}</span></div>
+                    <div class="text-sm text-gray-600 truncate">{{ $listing['min_contract_label'] ?? '' }}</div>
+                </div>
+                <a href="{{ $loginApplyUrl }}" class="shrink-0 rounded-xl bg-black px-6 py-3 font-semibold text-white transition-all hover:bg-gray-800 active:scale-95">
+                    {{ __('Apply') }}
+                </a>
+            </div>
+        @endif
     </div>
+
+    @if ($hasProperty && ! $isDemo)
+        @livewire('property.apply-to-property', ['property' => $property], key('apply-property-'.$property->id))
+    @endif
 
     @include('layouts.client.partials.footer')
 @endsection

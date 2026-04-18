@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client\Listing;
 
 use App\Http\Controllers\Controller;
 use App\Models\Property\Property;
+use App\Models\User;
 use App\Support\ListingPublicId;
 use App\Support\SavedPropertyIds;
 use Illuminate\Contracts\View\View;
@@ -14,8 +15,10 @@ use Illuminate\Support\Str;
 class ListingController extends Controller
 {
     /**
-     * Public listing detail. URLs use an opaque ref (ListingPublicId) instead of raw numeric ids.
+     * Public listing detail (property details page). URLs use an opaque ref (ListingPublicId) instead of raw numeric ids.
      * Legacy /listings/123 redirects to the canonical ref URL.
+     *
+     * Note: This is the public “Property Details” route; there is no separate PropertyController for marketing listings.
      */
     public function show(Request $request, string $slug): View|RedirectResponse
     {
@@ -28,7 +31,7 @@ class ListingController extends Controller
         $id = ListingPublicId::decode($slug);
         if ($id !== null) {
             $property = Property::query()
-                ->published()
+                ->whereIn('status', [Property::STATUS_PUBLISHED, Property::STATUS_LET_AGREED])
                 ->with(['city', 'area', 'country', 'media', 'creator'])
                 ->find($id);
 
@@ -36,11 +39,23 @@ class ListingController extends Controller
                 $savedIds = SavedPropertyIds::forRequest($request);
                 $isSaved = in_array($property->id, $savedIds, true);
 
+                $existingApplication = null;
+                if (auth()->check()) {
+                    $user = auth()->user();
+                    if ($user instanceof User && $user->hasStudentRole()) {
+                        $existingApplication = $user->applications()
+                            ->where('property_id', $property->id)
+                            ->latest()
+                            ->first();
+                    }
+                }
+
                 return view('client.listing.show', [
                     'listing' => $this->listingSnapshot($property),
                     'property' => $property,
                     'isDemo' => false,
                     'isSaved' => $isSaved,
+                    'existingApplication' => $existingApplication,
                     'galleryUrls' => $this->galleryUrls($property),
                     'amenityRows' => $this->amenityRows($property),
                     'aboutPlace' => $this->aboutPlaceFromProperty($property),
@@ -384,6 +399,7 @@ class ListingController extends Controller
             'property' => null,
             'isDemo' => true,
             'isSaved' => false,
+            'existingApplication' => null,
             'galleryUrls' => [],
             'amenityRows' => [
                 ['icon' => 'wifi', 'label' => __('Wi‑Fi')],

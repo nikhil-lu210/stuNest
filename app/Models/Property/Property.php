@@ -98,6 +98,8 @@ class Property extends Model implements HasMedia
         'status',
         'capacity',
         'available_beds',
+        'available_from',
+        'min_contract_weeks',
     ];
 
     protected function casts(): array
@@ -115,6 +117,8 @@ class Property extends Model implements HasMedia
             'amenities' => 'array',
             'capacity' => 'integer',
             'available_beds' => 'integer',
+            'available_from' => 'date',
+            'min_contract_weeks' => 'integer',
         ];
     }
 }

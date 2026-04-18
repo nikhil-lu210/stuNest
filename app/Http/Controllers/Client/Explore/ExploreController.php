@@ -8,11 +8,12 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Property\Property;
 use App\Support\CountryMapCentroids;
+use App\Support\ListingPublicId;
+use App\Support\SavedPropertyIds;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class ExploreController extends Controller
@@ -40,7 +41,7 @@ class ExploreController extends Controller
         $placesContextLine = $this->placesContextLine($q, $countryNames);
         $explorePageTitle = $this->explorePageTitle($request, $q, $countryNames);
 
-        $savedIds = $this->savedPropertyIdsForUser($request);
+        $savedIds = SavedPropertyIds::forRequest($request);
 
         $guests = max(1, min(10, (int) $request->input('guests', 1)));
 
@@ -62,7 +63,7 @@ class ExploreController extends Controller
                 'lng' => $lng,
                 'price' => (int) $property->rent_amount,
                 'title' => $property->display_title,
-                'url' => route('client.listing.show', ['slug' => $property->id]),
+                'url' => route('client.listing.show', ['slug' => ListingPublicId::encode($property->id)]),
             ];
         })->values()->all();
 
@@ -466,31 +467,6 @@ class ExploreController extends Controller
         $saved = count($changes['attached'] ?? []) > 0;
 
         return response()->json(['saved' => $saved]);
-    }
-
-    /**
-     * @return array<int, int>
-     */
-    private function savedPropertyIdsForUser(Request $request): array
-    {
-        if (! $request->user()) {
-            return [];
-        }
-
-        if (Schema::hasTable('saved_properties')) {
-            return DB::table('saved_properties')
-                ->where('user_id', $request->user()->id)
-                ->pluck('property_id')
-                ->map(fn ($id) => (int) $id)
-                ->all();
-        }
-
-        $ids = session()->get('explore_saved_property_ids', []);
-        if (! is_array($ids)) {
-            return [];
-        }
-
-        return array_values(array_unique(array_map('intval', $ids)));
     }
 
     private function toggleFavoriteInSession(Property $property): bool

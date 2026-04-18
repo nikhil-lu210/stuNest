@@ -47,7 +47,7 @@
                         $isSaved = in_array($property->id, $savedIds ?? [], true);
                     @endphp
                     <article class="relative rounded-2xl transition-shadow" data-explore-property="{{ $property->id }}">
-                        <a href="{{ route('client.listing.show', ['slug' => $property->id]) }}" class="group block">
+                        <a href="{{ route('client.listing.show', ['slug' => \App\Support\ListingPublicId::encode($property->id)]) }}" class="group block">
                             <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-{{ $property->id }}">
                                 <img
                                     src="{{ $property->thumbnail_url ?? 'https://picsum.photos/seed/sr'.$property->id.'/800/600' }}"

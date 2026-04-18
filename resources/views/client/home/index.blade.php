@@ -272,7 +272,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             @forelse ($featuredProperties as $index => $property)
-                <a href="{{ route('client.listing.show', ['slug' => $property->id]) }}" class="group block">
+                <a href="{{ route('client.listing.show', ['slug' => \App\Support\ListingPublicId::encode($property->id)]) }}" class="group block">
                     <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="home-listing-{{ $property->id }}">
                         <img
                             src="{{ $property->thumbnail_url ?? 'https://picsum.photos/seed/stunest-'.$property->id.'/800/800' }}"

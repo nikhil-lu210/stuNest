@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('clients/css/base.css') }}">
     @stack('styles')
 
+    <script src="{{ asset('clients/js/home-search-form.js') }}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     @stack('head')

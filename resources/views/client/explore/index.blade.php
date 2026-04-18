@@ -10,54 +10,65 @@
 @endpush
 
 @section('content')
-    @include('layouts.client.partials.nav-explore')
+    @include('layouts.client.partials.nav-explore', ['filters' => $filters])
 
     <main class="flex-1 flex overflow-hidden min-h-[60vh] lg:min-h-[calc(100vh-12rem)]">
         <section class="w-full lg:w-[55%] xl:w-[60%] flex-col overflow-y-auto custom-scrollbar-wide px-6 py-6 pb-24 lg:pb-6">
-            <p class="text-sm font-medium text-gray-500 mb-2">320+ places to stay in London</p>
-            <h1 class="text-3xl font-semibold tracking-tight mb-6">Student accommodations</h1>
+            <p class="text-sm font-medium text-gray-500 mb-2">
+                @if ($properties->total() === 0)
+                    {{ __('No places match your filters yet.') }}
+                @else
+                    @if ($properties->total() === 1)
+                        {{ __('1 place to stay') }}
+                    @else
+                        {{ __(':count places to stay', ['count' => $properties->total()]) }}
+                    @endif
+                    @if (($filters['q'] ?? '') === '')
+                        {{ __('in London') }}
+                    @endif
+                @endif
+            </p>
+            <h1 class="text-3xl font-semibold tracking-tight mb-6">{{ __('Student accommodations') }}</h1>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 xl:gap-8">
-                @php
-                    $cards = [
-                        ['title' => 'The Oxford Studio', 'price' => '285', 'line1' => 'Premium Studio • Islington', 'line2' => '1.2 miles to UCL', 'img' => 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'the-oxford-studio', 'star' => '4.9'],
-                        ['title' => 'Nova Premium En-suite', 'price' => '320', 'line1' => 'En-suite Room • Camden Town', 'line2' => "0.8 miles to King's College", 'img' => 'https://images.unsplash.com/photo-1502672260266-1c1c294036f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'nova-premium-ensuite', 'star' => '4.8'],
-                        ['title' => 'Apex Student Living', 'price' => '210', 'line1' => 'Shared Apartment • Wembley', 'line2' => '2.5 miles to Imperial College', 'img' => 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'apex-student-living', 'star' => '4.7'],
-                        ['title' => 'The Chapter Loft', 'price' => '395', 'line1' => 'Luxury Studio • Spitalfields', 'line2' => '0.5 miles to LSE', 'img' => 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'the-chapter-loft', 'star' => '5.0', 'rare' => true],
-                        ['title' => 'Battersea Residence', 'price' => '260', 'line1' => 'Standard Studio • Battersea', 'line2' => "1.8 miles to King's College", 'img' => 'https://images.unsplash.com/photo-1499955085172-a104c9463ece?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'battersea-residence', 'star' => '4.6'],
-                        ['title' => 'Stratford Quarters', 'price' => '230', 'line1' => 'En-suite Room • Stratford', 'line2' => 'Next to Queen Mary Uni', 'img' => 'https://images.unsplash.com/photo-1540518614846-7eded433c457?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 'slug' => 'stratford-quarters', 'star' => '4.5'],
-                    ];
-                @endphp
-                @foreach ($cards as $i => $c)
-                    <a href="{{ route('client.listing.show', ['slug' => $c['slug']]) }}" class="group block">
-                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-{{ $i + 1 }}">
-                            <img src="{{ $c['img'] }}" alt="{{ $c['title'] }}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out" onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr{{ $i }}/800/600'">
+                @forelse ($properties as $i => $property)
+                    <a href="{{ route('client.listing.show', ['slug' => $property->id]) }}" class="group block">
+                        <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 mb-4" data-lightbox-gallery="sr-{{ $property->id }}">
+                            <img
+                                src="{{ $property->thumbnail_url ?? 'https://picsum.photos/seed/sr'.$property->id.'/800/600' }}"
+                                alt="{{ $property->display_title }}"
+                                class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700 ease-out"
+                                onerror="this.onerror=null;this.src='https://picsum.photos/seed/sr{{ $property->id }}/800/600'"
+                            >
                             <span class="heart-btn absolute top-3 right-3 p-2 bg-white/70 backdrop-blur-md rounded-full text-gray-900 hover:bg-white hover:scale-110 transition-all z-10">
                                 <i data-lucide="heart" class="w-4 h-4"></i>
                             </span>
-                            @if (!empty($c['rare']))
-                                <div class="absolute top-3 left-3 px-2 py-1 bg-black text-white rounded-lg text-[10px] font-bold tracking-wider uppercase z-10">Rare Find</div>
-                            @endif
                             <div class="absolute bottom-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-md rounded-lg text-xs font-semibold z-10 flex items-center gap-1">
-                                <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> {{ $c['star'] }}
+                                <i data-lucide="star" class="w-3 h-3 fill-black text-black"></i> {{ $property->public_star_rating }}
                             </div>
                         </div>
                         <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <h3 class="font-semibold text-gray-900 truncate pr-4 text-base">{{ $c['title'] }}</h3>
-                                <p class="font-semibold text-base shrink-0">€{{ $c['price'] }}<span class="text-gray-500 font-normal text-sm">/pw</span></p>
+                            <div class="flex justify-between items-start mb-1 gap-2">
+                                <h3 class="font-semibold text-gray-900 truncate text-base min-w-0">{{ $property->display_title }}</h3>
+                                <p class="font-semibold text-base shrink-0">€{{ $property->weekly_rent_display }}<span class="text-gray-500 font-normal text-sm">/pw</span></p>
                             </div>
-                            <p class="text-gray-500 text-sm mb-1 truncate">{{ $c['line1'] }}</p>
-                            <p class="text-gray-400 text-sm">{{ $c['line2'] }}</p>
+                            <p class="text-gray-500 text-sm mb-1 truncate">{{ $property->marketing_uni_line }}</p>
+                            <p class="text-gray-400 text-sm">{{ $property->marketing_area_line }}</p>
                         </div>
                     </a>
-                @endforeach
+                @empty
+                    <div class="col-span-full rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-6 py-12 text-center">
+                        <p class="text-gray-600">{{ __('Try widening your search or clearing filters.') }}</p>
+                        <a href="{{ route('client.explore') }}" class="mt-4 inline-block text-sm font-semibold text-gray-900 underline">{{ __('View all published stays') }}</a>
+                    </div>
+                @endforelse
             </div>
 
-            <div class="mt-12 text-center pb-12">
-                <p class="text-sm text-gray-500 mb-4">Continue exploring London</p>
-                <button type="button" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-black transition-colors">Show more</button>
-            </div>
+            @if ($properties->hasPages())
+                <div class="mt-10 pb-12">
+                    {{ $properties->links() }}
+                </div>
+            @endif
         </section>
 
         <section class="hidden lg:block lg:w-[45%] xl:w-[40%] bg-gray-200 relative border-l border-gray-200 min-h-[50vh]">

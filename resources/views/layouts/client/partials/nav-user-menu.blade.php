@@ -55,7 +55,7 @@
         x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 translate-y-1"
-        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-[60]"
+        class="absolute right-0 z-[110] mt-2 w-48 rounded-xl border border-gray-100 bg-white py-1 shadow-lg"
         role="menu"
     >
         <div class="px-4 py-3 border-b border-gray-100">

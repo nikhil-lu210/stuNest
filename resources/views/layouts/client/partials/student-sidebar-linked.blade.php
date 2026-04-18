@@ -9,6 +9,7 @@
     $navBase = 'flex w-full items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors';
     $activeCls = 'bg-gray-50 text-gray-900 font-semibold';
     $idleCls = 'text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50';
+    $unreadMessagesCount = $user->unreadApplicationMessagesFromLandlordsCount();
 @endphp
 
 <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
@@ -32,10 +33,14 @@
             <i data-lucide="heart" class="w-5 h-5"></i>
             {{ __('Saved Properties') }}
         </a>
-        <a href="{{ route('client.student.dashboard') }}#messages-tab" class="{{ $navBase }} {{ $idleCls }}">
+        <a href="{{ route('client.student.messages') }}" class="{{ $navBase }} {{ $active === 'messages' ? $activeCls : $idleCls }}">
             <i data-lucide="message-square" class="w-5 h-5"></i>
             {{ __('Messages') }}
-            <span class="ml-auto bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-full">2</span>
+            @if ($unreadMessagesCount > 0)
+                <span class="ml-auto min-w-[1.25rem] rounded-full bg-black px-2 py-0.5 text-center text-[10px] font-bold text-white">
+                    {{ $unreadMessagesCount > 99 ? '99+' : $unreadMessagesCount }}
+                </span>
+            @endif
         </a>
         <div class="pt-4 mt-4 border-t border-gray-100">
             <a href="{{ route('client.student.settings') }}" class="{{ $navBase }} {{ $active === 'settings' ? $activeCls : $idleCls }}">
@@ -134,9 +139,13 @@
         <i data-lucide="heart" class="w-6 h-6"></i>
         <span class="text-[10px] font-semibold">{{ __('Saved') }}</span>
     </a>
-    <a href="{{ route('client.student.dashboard') }}#messages-tab" class="flex flex-col items-center gap-1 text-gray-400 hover:text-black relative">
+    <a href="{{ route('client.student.messages') }}" class="relative flex flex-col items-center gap-1 {{ $active === 'messages' ? 'text-black' : 'text-gray-400 hover:text-black' }}">
         <i data-lucide="message-square" class="w-6 h-6"></i>
-        <span class="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        @if ($unreadMessagesCount > 0)
+            <span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-black px-1 text-[9px] font-bold leading-none text-white ring-2 ring-white">
+                {{ $unreadMessagesCount > 99 ? '99+' : $unreadMessagesCount }}
+            </span>
+        @endif
         <span class="text-[10px] font-semibold">{{ __('Inbox') }}</span>
     </a>
     <a href="{{ route('client.student.settings') }}" class="flex flex-col items-center gap-1 {{ $active === 'settings' ? 'text-black' : 'text-gray-400' }}">

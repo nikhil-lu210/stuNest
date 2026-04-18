@@ -33,6 +33,18 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function messages(): View
+    {
+        $user = Auth::user();
+        abort_unless($user && $user->hasStudentRole(), 403);
+
+        $user->loadMissing(['institution']);
+
+        return view('client.student.messages', [
+            'user' => $user,
+        ]);
+    }
+
     public function settings(): View
     {
         $user = Auth::user();

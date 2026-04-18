@@ -20,7 +20,7 @@
 
         <main class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50 pt-16 md:pt-0">
             <div class="hidden h-20 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 sm:px-6 md:px-8 lg:px-10 md:flex sticky top-0 z-40">
-                <h1 class="text-xl font-semibold tracking-tight" id="page-title">{{ __('Applications') }}</h1>
+                <h1 class="text-xl font-semibold tracking-tight">{{ __('Applications') }}</h1>
                 <div class="flex items-center gap-4">
                     <livewire:student.notification-bell />
                 </div>
@@ -44,19 +44,7 @@
                     </div>
                 @endif
 
-                <div id="applications-tab" class="tab-content active">
-                    <livewire:student.student-applications-list />
-                </div>
-
-                <div id="messages-tab" class="tab-content">
-                    <div class="flex flex-col items-center justify-center h-64 text-center">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                            <i data-lucide="message-square" class="w-8 h-8 text-gray-400"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ __('No messages yet') }}</h3>
-                        <p class="text-gray-500 mt-1 max-w-sm">{{ __('When you contact a landlord or they send you an update, your messages will appear here.') }}</p>
-                    </div>
-                </div>
+                <livewire:student.student-applications-list />
             </div>
             </div>
         </main>
@@ -66,51 +54,13 @@
 @push('scripts')
     <script>
         (function () {
-            const tabContents = document.querySelectorAll('.tab-content');
-            const pageTitle = document.getElementById('page-title');
-
-            const titles = {
-                'applications-tab': @json(__('Applications')),
-                'messages-tab': @json(__('Messages')),
-            };
-
-            const hashToTab = {
-                '': 'applications-tab',
-                '#messages-tab': 'messages-tab',
-            };
-
-            function refreshIcons() {
-                if (window.lucide && typeof lucide.createIcons === 'function') {
-                    lucide.createIcons();
-                }
+            if (window.location.hash === '#messages-tab') {
+                window.location.replace(@json(route('client.student.messages')));
+                return;
             }
-
-            function activateTab(targetId) {
-                if (!targetId || !titles[targetId]) {
-                    targetId = 'applications-tab';
-                }
-                tabContents.forEach(function (content) {
-                    content.classList.remove('active');
-                });
-                const targetEl = document.getElementById(targetId);
-                if (targetEl) {
-                    targetEl.classList.add('active');
-                }
-                if (pageTitle && titles[targetId]) {
-                    pageTitle.textContent = titles[targetId];
-                }
-                refreshIcons();
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
             }
-
-            function syncFromHash() {
-                const h = window.location.hash;
-                const id = hashToTab[h] || 'applications-tab';
-                activateTab(id);
-            }
-
-            document.addEventListener('DOMContentLoaded', syncFromHash);
-            window.addEventListener('hashchange', syncFromHash);
-            refreshIcons();
         })();
     </script>
 @endpush

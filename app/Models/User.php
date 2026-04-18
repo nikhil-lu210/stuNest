@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\InstituteLocation;
 use App\Models\Application;
+use App\Models\Message;
 use App\Models\Property\Property;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -193,6 +194,18 @@ class User extends Authenticatable implements HasMedia
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class, 'user_id');
+    }
+
+    /**
+     * Total unread in-app chat messages from landlords across this student's applications.
+     */
+    public function unreadApplicationMessagesFromLandlordsCount(): int
+    {
+        return Message::query()
+            ->whereHas('application', fn ($q) => $q->where('user_id', $this->id))
+            ->where('sender_id', '!=', $this->id)
+            ->where('is_read', false)
+            ->count();
     }
 
     /**

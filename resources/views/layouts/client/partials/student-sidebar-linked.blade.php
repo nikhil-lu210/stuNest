@@ -53,7 +53,7 @@
                 </a>
                 <a
                     href="{{ route('client.student.create-listing') }}"
-                    class="flex w-full items-center rounded-lg py-2 pl-11 pr-3 text-sm transition-colors {{ request()->routeIs('client.student.create-listing') ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                    class="flex w-full items-center rounded-lg py-2 pl-11 pr-3 text-sm transition-colors {{ request()->routeIs('client.student.create-listing') || request()->routeIs('client.student.listings.edit') ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
                 >
                     {{ __('New Advertise') }}
                 </a>

@@ -564,7 +564,7 @@ class CreateListing extends Component
 
     public function render(): View
     {
-        return view('livewire.property.create-listing', [
+        $view = view('livewire.property.create-listing', [
             'countries' => Country::query()->active()->orderBy('name')->get(),
             'cities' => $this->country_id
                 ? City::query()->active()->where('country_id', $this->country_id)->orderBy('name')->get()
@@ -572,12 +572,22 @@ class CreateListing extends Component
             'areas' => $this->city_id
                 ? Area::query()->active()->where('city_id', $this->city_id)->orderBy('name')->get()
                 : collect(),
-        ])->layout('layouts.property-wizard', [
-            'title' => match (true) {
-                $this->editingPropertyId !== null => __('Edit listing'),
-                $this->isStudent() => __('List a Room/Seat'),
-                default => __('Create property listing'),
-            },
+        ]);
+
+        $pageTitle = match (true) {
+            $this->editingPropertyId !== null => __('Edit listing'),
+            $this->isStudent() => __('List a Room/Seat'),
+            default => __('Create property listing'),
+        };
+
+        if ($this->isStudent()) {
+            return $view->layout('layouts.client.student-property-wizard', [
+                'title' => $pageTitle,
+            ]);
+        }
+
+        return $view->layout('layouts.property-wizard', [
+            'title' => $pageTitle,
         ]);
     }
 }

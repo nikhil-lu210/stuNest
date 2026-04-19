@@ -1,5 +1,12 @@
-<div>
-    <header class="mb-10 text-center">
+<div
+    @class([
+        'mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8' => $this->isStudent(),
+    ])
+>
+    <header @class([
+        'mb-10 text-center',
+        'md:mb-8' => $this->isStudent(),
+    ])>
         <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">{{ __('StuNest') }}</p>
         <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
             @if ($editingPropertyId)
@@ -33,7 +40,12 @@
         @endforeach
     </ol>
 
-    <div class="rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-sm sm:p-8">
+    <div
+        @class([
+            'rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-sm sm:p-8',
+            'border-gray-200 shadow-md ring-1 ring-gray-900/5' => $this->isStudent(),
+        ])
+    >
         {{-- Step 1: Category + location + distances --}}
         @if ($currentStep === 1)
             <div class="space-y-8">

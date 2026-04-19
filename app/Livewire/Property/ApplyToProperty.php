@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
@@ -85,14 +86,27 @@ class ApplyToProperty extends Component
 
         $proposedDurationWeeks = $this->proposedDurationAsWeeks();
 
-        Application::query()->create([
-            'property_id' => $this->property->id,
-            'user_id' => $user->id,
-            'proposed_move_in' => Carbon::parse($this->proposed_move_in)->format('Y-m-d'),
-            'proposed_duration_weeks' => $proposedDurationWeeks,
-            'message_to_landlord' => $this->message_to_landlord,
-            'status' => Application::STATUS_PENDING,
-        ]);
+        $property = $this->property;
+        $fullMessage = 'Expected Move-in Date: '.Carbon::parse($this->proposed_move_in)->format('d M Y')."\n".
+            'Proposed Min Duration: '.$this->proposed_duration.' '.Str::plural($property->rent_duration ?? 'week', (int) $this->proposed_duration)."\n\n".
+            $this->message_to_landlord;
+
+        DB::transaction(function () use ($user, $proposedDurationWeeks, $fullMessage) {
+            $application = Application::query()->create([
+                'property_id' => $this->property->id,
+                'user_id' => $user->id,
+                'proposed_move_in' => Carbon::parse($this->proposed_move_in)->format('Y-m-d'),
+                'proposed_duration_weeks' => $proposedDurationWeeks,
+                'message_to_landlord' => $this->message_to_landlord,
+                'status' => Application::STATUS_PENDING,
+            ]);
+
+            $application->messages()->create([
+                'sender_id' => $user->id,
+                'body' => $fullMessage,
+                'is_read' => false,
+            ]);
+        });
 
         $this->dispatch('application-submitted');
 

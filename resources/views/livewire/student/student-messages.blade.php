@@ -1,5 +1,6 @@
 @php
     use App\Models\Application;
+    use App\Support\ListingPublicId;
 @endphp
 
 <div class="flex min-h-0 flex-col">
@@ -120,8 +121,17 @@
                             <p class="truncate text-sm font-semibold text-gray-900">
                                 {{ $activeApplication->property->display_title }}
                             </p>
-                            <p class="truncate text-xs text-gray-500">
+                            <p class="mt-0.5 truncate text-xs text-gray-500">
                                 {{ $landlord?->name ?? __('Landlord') }}
+                                <span class="text-gray-300" aria-hidden="true">·</span>
+                                <a
+                                    href="{{ route('client.listing.show', ['slug' => ListingPublicId::encode($activeApplication->property->id)]) }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="font-medium text-gray-700 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 hover:decoration-gray-500"
+                                >
+                                    {{ __('View listing') }}
+                                </a>
                             </p>
                         </div>
                         <span

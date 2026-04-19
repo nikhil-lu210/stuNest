@@ -17,6 +17,8 @@
     @stack('styles')
 
     @livewireStyles
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.3/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     @stack('head')
 </head>

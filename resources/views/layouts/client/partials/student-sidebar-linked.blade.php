@@ -3,7 +3,7 @@
   @var \App\Models\User $user
   @var string $institutionLabel
   @var string|null $avatarUrl
-  @var string $active  applications|create-listing|saved|settings|messages
+  @var string $active  applications|listings|create-listing|saved|settings|messages
 --}}
 @php
     $navBase = 'flex w-full items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors';
@@ -25,10 +25,41 @@
             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
             {{ __('Applications') }}
         </a>
-        <a href="{{ route('client.student.create-listing') }}" class="{{ $navBase }} {{ $active === 'create-listing' ? $activeCls : $idleCls }}">
-            <i data-lucide="bed-double" class="w-5 h-5"></i>
-            {{ __('List a Room/Seat') }}
-        </a>
+
+        <div
+            class="space-y-0"
+            x-data="{ open: @json(request()->routeIs('client.student.listings.*') || request()->routeIs('client.student.create-listing')) }"
+        >
+            <button
+                type="button"
+                @click="open = !open"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors {{ in_array($active, ['listings', 'create-listing'], true) ? 'bg-gray-50 font-semibold text-gray-900' : 'font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}"
+                x-bind:aria-expanded="open"
+            >
+                <i data-lucide="home" class="h-5 w-5 shrink-0"></i>
+                <span class="min-w-0 flex-1">{{ __('Properties / Rooms') }}</span>
+                <i
+                    data-lucide="chevron-down"
+                    class="h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200"
+                    x-bind:class="{ 'rotate-180': open }"
+                ></i>
+            </button>
+            <div x-show="open" x-collapse class="space-y-0.5 pb-1 pt-0.5">
+                <a
+                    href="{{ route('client.student.listings.index') }}"
+                    class="flex w-full items-center rounded-lg py-2 pl-11 pr-3 text-sm transition-colors {{ $active === 'listings' ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                >
+                    {{ __('All Listings') }}
+                </a>
+                <a
+                    href="{{ route('client.student.create-listing') }}"
+                    class="flex w-full items-center rounded-lg py-2 pl-11 pr-3 text-sm transition-colors {{ request()->routeIs('client.student.create-listing') ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                >
+                    {{ __('New Advertise') }}
+                </a>
+            </div>
+        </div>
+
         <a href="{{ route('client.student.saved') }}" class="{{ $navBase }} {{ $active === 'saved' ? $activeCls : $idleCls }}">
             <i data-lucide="heart" class="w-5 h-5"></i>
             {{ __('Saved Properties') }}

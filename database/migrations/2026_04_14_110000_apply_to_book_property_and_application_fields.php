@@ -7,6 +7,54 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Drop all foreign keys on `applications` if present (names differ across DBs / legacy schemas).
+     */
+    protected function dropApplicationsForeignKeys(): void
+    {
+        if (! Schema::hasTable('applications')) {
+            return;
+        }
+
+        $connection = Schema::getConnection();
+        $driver = $connection->getDriverName();
+
+        if (in_array($driver, ['mysql', 'mariadb'], true)) {
+            $database = $connection->getDatabaseName();
+            $constraints = $connection->select(
+                <<<'SQL'
+                SELECT DISTINCT kcu.CONSTRAINT_NAME AS CONSTRAINT_NAME
+                FROM information_schema.TABLE_CONSTRAINTS tc
+                INNER JOIN information_schema.KEY_COLUMN_USAGE kcu
+                    ON tc.CONSTRAINT_SCHEMA = kcu.CONSTRAINT_SCHEMA
+                    AND tc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME
+                    AND tc.TABLE_NAME = kcu.TABLE_NAME
+                WHERE tc.TABLE_SCHEMA = ?
+                  AND tc.TABLE_NAME = 'applications'
+                  AND tc.CONSTRAINT_TYPE = 'FOREIGN KEY'
+                  AND kcu.COLUMN_NAME IN ('property_id', 'user_id')
+                SQL,
+                [$database]
+            );
+
+            foreach ($constraints as $row) {
+                $name = str_replace('`', '``', (string) $row->CONSTRAINT_NAME);
+                $connection->statement('ALTER TABLE `applications` DROP FOREIGN KEY `'.$name.'`');
+            }
+
+            return;
+        }
+
+        try {
+            Schema::table('applications', function (Blueprint $table) {
+                $table->dropForeign(['property_id']);
+                $table->dropForeign(['user_id']);
+            });
+        } catch (\Throwable) {
+            // No foreign keys or non-standard schema (e.g. SQLite tests).
+        }
+    }
+
     public function up(): void
     {
         Schema::table('properties', function (Blueprint $table) {
@@ -38,10 +86,7 @@ return new class extends Migration
 
         if (Schema::hasTable('applications')) {
             // InnoDB may use the composite unique index for FK lookups; drop FKs before dropping unique.
-            Schema::table('applications', function (Blueprint $table) {
-                $table->dropForeign(['property_id']);
-                $table->dropForeign(['user_id']);
-            });
+            $this->dropApplicationsForeignKeys();
 
             Schema::table('applications', function (Blueprint $table) {
                 $table->dropUnique(['property_id', 'user_id']);
@@ -81,10 +126,7 @@ return new class extends Migration
     public function down(): void
     {
         if (Schema::hasTable('applications')) {
-            Schema::table('applications', function (Blueprint $table) {
-                $table->dropForeign(['property_id']);
-                $table->dropForeign(['user_id']);
-            });
+            $this->dropApplicationsForeignKeys();
 
             Schema::table('applications', function (Blueprint $table) {
                 $table->dropIndex(['property_id', 'user_id', 'status']);

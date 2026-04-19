@@ -1,5 +1,8 @@
 {{--
-  Linked navigation for student portal.
+  Linked navigation for student portal — responsive shell from project_documents/clients_theme/student_dashboard.html:
+  - Desktop: aside `hidden md:flex` + scrollable nav
+  - Mobile: fixed top bar (logo + profile) + fixed bottom nav (`md:hidden` … `pb-safe`)
+  - No hamburger/off-canvas: primary mobile nav is the bottom bar, matching the theme.
   @var \App\Models\User $user
   @var string $institutionLabel
   @var string|null $avatarUrl
@@ -10,6 +13,11 @@
     $activeCls = 'bg-gray-50 text-gray-900 font-semibold';
     $idleCls = 'text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50';
     $unreadMessagesCount = $user->unreadApplicationMessagesFromLandlordsCount();
+    $studentDashboardActive = request()->routeIs('client.student.dashboard');
+    $propertiesBottomActive = $active === 'listings'
+        || request()->routeIs('client.student.create-listing')
+        || request()->routeIs('client.student.listings.edit');
+    $profileBottomActive = $active === 'settings';
 @endphp
 
 <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
@@ -161,26 +169,95 @@
     </div>
 </header>
 
-<nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-50 px-6 py-3 flex justify-between items-center pb-safe" aria-label="{{ __('Primary') }}">
-    <a href="{{ route('client.student.dashboard') }}" class="flex flex-col items-center gap-1 {{ $active === 'applications' ? 'text-black' : 'text-gray-400' }}">
-        <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
-        <span class="text-[10px] font-semibold">{{ __('Apps') }}</span>
-    </a>
-    <a href="{{ route('client.student.saved') }}" class="flex flex-col items-center gap-1 {{ $active === 'saved' ? 'text-black' : 'text-gray-400 hover:text-black' }}">
-        <i data-lucide="heart" class="w-6 h-6"></i>
-        <span class="text-[10px] font-semibold">{{ __('Saved') }}</span>
-    </a>
-    <a href="{{ route('client.student.messages') }}" class="relative flex flex-col items-center gap-1 {{ $active === 'messages' ? 'text-black' : 'text-gray-400 hover:text-black' }}">
-        <i data-lucide="message-square" class="w-6 h-6"></i>
-        @if ($unreadMessagesCount > 0)
-            <span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-black px-1 text-[9px] font-bold leading-none text-white ring-2 ring-white">
-                {{ $unreadMessagesCount > 99 ? '99+' : $unreadMessagesCount }}
-            </span>
-        @endif
-        <span class="text-[10px] font-semibold">{{ __('Inbox') }}</span>
-    </a>
-    <a href="{{ route('client.student.settings') }}" class="flex flex-col items-center gap-1 {{ $active === 'settings' ? 'text-black' : 'text-gray-400' }}">
-        <i data-lucide="settings" class="w-6 h-6"></i>
-        <span class="text-[10px] font-semibold">{{ __('Settings') }}</span>
-    </a>
-</nav>
+{{-- Mobile bottom nav — outer wrapper overflow-visible so Profile drop-up is not clipped --}}
+<div class="md:hidden fixed bottom-0 left-0 right-0 z-[60] overflow-visible pointer-events-none">
+    <nav class="pointer-events-auto w-full overflow-visible border-t border-gray-200 bg-white px-1 py-3 pb-safe" aria-label="{{ __('Primary') }}">
+        <div class="grid grid-cols-6 items-end justify-items-center gap-0.5">
+            <a href="{{ route('client.student.dashboard') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $studentDashboardActive ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+                <i data-lucide="home" class="h-6 w-6 shrink-0"></i>
+                <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Home') }}</span>
+            </a>
+            <a href="{{ route('client.student.dashboard') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $studentDashboardActive ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+                <i data-lucide="file-text" class="h-6 w-6 shrink-0"></i>
+                <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Applications') }}</span>
+            </a>
+            <a href="{{ route('client.student.messages') }}" class="relative flex max-w-[4.5rem] flex-col items-center gap-1 {{ $active === 'messages' ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+                <i data-lucide="message-square" class="h-6 w-6 shrink-0"></i>
+                @if ($unreadMessagesCount > 0)
+                    <span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-black px-1 text-[9px] font-bold leading-none text-white ring-2 ring-white">
+                        {{ $unreadMessagesCount > 99 ? '99+' : $unreadMessagesCount }}
+                    </span>
+                @endif
+                <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Messages') }}</span>
+            </a>
+            <a href="{{ route('client.student.saved') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $active === 'saved' ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+                <i data-lucide="heart" class="h-6 w-6 shrink-0"></i>
+                <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Saved') }}</span>
+            </a>
+            <a href="{{ route('client.student.listings.index') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $propertiesBottomActive ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+                <i data-lucide="building-2" class="h-6 w-6 shrink-0"></i>
+                <span class="text-center text-[9px] font-semibold leading-tight">{{ __('Properties / Rooms') }}</span>
+            </a>
+            <div class="relative z-[1] flex max-w-[4.5rem] flex-col items-center" x-data="{ mobileProfileOpen: false }">
+                <button
+                    type="button"
+                    @click="mobileProfileOpen = !mobileProfileOpen"
+                    class="flex flex-col items-center gap-1 {{ $profileBottomActive ? 'text-black' : 'text-gray-400 hover:text-black' }}"
+                    aria-haspopup="true"
+                    x-bind:aria-expanded="mobileProfileOpen"
+                    aria-label="{{ __('Profile menu') }}"
+                >
+                    <i data-lucide="user" class="h-6 w-6 shrink-0"></i>
+                    <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Profile') }}</span>
+                </button>
+                <div
+                    x-show="mobileProfileOpen"
+                    x-transition:enter="transition ease-out duration-150"
+                    x-transition:enter-start="opacity-0 translate-y-1"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-100"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 translate-y-1"
+                    @click.outside="mobileProfileOpen = false"
+                    x-cloak
+                    class="absolute bottom-full right-2 mb-4 w-48 rounded-xl border border-gray-100 bg-white shadow-2xl z-[70]"
+                >
+            <div class="border-b border-gray-100 px-3 py-2.5">
+                <p class="truncate text-sm font-semibold text-gray-900">{{ $user->name }}</p>
+                <p class="mt-0.5 truncate text-xs text-gray-500">{{ $user->email }}</p>
+            </div>
+            <a
+                href="{{ route('client.student.settings') }}"
+                class="block px-3 py-2.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                @click="mobileProfileOpen = false"
+            >
+                {{ __('Settings') }}
+            </a>
+            <a
+                href="{{ route('client.student.create-listing') }}"
+                class="block px-3 py-2.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                @click="mobileProfileOpen = false"
+            >
+                {{ __('List a Room/Seat') }}
+            </a>
+            <a
+                href="{{ route('client.student.listings.index') }}"
+                class="block px-3 py-2.5 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                @click="mobileProfileOpen = false"
+            >
+                {{ __('All Listings') }}
+            </a>
+            <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-100">
+                @csrf
+                <button
+                    type="submit"
+                    class="w-full px-3 py-2.5 text-left text-sm font-medium text-gray-800 transition-colors hover:bg-gray-50"
+                >
+                    {{ __('Log out') }}
+                </button>
+            </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>

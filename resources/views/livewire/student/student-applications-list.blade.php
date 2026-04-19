@@ -41,9 +41,10 @@
                         <div class="absolute left-0 top-0 h-full w-1.5 bg-amber-500" aria-hidden="true"></div>
                     @endif
 
-                    <div class="flex flex-col gap-5 sm:flex-row sm:items-stretch sm:gap-6">
+                    {{-- Layout: project_documents/clients_theme/student_dashboard.html — stack on mobile/tablet, row from lg --}}
+                    <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch">
                         {{-- Thumbnail --}}
-                        <div class="mx-auto w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:mx-0 sm:w-28 sm:self-start md:w-32 aspect-[16/10] sm:aspect-square">
+                        <div class="mx-auto aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 lg:mx-0 lg:w-48 lg:aspect-square">
                             @if ($thumbUrl)
                                 <img src="{{ $thumbUrl }}" alt="" class="h-full w-full object-cover" loading="lazy" />
                             @else
@@ -55,7 +56,7 @@
 
                         {{-- Main --}}
                         <div class="min-w-0 flex-1">
-                            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                                 <div class="min-w-0 flex-1">
                                     <div class="mb-1 flex flex-wrap items-center gap-2">
                                         <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide {{ $badgeClass }}">
@@ -76,9 +77,14 @@
                                             {{ __('From :date', ['date' => $application->proposed_move_in->translatedFormat('M j, Y')]) }}
                                         @endif
                                     </p>
+                                    @if ($property)
+                                        <p class="mt-2 text-xl font-bold text-gray-900 sm:hidden">
+                                            €{{ $property->rent_amount }}<span class="text-sm font-normal text-gray-500">/{{ $property->rent_duration }}</span>
+                                        </p>
+                                    @endif
                                 </div>
 
-                                <div class="flex shrink-0 flex-col gap-3 sm:items-end sm:text-right">
+                                <div class="hidden shrink-0 flex-col gap-3 text-right sm:flex sm:items-end">
                                     @if ($property)
                                         <div class="text-xl font-bold text-gray-900">
                                             €{{ $property->rent_amount }}<span class="text-sm font-normal text-gray-500">/{{ $property->rent_duration }}</span>
@@ -90,12 +96,12 @@
                                 </div>
                             </div>
 
-                            {{-- Actions: inline links (no Alpine; matches student-app layout) --}}
+                            {{-- Actions: full-width on mobile (theme application cards) --}}
                             <div class="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                                 @if ($property)
                                     <a
                                         href="{{ route('client.listing.show', ['slug' => \App\Support\ListingPublicId::encode($property->id)]) }}"
-                                        class="text-sm font-semibold text-gray-900 underline-offset-2 hover:underline"
+                                        class="inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-gray-900 shadow-sm transition hover:bg-gray-50 sm:inline-flex sm:w-auto sm:justify-start sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none sm:underline sm:underline-offset-2"
                                     >
                                         {{ __('View listing') }}
                                     </a>
@@ -105,7 +111,7 @@
                                         type="button"
                                         wire:click="withdrawApplication({{ $application->id }})"
                                         wire:confirm="{{ __('Are you sure?') }}"
-                                        class="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 sm:ml-auto"
+                                        class="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-100 sm:ml-auto sm:w-auto"
                                     >
                                         {{ __('Withdraw application') }}
                                     </button>

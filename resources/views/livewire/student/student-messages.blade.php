@@ -29,7 +29,7 @@
                 <div class="border-b border-gray-100 px-4 py-3 md:hidden">
                     <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">{{ __('Conversations') }}</p>
                 </div>
-                <ul class="custom-scrollbar max-h-[50vh] flex-1 overflow-y-auto md:max-h-none" role="list">
+                <ul class="custom-scrollbar min-h-0 flex-1 overflow-y-auto md:max-h-[min(28rem,calc(100vh-12rem))]" role="list">
                     @foreach ($applications as $app)
                         @php
                             $landlord = $app->property?->creator;
@@ -108,14 +108,15 @@
                             default => ucfirst((string) $status),
                         };
                     @endphp
-                    <header class="flex shrink-0 items-center gap-3 border-b border-gray-100 bg-white px-4 py-3">
+                    <header class="flex shrink-0 items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
                         <button
                             type="button"
                             wire:click="backToList"
-                            class="rounded-lg p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+                            class="inline-flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 md:hidden"
                             aria-label="{{ __('Back to conversations') }}"
                         >
-                            <i data-lucide="arrow-left" class="h-5 w-5"></i>
+                            <i data-lucide="arrow-left" class="h-5 w-5 shrink-0"></i>
+                            {{ __('Back') }}
                         </button>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-sm font-semibold text-gray-900">

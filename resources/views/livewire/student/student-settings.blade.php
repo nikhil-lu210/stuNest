@@ -92,13 +92,13 @@
                 </div>
             </div>
 
-            <div class="flex justify-end pt-2 border-t border-gray-50">
+            <div class="flex flex-col-reverse gap-2 pt-2 border-t border-gray-50 sm:flex-row sm:justify-end">
                 <button
                     type="button"
                     wire:click="updateProfile"
                     wire:loading.attr="disabled"
                     wire:target="updateProfile"
-                    class="inline-flex items-center justify-center rounded-xl bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-60 transition-colors"
+                    class="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-60 transition-colors sm:w-auto"
                 >
                     <span wire:loading.remove wire:target="updateProfile">{{ __('Save Profile') }}</span>
                     <span wire:loading wire:target="updateProfile">{{ __('Saving…') }}</span>
@@ -153,13 +153,13 @@
                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="flex justify-end pt-2 border-t border-gray-50">
+            <div class="flex flex-col-reverse gap-2 pt-2 border-t border-gray-50 sm:flex-row sm:justify-end">
                 <button
                     type="button"
                     wire:click="updatePassword"
                     wire:loading.attr="disabled"
                     wire:target="updatePassword"
-                    class="inline-flex items-center justify-center rounded-xl bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-60 transition-colors"
+                    class="inline-flex w-full items-center justify-center rounded-xl bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:opacity-60 transition-colors sm:w-auto"
                 >
                     <span wire:loading.remove wire:target="updatePassword">{{ __('Update Password') }}</span>
                     <span wire:loading wire:target="updatePassword">{{ __('Saving…') }}</span>
@@ -175,15 +175,15 @@
             <p class="text-sm text-gray-500 mt-1">{{ __('Choose which emails we send you.') }}</p>
         </div>
         <div class="px-6 py-6 space-y-6">
-            <div class="flex items-center justify-between gap-4 py-1">
-                <span class="text-sm text-gray-800 pr-2">{{ __('Email me when my application status changes.') }}</span>
+            <div class="flex flex-col gap-3 py-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <span class="text-sm text-gray-800 sm:pr-2">{{ __('Email me when my application status changes.') }}</span>
                 <label class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full bg-gray-200 transition-colors has-[:checked]:bg-black focus-within:ring-2 focus-within:ring-gray-900 focus-within:ring-offset-2">
                     <input type="checkbox" wire:model.live="notify_application_status" class="peer sr-only">
                     <span class="pointer-events-none absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></span>
                 </label>
             </div>
-            <div class="flex items-center justify-between gap-4 py-1">
-                <span class="text-sm text-gray-800 pr-2">{{ __('Email me when a landlord sends a message.') }}</span>
+            <div class="flex flex-col gap-3 py-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <span class="text-sm text-gray-800 sm:pr-2">{{ __('Email me when a landlord sends a message.') }}</span>
                 <label class="relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full bg-gray-200 transition-colors has-[:checked]:bg-black focus-within:ring-2 focus-within:ring-gray-900 focus-within:ring-offset-2">
                     <input type="checkbox" wire:model.live="notify_landlord_message" class="peer sr-only">
                     <span class="pointer-events-none absolute left-0.5 top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></span>
@@ -196,13 +196,13 @@
                 <p class="text-sm text-red-600">{{ $message }}</p>
             @enderror
 
-            <div class="flex justify-end pt-4 border-t border-gray-50">
+            <div class="flex flex-col-reverse gap-2 pt-4 border-t border-gray-50 sm:flex-row sm:justify-end">
                 <button
                     type="button"
                     wire:click="savePreferences"
                     wire:loading.attr="disabled"
                     wire:target="savePreferences"
-                    class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 disabled:opacity-60 transition-colors"
+                    class="inline-flex w-full items-center justify-center rounded-xl border border-gray-200 bg-white px-6 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 disabled:opacity-60 transition-colors sm:w-auto"
                 >
                     <span wire:loading.remove wire:target="savePreferences">{{ __('Save Preferences') }}</span>
                     <span wire:loading wire:target="savePreferences">{{ __('Saving…') }}</span>

@@ -51,8 +51,8 @@
                     wire:key="student-listing-{{ $property->id }}"
                     class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
                 >
-                    <div class="flex flex-col gap-5 sm:flex-row sm:items-stretch sm:gap-6">
-                        <div class="mx-auto aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:mx-0 sm:w-32 sm:aspect-square md:w-36">
+                    <div class="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+                        <div class="mx-auto aspect-[16/10] w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 lg:mx-0 lg:w-48 lg:aspect-square">
                             @if ($thumbUrl)
                                 <img src="{{ $thumbUrl }}" alt="" class="h-full w-full object-cover" loading="lazy" />
                             @else
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="min-w-0 flex-1">
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                 <div class="min-w-0">
                                     <div class="mb-1 flex flex-wrap items-center gap-2">
                                         <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide {{ $badgeClass }}">
@@ -81,7 +81,7 @@
                                     </p>
                                 </div>
 
-                                <div class="flex shrink-0 flex-col gap-2 sm:items-end">
+                                <div class="flex w-full shrink-0 flex-col gap-2 lg:w-auto lg:items-end">
                                     @if ($canToggle)
                                         <button
                                             type="button"
@@ -89,7 +89,7 @@
                                             wire:loading.attr="disabled"
                                             role="switch"
                                             aria-checked="{{ $isLive ? 'true' : 'false' }}"
-                                            class="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm transition hover:bg-gray-50 disabled:opacity-50"
+                                            class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm transition hover:bg-gray-50 disabled:opacity-50 lg:w-auto lg:justify-start"
                                         >
                                             <span class="relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors {{ $isLive ? 'bg-emerald-500' : 'bg-gray-200' }}">
                                                 <span
@@ -101,17 +101,17 @@
                                         </button>
                                     @endif
 
-                                    <div class="flex flex-wrap gap-2">
+                                    <div class="flex w-full flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
                                         <a
                                             href="{{ route('client.student.listings.edit', $property) }}"
-                                            class="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
+                                            class="inline-flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-50 sm:w-auto"
                                         >
                                             {{ __('Edit') }}
                                         </a>
                                         @if ($property->status === Property::STATUS_PUBLISHED)
                                             <a
                                                 href="{{ route('client.listing.show', ['slug' => \App\Support\ListingPublicId::encode($property->id)]) }}"
-                                                class="inline-flex items-center justify-center rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
+                                                class="inline-flex w-full items-center justify-center rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 sm:w-auto"
                                             >
                                                 {{ __('View live') }}
                                             </a>

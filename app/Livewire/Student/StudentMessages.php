@@ -23,12 +23,6 @@ class StudentMessages extends Component
     {
         $user = Auth::user();
         abort_unless($user instanceof User && $user->hasStudentRole(), 403);
-
-        $applications = $this->applicationsQuery()->get();
-        if ($applications->isNotEmpty()) {
-            $this->activeApplicationId = $applications->first()->id;
-            $this->markIncomingReadFor($this->activeApplicationId);
-        }
     }
 
     public function selectConversation(int $applicationId): void
@@ -52,6 +46,7 @@ class StudentMessages extends Component
     public function backToList(): void
     {
         $this->mobilePanel = 'list';
+        $this->activeApplicationId = null;
     }
 
     public function sendMessage(): void
@@ -133,13 +128,9 @@ class StudentMessages extends Component
                 ->with(['property.creator', 'messages' => fn ($q) => $q->orderBy('created_at')])
                 ->first();
 
-            if (! $activeApplication && $applications->isNotEmpty()) {
-                $this->activeApplicationId = $applications->first()->id;
-                $activeApplication = Application::query()
-                    ->where('user_id', Auth::id())
-                    ->whereKey($this->activeApplicationId)
-                    ->with(['property.creator', 'messages' => fn ($q) => $q->orderBy('created_at')])
-                    ->first();
+            if (! $activeApplication) {
+                $this->activeApplicationId = null;
+                $this->mobilePanel = 'list';
             }
         }
 

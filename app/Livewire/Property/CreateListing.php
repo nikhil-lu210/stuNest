@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
@@ -90,8 +91,27 @@ class CreateListing extends Component
     /** User choice on the final step: save without publishing, or publish live. */
     public string $save_as = 'draft';
 
-    public function mount(): void
+    public ?int $editingPropertyId = null;
+
+    public int $existingGalleryCount = 0;
+
+    /** @var array<int, string> */
+    public array $existingPhotoUrls = [];
+
+    public function mount(?Property $property = null): void
     {
+        if ($property !== null) {
+            if (request()->routeIs('client.student.listings.edit')) {
+                abort_unless(Auth::user()?->hasStudentRole(), 403);
+                abort_unless(Auth::user()?->can('update', $property), 403);
+            } else {
+                abort_unless(Auth::user()?->can('update', $property), 403);
+            }
+
+            $this->editingPropertyId = $property->id;
+            $this->fillFromProperty($property);
+        }
+
         if (request()->routeIs('client.student.create-listing')) {
             abort_unless($this->isStudent(), 403);
         }
@@ -99,6 +119,45 @@ class CreateListing extends Component
         if ($this->isStudent()) {
             $this->listing_category = 'shared_room';
         }
+    }
+
+    protected function fillFromProperty(Property $property): void
+    {
+        $property->loadMissing('media');
+
+        $this->listing_category = (string) $property->listing_category;
+        $this->country_id = $property->country_id;
+        $this->city_id = $property->city_id;
+        $this->area_id = $property->area_id;
+        $this->map_link = (string) $property->map_link;
+        $this->latitude = $property->latitude !== null ? (string) $property->latitude : null;
+        $this->longitude = $property->longitude !== null ? (string) $property->longitude : null;
+        $this->distance_university_km = $property->distance_university_km !== null ? (string) $property->distance_university_km : null;
+        $this->distance_transit_km = $property->distance_transit_km !== null ? (string) $property->distance_transit_km : null;
+        $this->property_type = (string) $property->property_type;
+        $this->bed_type = $property->bed_type;
+        $this->bedrooms = (int) $property->bedrooms;
+        $this->bathrooms = (int) $property->bathrooms;
+        $this->bathroom_type = (string) $property->bathroom_type;
+        $this->is_furnished = (bool) $property->is_furnished;
+        $this->rent_duration = (string) $property->rent_duration;
+        $this->rent_amount = (int) $property->rent_amount;
+        $this->bills_included = (string) $property->bills_included;
+        $this->included_bills = is_array($property->included_bills) ? $property->included_bills : [];
+        $this->min_contract_length = (string) $property->min_contract_length;
+        $this->provides_agreement = (bool) $property->provides_agreement;
+        $this->deposit_required = (string) $property->deposit_required;
+        $this->rent_for = (string) $property->rent_for;
+        $this->suitable_for = is_array($property->suitable_for) ? $property->suitable_for : [];
+        $this->flatmate_vibe = $property->flatmate_vibe;
+        $this->house_rules = is_array($property->house_rules) ? $property->house_rules : [];
+        $this->amenities = is_array($property->amenities) ? $property->amenities : [];
+
+        $this->save_as = $property->status === Property::STATUS_PUBLISHED ? 'published' : 'draft';
+
+        $gallery = $property->getMedia('property_gallery');
+        $this->existingGalleryCount = $gallery->count();
+        $this->existingPhotoUrls = $gallery->map(fn ($media) => $media->getUrl('thumb'))->values()->all();
     }
 
     public function hydrate(): void
@@ -279,6 +338,63 @@ class CreateListing extends Component
         $this->submitListing('published');
     }
 
+    /**
+     * @return array<int, TemporaryUploadedFile>
+     */
+    protected function newPhotoFiles(): array
+    {
+        return array_values(array_filter(
+            $this->photos ?? [],
+            static fn ($p): bool => $p instanceof TemporaryUploadedFile
+        ));
+    }
+
+    protected function assertPhotosValidForSubmit(): void
+    {
+        $newFiles = $this->newPhotoFiles();
+        $total = $this->existingGalleryCount + count($newFiles);
+
+        if ($total < 3) {
+            throw ValidationException::withMessages([
+                'photos' => [__('You must have at least 3 photos in total.')],
+            ]);
+        }
+        if ($total > 10) {
+            throw ValidationException::withMessages([
+                'photos' => [__('You can have at most 10 photos in total.')],
+            ]);
+        }
+
+        $totalNewBytes = array_sum(array_map(
+            static fn (TemporaryUploadedFile $f): int => $f->getSize(),
+            $newFiles
+        ));
+        if ($totalNewBytes > self::PHOTOS_MAX_TOTAL_BYTES) {
+            throw ValidationException::withMessages([
+                'photos' => [__('The total size of all new photos must not exceed 10 MB.')],
+            ]);
+        }
+
+        foreach ($newFiles as $file) {
+            validator(['photo' => $file], ['photo' => 'image'])->validate();
+        }
+    }
+
+    protected function resolveStatusAfterUpdate(Property $property): string
+    {
+        if (in_array($property->status, [
+            Property::STATUS_PENDING,
+            Property::STATUS_REJECTED,
+            Property::STATUS_LET_AGREED,
+        ], true)) {
+            return $property->status;
+        }
+
+        return $this->save_as === 'published'
+            ? Property::STATUS_PUBLISHED
+            : Property::STATUS_DRAFT;
+    }
+
     protected function submitListing(string $saveAs = 'draft'): void
     {
         $this->save_as = in_array($saveAs, ['draft', 'published'], true) ? $saveAs : 'draft';
@@ -287,29 +403,7 @@ class CreateListing extends Component
             $this->validate($this->rulesForStep($s));
         }
 
-        $this->validate([
-            'photos' => [
-                'required',
-                'array',
-                'min:3',
-                'max:10',
-                function (string $attribute, mixed $value, \Closure $fail): void {
-                    if (! is_array($value)) {
-                        return;
-                    }
-                    $total = 0;
-                    foreach ($value as $file) {
-                        if ($file instanceof TemporaryUploadedFile) {
-                            $total += $file->getSize();
-                        }
-                    }
-                    if ($total > self::PHOTOS_MAX_TOTAL_BYTES) {
-                        $fail(__('The total size of all photos must not exceed 10 MB.'));
-                    }
-                },
-            ],
-            'photos.*' => ['image'],
-        ]);
+        $this->assertPhotosValidForSubmit();
 
         if ($this->bills_included !== 'some') {
             $this->included_bills = [];
@@ -328,6 +422,15 @@ class CreateListing extends Component
             ? $maps['longitude']
             : $this->normalizeOptionalDecimal($this->longitude);
 
+        if ($this->editingPropertyId !== null) {
+            $this->persistListingUpdate($latitude, $longitude);
+        } else {
+            $this->persistListingCreate($latitude, $longitude);
+        }
+    }
+
+    protected function persistListingCreate(?string $latitude, ?string $longitude): void
+    {
         DB::transaction(function () use ($latitude, $longitude) {
             $property = Property::create([
                 'user_id' => Auth::id(),
@@ -365,11 +468,9 @@ class CreateListing extends Component
                     : Property::STATUS_DRAFT,
             ]);
 
-            foreach ($this->photos as $photo) {
+            foreach ($this->newPhotoFiles() as $photo) {
                 $property->addMedia($photo->getRealPath())->toMediaCollection('property_gallery');
-                if ($photo instanceof TemporaryUploadedFile) {
-                    $photo->delete();
-                }
+                $photo->delete();
             }
         });
 
@@ -385,7 +486,69 @@ class CreateListing extends Component
 
         $this->redirect(
             $this->isStudent()
-                ? route('client.student.dashboard')
+                ? route('client.student.listings.index')
+                : route('administration.dashboard.index')
+        );
+    }
+
+    protected function persistListingUpdate(?string $latitude, ?string $longitude): void
+    {
+        $property = Property::query()->whereKey($this->editingPropertyId)->firstOrFail();
+        abort_unless(Auth::user()?->can('update', $property), 403);
+
+        DB::transaction(function () use ($property, $latitude, $longitude) {
+            $property->update([
+                'country_id' => $this->country_id,
+                'city_id' => $this->city_id,
+                'area_id' => $this->area_id,
+                'map_link' => $this->map_link,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'distance_university_km' => $this->distance_university_km,
+                'distance_transit_km' => $this->distance_transit_km,
+                'bed_type' => $this->listing_category === 'shared_room' ? $this->bed_type : null,
+                'listing_category' => $this->listing_category,
+                'property_type' => $this->property_type,
+                'bedrooms' => $this->bedrooms,
+                'bathrooms' => $this->bathrooms,
+                'bathroom_type' => $this->bathroom_type,
+                'is_furnished' => $this->is_furnished,
+                'rent_duration' => $this->rent_duration,
+                'rent_amount' => (int) $this->rent_amount,
+                'bills_included' => $this->bills_included,
+                'included_bills' => $this->bills_included === 'some' ? $this->included_bills : [],
+                'min_contract_length' => $this->min_contract_length,
+                'provides_agreement' => $this->provides_agreement,
+                'deposit_required' => $this->deposit_required,
+                'rent_for' => $this->rent_for,
+                'suitable_for' => $this->suitable_for,
+                'flatmate_vibe' => $this->listing_category === 'shared_room' ? $this->flatmate_vibe : null,
+                'house_rules' => $this->house_rules,
+                'amenities' => $this->amenities,
+                'capacity' => max(1, (int) $this->bedrooms),
+                'available_beds' => max(1, (int) $this->bedrooms),
+                'status' => $this->resolveStatusAfterUpdate($property),
+            ]);
+
+            foreach ($this->newPhotoFiles() as $photo) {
+                $property->addMedia($photo->getRealPath())->toMediaCollection('property_gallery');
+                $photo->delete();
+            }
+        });
+
+        $this->photos = [];
+        $this->photosCount = 0;
+
+        session()->flash(
+            'success',
+            $this->save_as === 'published'
+                ? __('Your listing has been updated and is live.')
+                : __('Your listing has been saved as a draft.')
+        );
+
+        $this->redirect(
+            $this->isStudent()
+                ? route('client.student.listings.index')
                 : route('administration.dashboard.index')
         );
     }
@@ -410,9 +573,11 @@ class CreateListing extends Component
                 ? Area::query()->active()->where('city_id', $this->city_id)->orderBy('name')->get()
                 : collect(),
         ])->layout('layouts.property-wizard', [
-            'title' => $this->isStudent()
-                ? __('List a Room/Seat')
-                : __('Create property listing'),
+            'title' => match (true) {
+                $this->editingPropertyId !== null => __('Edit listing'),
+                $this->isStudent() => __('List a Room/Seat'),
+                default => __('Create property listing'),
+            },
         ]);
     }
 }

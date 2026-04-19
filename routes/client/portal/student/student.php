@@ -21,4 +21,5 @@ Route::middleware('auth')
         });
 
         Route::get('/create-listing', CreateListing::class)->name('create-listing');
+        Route::get('/listings/{property}/edit', CreateListing::class)->name('listings.edit');
     });

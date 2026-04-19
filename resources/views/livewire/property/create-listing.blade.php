@@ -1,7 +1,13 @@
 <div>
     <header class="mb-10 text-center">
         <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">{{ __('StuNest') }}</p>
-        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">{{ $this->isStudent() ? __('List a Room/Seat') : __('Create a listing') }}</h1>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-zinc-900">
+            @if ($editingPropertyId)
+                {{ __('Edit listing') }}
+            @else
+                {{ $this->isStudent() ? __('List a Room/Seat') : __('Create a listing') }}
+            @endif
+        </h1>
         <p class="mt-2 text-sm text-zinc-500">{{ __('Answer a few steps — no long descriptions needed.') }}</p>
     </header>
 
@@ -566,23 +572,43 @@
 
                 <div class="border-t border-zinc-100 pt-8"
                     x-data="{
+                        existing: @js($existingGalleryCount),
                         photoCount: @entangle('photosCount').live,
                         dragging: false,
                         uploadFromDrop(e) {
                             this.dragging = false;
                             const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-                            const maxAdd = Math.max(0, 10 - this.photoCount);
+                            const maxAdd = Math.max(0, 10 - this.existing - this.photoCount);
                             const batch = files.slice(0, maxAdd);
                             if (!batch.length) return;
                             $wire.uploadMultiple('photos', batch, function () {}, function () {}, function () {}, function () {}, this.photoCount > 0);
                         }
                     }">
                     <h2 class="text-lg font-semibold text-zinc-900">{{ __('Property photos') }}</h2>
-                    <p class="mt-1 text-sm text-zinc-500">{{ __('Upload between 3 and 10 images. Combined file size must not exceed 10 MB. JPG, PNG, or WebP.') }}</p>
+                    @if ($editingPropertyId)
+                        <p class="mt-1 text-sm text-zinc-500">
+                            {{ __('You already have :count saved photo(s). Add more if you like — you need 3–10 photos in total. New uploads only: combined size must not exceed 10 MB. JPG, PNG, or WebP.', ['count' => $existingGalleryCount]) }}
+                        </p>
+                    @else
+                        <p class="mt-1 text-sm text-zinc-500">{{ __('Upload between 3 and 10 images. Combined file size must not exceed 10 MB. JPG, PNG, or WebP.') }}</p>
+                    @endif
                     <p class="mt-1 text-xs font-medium text-zinc-600">
-                        <span>{{ __('Selected') }}:</span>
-                        <span x-text="photoCount"></span> / 10
+                        <span>{{ __('Photos (saved + new)') }}:</span>
+                        <span x-text="existing + photoCount"></span> / 10
                     </p>
+
+                    @if ($editingPropertyId && count($existingPhotoUrls) > 0)
+                        <div class="mt-4">
+                            <p class="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">{{ __('Current photos') }}</p>
+                            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                                @foreach ($existingPhotoUrls as $url)
+                                    <div class="overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 shadow-sm">
+                                        <img src="{{ $url }}" alt="" class="h-36 w-full object-cover" loading="lazy" />
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
                     {{-- Hidden: UI is the dashed zone only (no native "Choose file" row) --}}
                     <input type="file" id="property-photos-input" wire:model="photos" multiple
@@ -654,7 +680,11 @@
                 <div class="border-t border-zinc-100 pt-8">
                     <h2 class="text-lg font-semibold text-zinc-900">{{ __('Publish or save as draft') }}</h2>
                     <p class="mt-1 text-sm text-zinc-500">
-                        {{ __('Publishing makes the listing live for seekers. Draft keeps it in your account until you publish it later.') }}
+                        @if ($editingPropertyId)
+                            {{ __('Save your changes as a draft or publish so seekers see the latest version.') }}
+                        @else
+                            {{ __('Publishing makes the listing live for seekers. Draft keeps it in your account until you publish it later.') }}
+                        @endif
                     </p>
                 </div>
             </div>
@@ -684,7 +714,9 @@
                     <button type="button" wire:click="submitPublished"
                         wire:loading.attr="disabled"
                         class="inline-flex justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:opacity-60">
-                        <span wire:loading.remove wire:target="submitPublished">{{ __('Publish') }}</span>
+                        <span wire:loading.remove wire:target="submitPublished">
+                            {{ $editingPropertyId ? __('Update & publish') : __('Publish') }}
+                        </span>
                         <span wire:loading wire:target="submitPublished">{{ __('Publishing…') }}</span>
                     </button>
                 @endif

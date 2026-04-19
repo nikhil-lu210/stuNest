@@ -103,7 +103,7 @@
 
                                     <div class="flex flex-wrap gap-2">
                                         <a
-                                            href="{{ route('administration.properties.edit', $property) }}"
+                                            href="{{ route('client.student.listings.edit', $property) }}"
                                             class="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-50"
                                         >
                                             {{ __('Edit') }}

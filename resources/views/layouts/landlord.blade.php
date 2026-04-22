@@ -196,10 +196,16 @@
     </header>
 
     <!-- --- MAIN CONTENT AREA --- -->
-    <main class="flex-1 h-full overflow-y-auto pt-16 md:pt-0">
+    <main
+        @class([
+            'flex h-full min-h-0 min-w-0 flex-1 flex-col pt-16 md:pt-0',
+            'overflow-hidden' => request()->routeIs('client.landlord.messages.*'),
+            'overflow-y-auto' => ! request()->routeIs('client.landlord.messages.*'),
+        ])
+    >
 
         <!-- Top Bar Area (Desktop) -->
-        <div class="hidden md:flex h-20 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div class="hidden h-20 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white px-8 md:flex md:sticky md:top-0 md:z-40">
             <h1 class="text-xl font-semibold tracking-tight" id="page-title">{{ $pageTitle ?? $__env->yieldContent('page_title', __('Dashboard Overview')) }}</h1>
             <div class="flex items-center gap-4">
                 <a href="{{ route('client.landlord.create-listing') }}" class="bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
@@ -243,7 +249,12 @@
             </div>
         </div>
 
-        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-24">
+        <div
+            @class([
+                'mx-auto w-full max-w-6xl p-4 pb-24 md:p-8',
+                'flex min-h-0 flex-1 flex-col overflow-hidden' => request()->routeIs('client.landlord.messages.*'),
+            ])
+        >
             @hasSection('content')
                 @yield('content')
             @else

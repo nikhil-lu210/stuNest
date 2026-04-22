@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Livewire\Student;
+namespace App\Livewire\Landlord;
 
 use App\Models\Application;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class StudentMessages extends Component
+class LandlordMessages extends Component
 {
     public ?int $activeApplicationId = null;
 
@@ -19,25 +20,22 @@ class StudentMessages extends Component
     /** @var 'list'|'chat' */
     public string $mobilePanel = 'list';
 
-    /**
-     * Bumped after each send so the textarea remounts and reliably clears (Livewire + deferred model edge cases).
-     */
     public int $messageInputKey = 0;
 
     public function mount(): void
     {
         $user = Auth::user();
-        abort_unless($user instanceof User && $user->hasStudentRole(), 403);
+        abort_unless($user instanceof User && $user->hasRole('Landlord'), 403);
     }
 
     public function selectConversation(int $applicationId): void
     {
         $user = Auth::user();
-        abort_unless($user instanceof User && $user->hasStudentRole(), 403);
+        abort_unless($user instanceof User && $user->hasRole('Landlord'), 403);
 
         $application = Application::query()
-            ->where('user_id', $user->id)
             ->whereKey($applicationId)
+            ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
             ->first();
 
         abort_unless($application, 403);
@@ -61,11 +59,11 @@ class StudentMessages extends Component
         ]);
 
         $user = Auth::user();
-        abort_unless($user instanceof User && $user->hasStudentRole(), 403);
+        abort_unless($user instanceof User && $user->hasRole('Landlord'), 403);
 
         $application = Application::query()
-            ->where('user_id', $user->id)
             ->whereKey($this->activeApplicationId)
+            ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
             ->first();
 
         abort_unless($application, 403);
@@ -81,35 +79,35 @@ class StudentMessages extends Component
         $this->messageInputKey++;
 
         $this->js(<<<'JS'
-            const scrollStudentChatToBottom = () => {
-                const el = document.getElementById('student-chat-scroll');
+            const scrollLandlordChatToBottom = () => {
+                const el = document.getElementById('landlord-chat-scroll');
                 if (el) {
                     el.scrollTop = el.scrollHeight;
                 }
             };
-            const focusStudentMessageInput = () => {
-                const input = document.getElementById('student-message-input');
+            const focusLandlordMessageInput = () => {
+                const input = document.getElementById('landlord-message-input');
                 if (input && typeof input.focus === 'function') {
                     input.focus({ preventScroll: true });
                 }
             };
-            scrollStudentChatToBottom();
-            focusStudentMessageInput();
+            scrollLandlordChatToBottom();
+            focusLandlordMessageInput();
             requestAnimationFrame(() => {
-                scrollStudentChatToBottom();
-                focusStudentMessageInput();
+                scrollLandlordChatToBottom();
+                focusLandlordMessageInput();
                 requestAnimationFrame(() => {
-                    scrollStudentChatToBottom();
-                    focusStudentMessageInput();
+                    scrollLandlordChatToBottom();
+                    focusLandlordMessageInput();
                 });
             });
             setTimeout(() => {
-                scrollStudentChatToBottom();
-                focusStudentMessageInput();
+                scrollLandlordChatToBottom();
+                focusLandlordMessageInput();
             }, 50);
             setTimeout(() => {
-                scrollStudentChatToBottom();
-                focusStudentMessageInput();
+                scrollLandlordChatToBottom();
+                focusLandlordMessageInput();
             }, 200);
         JS);
     }
@@ -133,33 +131,37 @@ class StudentMessages extends Component
         $userId = Auth::id();
 
         return Application::query()
-            ->where('user_id', $userId)
-            ->with(['property.creator', 'latestMessage'])
+            ->whereHas('property', fn ($q) => $q->where('user_id', $userId))
+            ->whereHas('messages')
+            ->with(['property.area', 'property.city', 'student', 'latestMessage'])
+            ->withMax('messages', 'created_at')
             ->withCount([
-                'messages as unread_from_landlord_count' => function ($q) use ($userId) {
+                'messages as unread_from_student_count' => function ($q) use ($userId) {
                     $q->where('sender_id', '!=', $userId)->where('is_read', false);
                 },
             ])
-            ->where(function ($q) {
-                $q->whereHas('messages')
-                    ->orWhereIn('status', [
-                        Application::STATUS_PENDING,
-                        Application::STATUS_ACCEPTED,
-                    ]);
-            })
-            ->latest('updated_at');
+            ->orderByDesc('messages_max_created_at');
     }
 
     public function render(): View
     {
+        $user = Auth::user();
+        abort_unless($user instanceof User && $user->hasRole('Landlord'), 403);
+
+        /** @var Collection<int, Application> $applications */
         $applications = $this->applicationsQuery()->get();
 
         $activeApplication = null;
         if ($this->activeApplicationId) {
             $activeApplication = Application::query()
-                ->where('user_id', Auth::id())
                 ->whereKey($this->activeApplicationId)
-                ->with(['property.creator', 'messages' => fn ($q) => $q->orderBy('created_at')])
+                ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
+                ->with([
+                    'property.area',
+                    'property.city',
+                    'student',
+                    'messages' => fn ($q) => $q->orderBy('created_at'),
+                ])
                 ->first();
 
             if (! $activeApplication) {
@@ -168,9 +170,12 @@ class StudentMessages extends Component
             }
         }
 
-        return view('livewire.student.student-messages', [
+        return view('livewire.landlord.landlord-messages', [
             'applications' => $applications,
             'activeApplication' => $activeApplication,
+        ])->layout('layouts.landlord', [
+            'title' => __('Messages'),
+            'pageTitle' => __('Messages'),
         ]);
     }
 }

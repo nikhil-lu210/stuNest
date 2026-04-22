@@ -1,27 +1,28 @@
 @php
     use App\Models\Application;
+    use App\Models\Property\Property;
     use App\Support\ListingPublicId;
 @endphp
 
-<div class="flex min-h-0 flex-col">
+<div class="flex min-h-0 flex-1 flex-col">
     @if ($applications->isEmpty())
-        <div class="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center shadow-sm sm:p-12">
-            <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
-                <i data-lucide="message-square" class="h-7 w-7 text-gray-300"></i>
+        <div class="flex flex-col items-center justify-center h-64 text-center">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <i data-lucide="message-square" class="w-8 h-8 text-gray-400"></i>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900">{{ __('No conversations yet') }}</h3>
-            <p class="mx-auto mt-2 max-w-md text-sm text-gray-500">
-                {{ __('When you apply for a property or exchange messages with a landlord, your threads will appear here.') }}
+            <h3 class="text-lg font-semibold text-gray-900">{{ __('Inbox empty') }}</h3>
+            <p class="text-gray-500 mt-1 max-w-sm">
+                {{ __('Messages from prospective and current tenants will appear here.') }}
             </p>
         </div>
     @else
         <div
-            class="grid min-h-[24rem] grid-cols-1 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:min-h-[28rem] md:grid-cols-3"
+            class="grid h-[calc(100dvh-10.5rem)] max-h-[calc(100dvh-10.5rem)] min-h-[20rem] grid-cols-1 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:h-[calc(100dvh-7.5rem)] md:max-h-[calc(100dvh-7.5rem)] md:grid-cols-3"
         >
             {{-- Conversations list --}}
             <aside
                 @class([
-                    'flex min-h-0 flex-col border-gray-200 md:border-r',
+                    'flex min-h-0 max-h-full flex-col overflow-hidden border-gray-200 md:border-r',
                     'hidden md:flex' => $mobilePanel === 'chat',
                     'flex' => $mobilePanel === 'list',
                 ])
@@ -29,18 +30,20 @@
                 <div class="border-b border-gray-100 px-4 py-3 md:hidden">
                     <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">{{ __('Conversations') }}</p>
                 </div>
-                <ul class="custom-scrollbar min-h-0 flex-1 overflow-y-auto md:max-h-[min(28rem,calc(100vh-12rem))]" role="list">
+                <ul class="custom-scrollbar min-h-0 flex-1 overflow-y-auto" role="list">
                     @foreach ($applications as $app)
                         @php
-                            $landlord = $app->property?->creator;
-                            $unread = (int) ($app->unread_from_landlord_count ?? 0);
+                            $student = $app->student;
+                            $unread = (int) ($app->unread_from_student_count ?? 0);
                             $preview = $app->latestMessage?->body;
+                            $avatarUrl = $student?->getFirstMediaUrl('avatar', 'thumb') ?: $student?->getFirstMediaUrl('avatar');
+                            $avatarUrl = $avatarUrl !== '' ? $avatarUrl : null;
                         @endphp
                         <li>
                             <button
                                 type="button"
                                 wire:click="selectConversation({{ $app->id }})"
-                                wire:key="conv-{{ $app->id }}"
+                                wire:key="landlord-conv-{{ $app->id }}"
                                 @class([
                                     'flex w-full items-start gap-3 border-b border-gray-50 px-4 py-3 text-left transition hover:bg-gray-50',
                                     'bg-gray-50' => $activeApplication && $activeApplication->id === $app->id,
@@ -49,30 +52,31 @@
                                 <div
                                     class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-sm font-semibold text-gray-700"
                                 >
-                                    @if ($landlord?->hasMedia('avatar'))
-                                        <img
-                                            src="{{ $landlord->getFirstMediaUrl('avatar', 'thumb') }}"
-                                            alt=""
-                                            class="h-full w-full object-cover"
-                                        />
+                                    @if ($avatarUrl)
+                                        <img src="{{ $avatarUrl }}" alt="" class="h-full w-full object-cover" />
                                     @else
-                                        {{ strtoupper(mb_substr($landlord?->first_name ?? '?', 0, 1)) }}
+                                        {{ strtoupper(mb_substr($student?->first_name ?? $student?->email ?? '?', 0, 1)) }}
                                     @endif
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-start justify-between gap-2">
                                         <p class="truncate text-sm font-semibold text-gray-900">
-                                            {{ $app->property?->display_title ?? __('Listing') }}
+                                            {{ $student?->name ?: ($student?->email ?? __('Applicant')) }}
                                         </p>
                                         @if ($unread > 0)
                                             <span
-                                                class="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-blue-600"
-                                                title="{{ __('Unread') }}"
-                                            ></span>
+                                                class="mt-0.5 shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700"
+                                                title="{{ trans_choice(':count unread message|:count unread messages', $unread, ['count' => $unread]) }}"
+                                            >
+                                                {{ $unread }}
+                                            </span>
                                         @endif
                                     </div>
+                                    <p class="mt-0.5 truncate text-xs text-gray-600">
+                                        {{ $app->property?->display_title ?? __('Listing') }}
+                                    </p>
                                     <p class="mt-0.5 truncate text-xs text-gray-500">
-                                        {{ $preview ? \Illuminate\Support\Str::limit($preview, 56) : __('No messages yet') }}
+                                        {{ $preview ? \Illuminate\Support\Str::limit(strip_tags($preview), 56) : __('No messages yet') }}
                                     </p>
                                 </div>
                             </button>
@@ -84,14 +88,15 @@
             {{-- Chat pane --}}
             <section
                 @class([
-                    'flex min-h-0 min-w-0 flex-col border-gray-200 md:col-span-2',
+                    'flex min-h-0 max-h-full min-w-0 flex-col overflow-hidden border-gray-200 md:col-span-2',
                     'hidden md:flex' => $mobilePanel === 'list',
                     'flex' => $mobilePanel === 'chat',
                 ])
             >
                 @if ($activeApplication && $activeApplication->property)
                     @php
-                        $landlord = $activeApplication->property->creator;
+                        $student = $activeApplication->student;
+                        $property = $activeApplication->property;
                         $status = $activeApplication->status;
                         $statusBadge = match ($status) {
                             Application::STATUS_PENDING => 'bg-amber-100 text-amber-800',
@@ -107,8 +112,9 @@
                             Application::STATUS_WITHDRAWN => __('Withdrawn'),
                             default => ucfirst((string) $status),
                         };
+                        $canViewPublic = in_array($property->status, [Property::STATUS_PUBLISHED, Property::STATUS_LET_AGREED], true);
                     @endphp
-                    <header class="flex shrink-0 items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
+                    <header class="flex shrink-0 flex-wrap items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
                         <button
                             type="button"
                             wire:click="backToList"
@@ -120,20 +126,32 @@
                         </button>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-sm font-semibold text-gray-900">
-                                {{ $activeApplication->property->display_title }}
+                                {{ $student?->name ?: ($student?->email ?? __('Applicant')) }}
                             </p>
                             <p class="mt-0.5 truncate text-xs text-gray-500">
-                                {{ $landlord?->name ?? __('Landlord') }}
-                                <span class="text-gray-300" aria-hidden="true">·</span>
+                                {{ $property->display_title }}
+                            </p>
+                            <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium">
                                 <a
-                                    href="{{ route('client.listing.show', ['slug' => ListingPublicId::encode($activeApplication->property->id)]) }}"
+                                    href="{{ route('client.landlord.applications.index', ['application' => $activeApplication->id]) }}"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="font-medium text-gray-700 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 hover:decoration-gray-500"
+                                    class="text-gray-700 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 hover:decoration-gray-500"
                                 >
-                                    {{ __('View listing') }}
+                                    {{ __('View application') }}
                                 </a>
-                            </p>
+                                @if ($canViewPublic)
+                                    <span class="text-gray-300" aria-hidden="true">·</span>
+                                    <a
+                                        href="{{ route('client.listing.show', ['slug' => ListingPublicId::encode($property->id)]) }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-gray-700 underline decoration-gray-300 underline-offset-2 hover:text-gray-900 hover:decoration-gray-500"
+                                    >
+                                        {{ __('View property') }}
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                         <span
                             class="shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide {{ $statusBadge }}"
@@ -143,7 +161,7 @@
                     </header>
 
                     <div
-                        id="student-chat-scroll"
+                        id="landlord-chat-scroll"
                         @if ($activeApplication)
                             wire:poll.2s
                         @endif
@@ -159,7 +177,7 @@
                                         'border border-gray-200 bg-white text-gray-900' => ! $mine,
                                     ])
                                 >
-                                    <p class="whitespace-pre-wrap break-words">{{ $msg->body }}</p>
+                                    <div class="break-words">{!! nl2br(e($msg->body)) !!}</div>
                                     <p
                                         @class([
                                             'mt-1 text-[10px]',
@@ -177,17 +195,16 @@
                     </div>
 
                     <div class="shrink-0 border-t border-gray-100 bg-white p-3">
-                        <form wire:submit="sendMessage" class="flex items-end gap-2">
-                            <label class="sr-only" for="student-message-input">{{ __('Message') }}</label>
-                            <textarea
-                                id="student-message-input"
-                                wire:key="student-message-input-{{ $activeApplication->id }}-{{ $messageInputKey }}"
+                        <form wire:submit="sendMessage" class="flex items-center gap-2">
+                            <label class="sr-only" for="landlord-message-input">{{ __('Message') }}</label>
+                            <input
+                                id="landlord-message-input"
+                                type="text"
+                                wire:key="landlord-message-input-{{ $activeApplication->id }}-{{ $messageInputKey }}"
                                 wire:model.live="messageBody"
-                                wire:keydown.enter="$event.shiftKey || ($event.preventDefault(), $wire.sendMessage())"
-                                rows="1"
                                 placeholder="{{ __('Type a message…') }}"
-                                class="custom-scrollbar max-h-32 min-h-[44px] flex-1 resize-none rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
-                            ></textarea>
+                                class="min-h-[44px] flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
+                            />
                             <button
                                 type="submit"
                                 wire:loading.attr="disabled"

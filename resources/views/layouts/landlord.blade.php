@@ -200,8 +200,8 @@
         <div class="hidden md:flex h-20 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40">
             <h1 class="text-xl font-semibold tracking-tight" id="page-title">{{ $pageTitle ?? $__env->yieldContent('page_title', __('Dashboard Overview')) }}</h1>
             <div class="flex items-center gap-4">
-                <a href="{{ route('administration.properties.create') }}" class="bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
-                    <i data-lucide="plus" class="w-4 h-4"></i> {{ __('Add Property') }}
+                <a href="{{ route('client.landlord.create-listing') }}" class="bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i> {{ __('Add New Property') }}
                 </a>
                 <div class="w-px h-6 bg-gray-200"></div>
                 <div class="flex shrink-0 items-center">
@@ -303,12 +303,17 @@
     @livewireScripts
     <script>
         function stunestRefreshLucide() {
-            if (window.lucide && typeof lucide.createIcons === 'function') {
+            if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
                 lucide.createIcons();
             }
         }
         stunestRefreshLucide();
         document.addEventListener('livewire:navigated', stunestRefreshLucide);
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.hook('morph.updated', ({ el, component }) => {
+                stunestRefreshLucide();
+            });
+        });
     </script>
 </body>
 </html>

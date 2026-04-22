@@ -34,4 +34,9 @@ class PropertyPolicy
     {
         return $this->isStaffAdmin($user) || (int) $property->user_id === (int) $user->id;
     }
+
+    public function delete(User $user, Property $property): bool
+    {
+        return $this->update($user, $property);
+    }
 }

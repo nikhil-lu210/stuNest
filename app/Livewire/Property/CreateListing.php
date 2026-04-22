@@ -104,6 +104,9 @@ class CreateListing extends Component
             if (request()->routeIs('client.student.listings.edit')) {
                 abort_unless(Auth::user()?->hasStudentRole(), 403);
                 abort_unless(Auth::user()?->can('update', $property), 403);
+            } elseif (request()->routeIs('client.landlord.listings.edit')) {
+                abort_unless(Auth::user()?->hasRole('Landlord'), 403);
+                abort_unless(Auth::user()?->can('update', $property), 403);
             } else {
                 abort_unless(Auth::user()?->can('update', $property), 403);
             }
@@ -114,6 +117,10 @@ class CreateListing extends Component
 
         if (request()->routeIs('client.student.create-listing')) {
             abort_unless($this->isStudent(), 403);
+        }
+
+        if (request()->routeIs('client.landlord.create-listing')) {
+            abort_unless(Auth::user()?->hasRole('Landlord'), 403);
         }
 
         if ($this->isStudent()) {
@@ -484,11 +491,7 @@ class CreateListing extends Component
                 : __('Your property listing has been saved as a draft.')
         );
 
-        $this->redirect(
-            $this->isStudent()
-                ? route('client.student.listings.index')
-                : route('administration.dashboard.index')
-        );
+        $this->redirect($this->listingsRedirectUrl());
     }
 
     protected function persistListingUpdate(?string $latitude, ?string $longitude): void
@@ -546,11 +549,20 @@ class CreateListing extends Component
                 : __('Your listing has been saved as a draft.')
         );
 
-        $this->redirect(
-            $this->isStudent()
-                ? route('client.student.listings.index')
-                : route('administration.dashboard.index')
-        );
+        $this->redirect($this->listingsRedirectUrl());
+    }
+
+    protected function listingsRedirectUrl(): string
+    {
+        if ($this->isStudent()) {
+            return route('client.student.listings.index');
+        }
+
+        if (Auth::user()?->hasRole('Landlord')) {
+            return route('client.landlord.properties.index');
+        }
+
+        return route('administration.dashboard.index');
     }
 
     protected function normalizeOptionalDecimal(?string $value): ?string

@@ -24,9 +24,20 @@
     {{-- Alpine ships with Livewire; loading alpinejs CDN as well runs Alpine.start() twice and breaks UI (e.g. notification bell). --}}
 </head>
 @php
+    use App\Models\Application;
+    use App\Models\User;
+
     $landlordUser = auth()->user();
     $landlordAvatarUrl = $landlordUser?->getFirstMediaUrl('avatar', 'thumb') ?: $landlordUser?->getFirstMediaUrl('avatar');
     $landlordInitial = strtoupper(mb_substr((string) ($landlordUser?->first_name ?: $landlordUser?->email ?? 'H'), 0, 1));
+
+    $landlordPendingApplicationsCount = 0;
+    if ($landlordUser instanceof User && $landlordUser->hasRole('Landlord')) {
+        $landlordPendingApplicationsCount = Application::query()
+            ->where('status', Application::STATUS_PENDING)
+            ->whereHas('property', fn ($q) => $q->where('user_id', $landlordUser->id))
+            ->count();
+    }
 @endphp
 <body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
 
@@ -100,7 +111,14 @@
                     <i data-lucide="users" class="w-5 h-5"></i>
                     {{ __('Applications') }}
                 </div>
-                <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full">3 New</span>
+                @if ($landlordPendingApplicationsCount > 0)
+                    <span
+                        class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums"
+                        title="{{ trans_choice(':count pending application|:count pending applications', $landlordPendingApplicationsCount, ['count' => $landlordPendingApplicationsCount]) }}"
+                    >
+                        {{ $landlordPendingApplicationsCount > 99 ? '99+' : $landlordPendingApplicationsCount }} {{ __('New') }}
+                    </span>
+                @endif
             </a>
             <a
                 href="{{ route('client.landlord.messages.index') }}"
@@ -296,7 +314,12 @@
             ])
         >
             <i data-lucide="users" class="w-6 h-6"></i>
-            <span class="absolute top-0 right-1 w-2 h-2 bg-amber-500 rounded-full border border-white"></span>
+            @if ($landlordPendingApplicationsCount > 0)
+                <span
+                    class="absolute top-0 right-1 h-2 w-2 rounded-full border border-white bg-amber-500"
+                    title="{{ trans_choice(':count pending application|:count pending applications', $landlordPendingApplicationsCount, ['count' => $landlordPendingApplicationsCount]) }}"
+                ></span>
+            @endif
             <span class="text-[10px] font-semibold">{{ __('Apps') }}</span>
         </a>
         <a

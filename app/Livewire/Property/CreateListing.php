@@ -8,6 +8,7 @@ use App\Models\Country;
 use App\Models\Property\Property;
 use App\Services\GoogleMapsUrlNormalizer;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -83,7 +84,7 @@ class CreateListing extends Component
     /** @var array<int, string> */
     public array $amenities = [];
 
-    /** @var array<int, \Illuminate\Http\UploadedFile> */
+    /** @var array<int, UploadedFile> */
     public array $photos = [];
 
     public int $photosCount = 0;
@@ -595,6 +596,13 @@ class CreateListing extends Component
         if ($this->isStudent()) {
             return $view->layout('layouts.client.student-property-wizard', [
                 'title' => $pageTitle,
+            ]);
+        }
+
+        if (Auth::user()?->hasRole('Landlord')) {
+            return $view->layout('layouts.landlord', [
+                'title' => $pageTitle,
+                'pageTitle' => $pageTitle,
             ]);
         }
 

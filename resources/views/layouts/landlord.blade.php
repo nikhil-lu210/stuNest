@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="{{ asset('clients/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('clients/css/dashboard.css') }}">
 
+    @if (request()->routeIs('client.landlord.create-listing', 'client.landlord.listings.edit'))
+        @vite(['resources/js/property-wizard.js'])
+    @endif
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>[x-cloak]{display:none !important;}</style>
     @stack('styles')
@@ -38,6 +42,15 @@
             ->whereHas('property', fn ($q) => $q->where('user_id', $landlordUser->id))
             ->count();
     }
+
+    $landlordPropertiesSectionActive = request()->routeIs(
+        'client.landlord.properties.*',
+        'client.landlord.create-listing',
+        'client.landlord.listings.edit',
+    );
+    $landlordAllListingsActive = request()->routeIs('client.landlord.properties.*')
+        || request()->routeIs('client.landlord.listings.edit');
+    $landlordNewAdvertiseActive = request()->routeIs('client.landlord.create-listing');
 @endphp
 <body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
 
@@ -86,18 +99,60 @@
                 <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
                 {{ __('Dashboard Overview') }}
             </a>
-            <a
-                href="{{ route('client.landlord.properties.index') }}"
-                @click="sidebarOpen = false"
-                @class([
-                    'nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors',
-                    'bg-gray-50 text-gray-900 font-semibold' => request()->routeIs('client.landlord.properties.*'),
-                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! request()->routeIs('client.landlord.properties.*'),
-                ])
+            <div
+                class="space-y-0.5"
+                x-data="{ propertiesOpen: {{ $landlordPropertiesSectionActive ? 'true' : 'false' }} }"
             >
-                <i data-lucide="building" class="w-5 h-5"></i>
-                {{ __('My Properties') }}
-            </a>
+                <button
+                    type="button"
+                    @click="propertiesOpen = ! propertiesOpen"
+                    :aria-expanded="propertiesOpen"
+                    @class([
+                        'nav-btn w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors text-left',
+                        'text-gray-900 font-semibold bg-gray-50' => $landlordPropertiesSectionActive,
+                        'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $landlordPropertiesSectionActive,
+                    ])
+                >
+                    <span class="flex items-center gap-3 min-w-0">
+                        <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+                        <span class="truncate">{{ __('Properties/Rooms') }}</span>
+                    </span>
+                    <span
+                        class="inline-flex shrink-0 text-gray-400 transition-transform duration-200"
+                        :class="{ 'rotate-180': ! propertiesOpen }"
+                    >
+                        <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                    </span>
+                </button>
+                <div
+                    x-show="propertiesOpen"
+                    x-cloak
+                    class="mt-0.5 ml-2 pl-3 border-l border-gray-200 space-y-0.5 py-0.5"
+                >
+                    <a
+                        href="{{ route('client.landlord.properties.index') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $landlordAllListingsActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $landlordAllListingsActive,
+                        ])
+                    >
+                        {{ __('All Listing') }}
+                    </a>
+                    <a
+                        href="{{ route('client.landlord.create-listing') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $landlordNewAdvertiseActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $landlordNewAdvertiseActive,
+                        ])
+                    >
+                        {{ __('New Advertise') }}
+                    </a>
+                </div>
+            </div>
             <a
                 href="{{ route('client.landlord.applications.index') }}"
                 @click="sidebarOpen = false"
@@ -298,8 +353,12 @@
             href="{{ route('client.landlord.properties.index') }}"
             @class([
                 'flex flex-col items-center gap-1 nav-btn-mobile',
-                'text-black' => request()->routeIs('client.landlord.properties.*'),
-                'text-gray-400 hover:text-black' => ! request()->routeIs('client.landlord.properties.*'),
+                'text-black' => request()->routeIs('client.landlord.properties.*')
+                    || request()->routeIs('client.landlord.create-listing')
+                    || request()->routeIs('client.landlord.listings.edit'),
+                'text-gray-400 hover:text-black' => ! request()->routeIs('client.landlord.properties.*')
+                    && ! request()->routeIs('client.landlord.create-listing')
+                    && ! request()->routeIs('client.landlord.listings.edit'),
             ])
         >
             <i data-lucide="building" class="w-6 h-6"></i>

@@ -11,6 +11,7 @@ use Database\Seeders\User\UsersTableSeeder;
 use Database\Seeders\Permission\PermissionsTableSeeder;
 use Database\Seeders\Geography\CyprusGeographySeeder;
 use Database\Seeders\Demo\CyprusPortalDemoSeeder;
+use Database\Seeders\Demo\CyprusRentPropertiesSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(CyprusGeographySeeder::class);
         $this->call(CyprusPortalDemoSeeder::class);
+        $this->call(CyprusRentPropertiesSeeder::class);
     }
 }

@@ -15,5 +15,6 @@ Route::controller(DashboardController::class)->prefix('landlord')->name('landlor
     Route::get('/properties', 'properties')->name('properties.index');
     Route::get('/applications', 'applications')->name('applications.index');
     Route::get('/messages', 'messages')->name('messages.index');
+    Route::get('/notifications', 'notifications')->name('notifications');
     Route::get('/settings', 'settings')->name('settings.index');
 });

@@ -20,7 +20,8 @@
     @stack('styles')
     @stack('head')
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
+    @livewireStyles
+    {{-- Alpine ships with Livewire; loading alpinejs CDN as well runs Alpine.start() twice and breaks UI (e.g. notification bell). --}}
 </head>
 @php
     $landlordUser = auth()->user();
@@ -203,10 +204,9 @@
                     <i data-lucide="plus" class="w-4 h-4"></i> {{ __('Add Property') }}
                 </a>
                 <div class="w-px h-6 bg-gray-200"></div>
-                <button type="button" class="p-2 text-gray-400 hover:text-black transition-colors relative" aria-label="{{ __('Notifications') }}">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-                </button>
+                <div class="flex shrink-0 items-center">
+                    <livewire:landlord.notification-bell />
+                </div>
                 <div class="w-px h-6 bg-gray-200"></div>
                 <div class="relative" x-data="{ open: false }">
                     <button type="button" class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white pl-1 pr-2 py-1 hover:bg-gray-50 transition-colors" @click="open = ! open" :aria-expanded="open">

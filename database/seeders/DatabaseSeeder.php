@@ -10,6 +10,7 @@ use Database\Seeders\Role\RolesTableSeeder;
 use Database\Seeders\User\UsersTableSeeder;
 use Database\Seeders\Permission\PermissionsTableSeeder;
 use Database\Seeders\Geography\CyprusGeographySeeder;
+use Database\Seeders\Demo\CyprusPortalDemoSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(CyprusGeographySeeder::class);
+        $this->call(CyprusPortalDemoSeeder::class);
     }
 }

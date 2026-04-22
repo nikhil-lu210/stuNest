@@ -129,6 +129,89 @@
                             <button type="submit" class="btn btn-dark d-grid w-100">Sign in</button>
                         </form>
 
+                        @if (app()->environment('local') && config('app.debug'))
+                            @php
+                                $demoPassword = \Database\Seeders\Demo\CyprusPortalDemoSeeder::DEMO_PASSWORD;
+                            @endphp
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary btn-sm w-100 mt-3"
+                                data-bs-toggle="modal"
+                                data-bs-target="#localDevCredentialsModal"
+                            >
+                                Show Credentials
+                            </button>
+
+                            <div
+                                class="modal fade"
+                                id="localDevCredentialsModal"
+                                tabindex="-1"
+                                aria-labelledby="localDevCredentialsModalLabel"
+                                aria-hidden="true"
+                            >
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="localDevCredentialsModalLabel">Seeded login credentials</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-muted small mb-3">
+                                                Shown only when <code>APP_ENV</code> is <code>local</code> and <code>APP_DEBUG</code> is <code>true</code>.
+                                                Run <code>php artisan db:seed</code> (or the Cyprus demo seeder) so these accounts exist.
+                                            </p>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-striped mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Role</th>
+                                                            <th scope="col">Email</th>
+                                                            <th scope="col">Password</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Developer</td>
+                                                            <td><code class="user-select-all">developer@mail.com</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Super Admin</td>
+                                                            <td><code class="user-select-all">superadmin@mail.com</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Institute representative</td>
+                                                            <td><code class="user-select-all">institute.rep@ucy.ac.cy</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Student</td>
+                                                            <td><code class="user-select-all">demo.student@ucy.ac.cy</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Landlord</td>
+                                                            <td><code class="user-select-all">demo.landlord@stunest.test</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Agent</td>
+                                                            <td><code class="user-select-all">demo.agent@stunest.test</code></td>
+                                                            <td><code class="user-select-all">{{ $demoPassword }}</code></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- <p class="text-center">
                             <span>New on our platform?</span>
                             <a href="{{ route('register') }}">

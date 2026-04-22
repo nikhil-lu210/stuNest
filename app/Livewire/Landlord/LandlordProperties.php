@@ -30,12 +30,14 @@ class LandlordProperties extends Component
 
         if ($property->status === Property::STATUS_PUBLISHED) {
             $property->update(['status' => Property::STATUS_DRAFT]);
+            $this->dispatch('notify', message: __('Listing paused. It is no longer visible to students.'), type: 'success');
 
             return;
         }
 
         if (in_array($property->status, [Property::STATUS_DRAFT, Property::STATUS_ARCHIVED], true)) {
             $property->update(['status' => Property::STATUS_PUBLISHED]);
+            $this->dispatch('notify', message: __('Listing is now live and visible to students.'), type: 'success');
         }
     }
 
@@ -52,6 +54,7 @@ class LandlordProperties extends Component
         abort_unless($user->can('delete', $property), 403);
 
         $property->delete();
+        $this->dispatch('notify', message: __('Listing removed.'), type: 'success');
     }
 
     public function render(): View

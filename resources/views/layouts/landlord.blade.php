@@ -30,6 +30,8 @@
 @endphp
 <body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
 
+    <x-toast />
+
     <div
         class="md:hidden fixed inset-0 z-[55] bg-gray-900/40 transition-opacity"
         x-show="sidebarOpen"
@@ -301,6 +303,30 @@
 
     @stack('scripts')
     @livewireScripts
+    <script>
+        (function () {
+            var registered = false;
+            function stunestRegisterNotifyBridge() {
+                if (registered || typeof Livewire === 'undefined' || typeof Livewire.on !== 'function') {
+                    return;
+                }
+                registered = true;
+                Livewire.on('notify', function (event) {
+                    var raw = event && event.detail !== undefined ? event.detail : event;
+                    var payload = Array.isArray(raw) ? raw[0] : raw;
+                    if (!payload || typeof payload !== 'object') {
+                        payload = { message: 'Action successful', type: 'success' };
+                    }
+                    window.dispatchEvent(new CustomEvent('notify', {
+                        detail: [{ message: payload.message ?? '', type: payload.type || 'success' }],
+                    }));
+                });
+            }
+            document.addEventListener('livewire:init', stunestRegisterNotifyBridge);
+            document.addEventListener('livewire:initialized', stunestRegisterNotifyBridge);
+            stunestRegisterNotifyBridge();
+        })();
+    </script>
     <script>
         function stunestRefreshLucide() {
             if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {

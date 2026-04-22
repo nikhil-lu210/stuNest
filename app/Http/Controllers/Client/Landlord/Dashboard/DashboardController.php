@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function applications(): View
-    {
-        return view('client.landlord.dashboard.index', [
-            'pageTitle' => __('Applications'),
-        ]);
-    }
-
     public function messages(): View
     {
         return view('client.landlord.dashboard.index', [

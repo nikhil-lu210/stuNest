@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function settings(): View
-    {
-        return view('client.landlord.dashboard.index', [
-            'pageTitle' => __('Settings'),
-        ]);
-    }
-
     public function notifications(): View
     {
         $user = Auth::user();

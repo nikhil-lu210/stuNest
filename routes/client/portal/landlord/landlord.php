@@ -5,6 +5,7 @@ use App\Livewire\Landlord\LandlordApplications;
 use App\Livewire\Landlord\LandlordMessages;
 use App\Livewire\Landlord\LandlordOverview;
 use App\Livewire\Landlord\LandlordProperties;
+use App\Livewire\Landlord\LandlordSettings;
 use App\Livewire\Property\CreateListing;
 use Illuminate\Support\Facades\Route;
 
@@ -16,11 +17,11 @@ Route::prefix('landlord')->name('landlord.')->group(function () {
     Route::get('/properties', LandlordProperties::class)->name('properties.index');
     Route::get('/applications', LandlordApplications::class)->name('applications.index');
     Route::get('/messages', LandlordMessages::class)->name('messages.index');
+    Route::get('/settings', LandlordSettings::class)->name('settings.index');
     Route::get('/create-listing', CreateListing::class)->name('create-listing');
     Route::get('/listings/{property}/edit', CreateListing::class)->name('listings.edit');
 });
 
 Route::controller(DashboardController::class)->prefix('landlord')->name('landlord.')->group(function () {
     Route::get('/notifications', 'notifications')->name('notifications');
-    Route::get('/settings', 'settings')->name('settings.index');
 });

@@ -49,7 +49,6 @@
     $instituteStudentsAllActive = request()->routeIs('client.institute.students.index');
     $instituteStudentsUnverifiedActive = request()->routeIs('client.institute.students.unverified');
     $instituteStudentsCreateActive = request()->routeIs('client.institute.students.create');
-    $instituteReportsActive = request()->routeIs('client.institute.reports');
     $institutePropertiesSectionActive = request()->routeIs(
         'client.institute.properties.index',
         'client.institute.create-listing',
@@ -102,7 +101,7 @@
                 ])
             >
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                {{ __('Overview') }}
+                {{ __('Dashboard') }}
             </a>
             <div
                 class="space-y-0.5"
@@ -169,18 +168,6 @@
                     </a>
                 </div>
             </div>
-            <a
-                href="{{ route('client.institute.reports') }}"
-                @click="sidebarOpen = false"
-                @class([
-                    'nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors',
-                    'font-semibold bg-gray-50 text-gray-900' => $instituteReportsActive,
-                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteReportsActive,
-                ])
-            >
-                <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
-                {{ __('Reports & Analytics') }}
-            </a>
             <div
                 class="space-y-0.5"
                 x-data="{ propertiesOpen: {{ $institutePropertiesSectionActive ? 'true' : 'false' }} }"
@@ -383,7 +370,7 @@
     </main>
 
     <!-- --- MOBILE BOTTOM NAV --- -->
-    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-50 px-4 py-3 flex justify-between items-center pb-safe">
+    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-50 px-4 py-3 flex justify-around items-center pb-safe">
         <a
             href="{{ route('client.institute.dashboard') }}"
             @class([
@@ -417,17 +404,6 @@
         >
             <i data-lucide="building-2" class="w-5 h-5"></i>
             <span class="text-[10px] font-semibold">{{ __('Listings') }}</span>
-        </a>
-        <a
-            href="{{ route('client.institute.reports') }}"
-            @class([
-                'flex flex-col items-center gap-1 nav-btn-mobile',
-                'text-black' => $instituteReportsActive,
-                'text-gray-400 hover:text-black' => ! $instituteReportsActive,
-            ])
-        >
-            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
-            <span class="text-[10px] font-semibold">{{ __('Reports') }}</span>
         </a>
     </nav>
 

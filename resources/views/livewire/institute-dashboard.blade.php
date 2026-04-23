@@ -1,9 +1,11 @@
 <div>
+    <h1 class="text-xl font-semibold tracking-tight text-gray-900 mb-6 md:hidden">{{ __('Dashboard') }}</h1>
+
     <div class="mb-6 p-4 border border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/50 rounded-2xl">
         <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto sm:items-center">
-            <label class="sr-only" for="institute-reports-date-range">{{ __('Date range') }}</label>
+            <label class="sr-only" for="institute-dashboard-date-range">{{ __('Date range') }}</label>
             <select
-                id="institute-reports-date-range"
+                id="institute-dashboard-date-range"
                 class="w-full sm:w-auto min-w-[12rem] pl-3 pr-8 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
                 wire:model.live="dateRange"
             >

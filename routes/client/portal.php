@@ -4,10 +4,9 @@ use App\Http\Controllers\Client\Agent\DashboardController as AgentDashboardContr
 use App\Http\Controllers\Client\Landlord\DashboardController as LandlordDashboardController;
 use App\Http\Controllers\Client\Student\DashboardController as StudentDashboardController;
 use App\Livewire\Institute\InstituteCreateStudent;
-use App\Livewire\Institute\InstituteOverview;
 use App\Livewire\Institute\InstituteProperties;
-use App\Livewire\Institute\InstituteReports;
 use App\Livewire\Institute\InstituteStudents;
+use App\Livewire\InstituteDashboard;
 use App\Livewire\Property\CreateListing;
 use Illuminate\Support\Facades\Route;
 
@@ -29,11 +28,10 @@ Route::prefix('client')
         });
 
         Route::prefix('institute')->name('institute.')->group(function () {
-            Route::get('/dashboard', InstituteOverview::class)->name('dashboard');
+            Route::get('/dashboard', InstituteDashboard::class)->name('dashboard');
             Route::get('/students', InstituteStudents::class)->name('students.index');
             Route::get('/students/unverified', InstituteStudents::class)->name('students.unverified');
             Route::get('/students/create', InstituteCreateStudent::class)->name('students.create');
-            Route::get('/reports', InstituteReports::class)->name('reports');
             Route::get('/properties', InstituteProperties::class)->name('properties.index');
             Route::get('/create-listing', CreateListing::class)->name('create-listing');
             Route::get('/listings/{property}/edit', CreateListing::class)->name('listings.edit');

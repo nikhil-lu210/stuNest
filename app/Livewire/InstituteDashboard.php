@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Institute;
+namespace App\Livewire;
 
 use App\Models\Application;
 use App\Models\Institute;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class InstituteReports extends Component
+class InstituteDashboard extends Component
 {
     public string $dateRange = 'this_year';
 
@@ -79,7 +79,7 @@ class InstituteReports extends Component
             ->limit(10)
             ->get();
 
-        return view('livewire.institute.institute-reports', [
+        return view('livewire.institute-dashboard', [
             'institute' => $institute,
             'totalStudents' => $totalStudents,
             'verifiedStudents' => $verifiedStudents,
@@ -92,8 +92,8 @@ class InstituteReports extends Component
             'statusSegments' => $statusSegments,
             'recentAcceptedApplications' => $recentAcceptedApplications,
         ])->layout('layouts.institute', [
-            'title' => __('Reports & Analytics'),
-            'pageTitle' => __('Reports & Analytics'),
+            'title' => __('Dashboard'),
+            'pageTitle' => __('Dashboard'),
             'pageSubtitle' => $institute->name,
             'instituteOrgName' => $institute->name,
         ]);

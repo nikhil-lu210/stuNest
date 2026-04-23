@@ -14,6 +14,7 @@
     $idleCls = 'text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50';
     $unreadMessagesCount = $user->unreadApplicationMessagesFromLandlordsCount();
     $studentDashboardActive = request()->routeIs('client.student.dashboard');
+    $studentApplicationsNavActive = request()->routeIs('client.student.applications.*');
     $propertiesBottomActive = $active === 'listings'
         || request()->routeIs('client.student.create-listing')
         || request()->routeIs('client.student.listings.edit');
@@ -177,7 +178,7 @@
                 <i data-lucide="home" class="h-6 w-6 shrink-0"></i>
                 <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Home') }}</span>
             </a>
-            <a href="{{ route('client.student.dashboard') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $studentDashboardActive ? 'text-black' : 'text-gray-400 hover:text-black' }}">
+            <a href="{{ route('client.student.applications.index') }}" class="flex max-w-[4.5rem] flex-col items-center gap-1 {{ $studentApplicationsNavActive ? 'text-black' : 'text-gray-400 hover:text-black' }}">
                 <i data-lucide="file-text" class="h-6 w-6 shrink-0"></i>
                 <span class="text-center text-[10px] font-semibold leading-tight">{{ __('Applications') }}</span>
             </a>

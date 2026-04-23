@@ -28,6 +28,11 @@ class StudentMessages extends Component
     {
         $user = Auth::user();
         abort_unless($user instanceof User && $user->hasStudentRole(), 403);
+
+        $rawApplicationId = request()->query('application_id');
+        if ($rawApplicationId !== null && $rawApplicationId !== '' && (int) $rawApplicationId > 0) {
+            $this->selectConversation((int) $rawApplicationId);
+        }
     }
 
     public function selectConversation(int $applicationId): void

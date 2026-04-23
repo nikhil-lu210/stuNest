@@ -61,6 +61,16 @@ class InstituteStudents extends Component
         $this->dispatch('notify', message: __('Student Application Rejected'), type: 'warning');
     }
 
+    public function messageStudent(int $studentId): void
+    {
+        $institute = $this->resolveInstitute();
+        $student = User::query()->whereKey($studentId)->whereRoleName('Student')->first();
+
+        abort_unless($student !== null && $this->studentBelongsToInstitute($student, $institute), 403);
+
+        $this->redirect(route('client.institute.messages.index', ['student_id' => $studentId]));
+    }
+
     public function render(): View
     {
         $authUser = Auth::user();

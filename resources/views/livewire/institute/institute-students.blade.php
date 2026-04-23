@@ -102,29 +102,37 @@
                                             </span>
                                     @endswitch
                                 </td>
-                                <td class="px-6 py-4 text-right flex justify-end gap-2">
-                                    @if ($isPending)
+                                <td class="px-6 py-4 text-right">
+                                    <div class="inline-flex justify-end gap-2">
                                         <button
                                             type="button"
-                                            wire:click="verifyStudent({{ $student->id }})"
-                                            wire:confirm="{{ __('Verify this student account?') }}"
-                                            class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
-                                            title="{{ __('Verify') }}"
+                                            wire:click="messageStudent({{ $student->id }})"
+                                            class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors"
+                                            title="{{ __('Message student') }}"
                                         >
-                                            <i data-lucide="check" class="w-4 h-4"></i>
+                                            <i data-lucide="message-circle" class="w-4 h-4"></i>
                                         </button>
-                                        <button
-                                            type="button"
-                                            wire:click="rejectStudent({{ $student->id }})"
-                                            wire:confirm="{{ __('Reject this student application?') }}"
-                                            class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-white border border-gray-200 text-red-600 hover:bg-red-50 transition-colors"
-                                            title="{{ __('Reject') }}"
-                                        >
-                                            <i data-lucide="x" class="w-4 h-4"></i>
-                                        </button>
-                                    @else
-                                        <span class="text-gray-400 text-sm">—</span>
-                                    @endif
+                                        @if ($isPending)
+                                            <button
+                                                type="button"
+                                                wire:click="verifyStudent({{ $student->id }})"
+                                                wire:confirm="{{ __('Verify this student account?') }}"
+                                                class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors"
+                                                title="{{ __('Verify') }}"
+                                            >
+                                                <i data-lucide="check" class="w-4 h-4"></i>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                wire:click="rejectStudent({{ $student->id }})"
+                                                wire:confirm="{{ __('Reject this student application?') }}"
+                                                class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-white border border-gray-200 text-red-600 hover:bg-red-50 transition-colors"
+                                                title="{{ __('Reject') }}"
+                                            >
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

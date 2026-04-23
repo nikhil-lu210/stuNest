@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Institute\InstituteCreateStudent;
+use App\Livewire\Institute\InstituteMessages;
 use App\Livewire\Institute\InstituteProperties;
 use App\Livewire\Institute\InstituteStudents;
 use App\Livewire\InstituteDashboard;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 ===============================================*/
 Route::prefix('institute')->name('institute.')->group(function () {
     Route::get('/dashboard', InstituteDashboard::class)->name('dashboard');
+    Route::get('/messages', InstituteMessages::class)->name('messages.index');
     Route::get('/students', InstituteStudents::class)->name('students.index');
     Route::get('/students/unverified', InstituteStudents::class)->name('students.unverified');
     Route::get('/students/create', InstituteCreateStudent::class)->name('students.create');

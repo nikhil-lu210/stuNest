@@ -41,6 +41,7 @@
         }
     }
 
+    $instituteMessagesActive = request()->routeIs('client.institute.messages.index');
     $instituteStudentsSectionActive = request()->routeIs(
         'client.institute.students.index',
         'client.institute.students.unverified',
@@ -102,6 +103,18 @@
             >
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                 {{ __('Dashboard') }}
+            </a>
+            <a
+                href="{{ route('client.institute.messages.index') }}"
+                @click="sidebarOpen = false"
+                @class([
+                    'nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors',
+                    'font-semibold bg-gray-50 text-gray-900' => $instituteMessagesActive,
+                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteMessagesActive,
+                ])
+            >
+                <i data-lucide="message-square" class="w-5 h-5"></i>
+                {{ __('Messages') }}
             </a>
             <div
                 class="space-y-0.5"

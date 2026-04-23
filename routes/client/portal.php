@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\Agent\DashboardController as AgentDashboardController;
-use App\Http\Controllers\Client\Institute\DashboardController as InstituteDashboardController;
 use App\Http\Controllers\Client\Landlord\DashboardController as LandlordDashboardController;
 use App\Http\Controllers\Client\Student\DashboardController as StudentDashboardController;
+use App\Livewire\Institute\InstituteCreateStudent;
+use App\Livewire\Institute\InstituteOverview;
+use App\Livewire\Institute\InstituteStudents;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,11 @@ Route::prefix('client')
         });
 
         Route::prefix('institute')->name('institute.')->group(function () {
-            Route::get('/dashboard', [InstituteDashboardController::class, 'index'])->name('dashboard');
+            Route::get('/dashboard', InstituteOverview::class)->name('dashboard');
+            Route::get('/students', InstituteStudents::class)->name('students.index');
+            Route::get('/students/unverified', InstituteStudents::class)->name('students.unverified');
+            Route::get('/students/create', InstituteCreateStudent::class)->name('students.create');
+            Route::view('/settings', 'client.institute.settings.index')->name('settings');
         });
 
         Route::prefix('agent')->name('agent.')->group(function () {

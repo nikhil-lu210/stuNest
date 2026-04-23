@@ -3,30 +3,32 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\InstituteLocation;
 use App\Models\Application;
+use App\Models\Institute;
+use App\Models\InstituteLocation;
+use App\Models\InstituteRepresentative;
 use App\Models\Message;
 use App\Models\Property\Property;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Scopes\HideDeveloperRoleUsersScope;
 use App\Support\StudentCountryList;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, InteractsWithMedia, SoftDeletes, CascadeSoftDeletes;
+    use CascadeSoftDeletes, HasApiTokens, HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes;
 
     public const ACCOUNT_STATUS_ACTIVE = 'active';
 
@@ -56,13 +58,25 @@ class User extends Authenticatable implements HasMedia
 
         static::creating(function ($user) {
             // Prefix 'UID' to the 'userid' attribute
-            $user->userid = 'UID' . $user->userid;
+            $user->userid = 'UID'.$user->userid;
         });
     }
 
     protected static function booted(): void
     {
         static::addGlobalScope(new HideDeveloperRoleUsersScope);
+    }
+
+    /**
+     * Random numeric userid before the creating hook prefixes it with "UID".
+     */
+    public static function generateUniqueUseridRaw(): string
+    {
+        do {
+            $raw = (string) random_int(100000, 999999);
+        } while (static::withoutGlobalScopes()->where('userid', 'UID'.$raw)->exists());
+
+        return $raw;
     }
 
     public function registerMediaCollections(): void

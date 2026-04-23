@@ -7,9 +7,9 @@ use App\Http\Requests\Administration\UserManagement\StoreStudentRequest;
 use App\Http\Requests\Administration\UserManagement\UpdateStudentRequest;
 use App\Mail\WelcomeUserMail;
 use App\Models\Institute;
-use App\Support\StudentCountryList;
 use App\Models\InstituteLocation;
 use App\Models\User;
+use App\Support\StudentCountryList;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -156,7 +156,7 @@ class StudentController extends Controller
 
         $user = DB::transaction(function () use ($validated, $firstName, $lastName, $institute) {
             $user = User::create([
-                'userid' => $this->generateUniqueUserid(),
+                'userid' => User::generateUniqueUseridRaw(),
                 'first_name' => $firstName,
                 'middle_name' => null,
                 'last_name' => $lastName,
@@ -263,14 +263,5 @@ class StudentController extends Controller
         }
 
         return substr($email, 0, strlen($email) - $len);
-    }
-
-    protected function generateUniqueUserid(): string
-    {
-        do {
-            $raw = (string) random_int(100000, 999999);
-        } while (User::withoutGlobalScopes()->where('userid', 'UID'.$raw)->exists());
-
-        return $raw;
     }
 }

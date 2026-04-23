@@ -1,11 +1,17 @@
 <?php
 
+use App\Livewire\Institute\InstituteCreateStudent;
+use App\Livewire\Institute\InstituteOverview;
+use App\Livewire\Institute\InstituteStudents;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Client\Institute\Dashboard\DashboardController;
 
 /* ==============================================
 ===============< Institute Routes (v2) >==============
 ===============================================*/
-Route::controller(DashboardController::class)->prefix('institute')->name('institute.')->group(function () {
-    Route::get('/dashboard', 'index')->name('dashboard');
+Route::prefix('institute')->name('institute.')->group(function () {
+    Route::get('/dashboard', InstituteOverview::class)->name('dashboard');
+    Route::get('/students', InstituteStudents::class)->name('students.index');
+    Route::get('/students/unverified', InstituteStudents::class)->name('students.unverified');
+    Route::get('/students/create', InstituteCreateStudent::class)->name('students.create');
+    Route::view('/settings', 'client.institute.settings.index')->name('settings');
 });

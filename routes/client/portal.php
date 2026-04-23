@@ -5,7 +5,10 @@ use App\Http\Controllers\Client\Landlord\DashboardController as LandlordDashboar
 use App\Http\Controllers\Client\Student\DashboardController as StudentDashboardController;
 use App\Livewire\Institute\InstituteCreateStudent;
 use App\Livewire\Institute\InstituteOverview;
+use App\Livewire\Institute\InstituteProperties;
+use App\Livewire\Institute\InstituteReports;
 use App\Livewire\Institute\InstituteStudents;
+use App\Livewire\Property\CreateListing;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +33,10 @@ Route::prefix('client')
             Route::get('/students', InstituteStudents::class)->name('students.index');
             Route::get('/students/unverified', InstituteStudents::class)->name('students.unverified');
             Route::get('/students/create', InstituteCreateStudent::class)->name('students.create');
+            Route::get('/reports', InstituteReports::class)->name('reports');
+            Route::get('/properties', InstituteProperties::class)->name('properties.index');
+            Route::get('/create-listing', CreateListing::class)->name('create-listing');
+            Route::get('/listings/{property}/edit', CreateListing::class)->name('listings.edit');
             Route::view('/settings', 'client.institute.settings.index')->name('settings');
         });
 

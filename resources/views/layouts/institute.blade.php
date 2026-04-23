@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="{{ asset('clients/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('clients/css/dashboard.css') }}">
 
+    @if (request()->routeIs('client.institute.create-listing', 'client.institute.listings.edit'))
+        @vite(['resources/js/property-wizard.js'])
+    @endif
+
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>[x-cloak]{display:none !important;}</style>
     @stack('styles')
@@ -45,6 +49,15 @@
     $instituteStudentsAllActive = request()->routeIs('client.institute.students.index');
     $instituteStudentsUnverifiedActive = request()->routeIs('client.institute.students.unverified');
     $instituteStudentsCreateActive = request()->routeIs('client.institute.students.create');
+    $instituteReportsActive = request()->routeIs('client.institute.reports');
+    $institutePropertiesSectionActive = request()->routeIs(
+        'client.institute.properties.index',
+        'client.institute.create-listing',
+        'client.institute.listings.edit',
+    );
+    $institutePropertiesAllActive = request()->routeIs('client.institute.properties.index')
+        || request()->routeIs('client.institute.listings.edit');
+    $institutePropertiesNewAdvertiseActive = request()->routeIs('client.institute.create-listing');
 @endphp
 <body class="bg-gray-50 font-sans text-gray-900 antialiased flex h-screen overflow-hidden" x-data="{ sidebarOpen: false }">
 
@@ -157,32 +170,71 @@
                 </div>
             </div>
             <a
-                href="#"
-                @click.prevent="sidebarOpen = false"
+                href="{{ route('client.institute.reports') }}"
+                @click="sidebarOpen = false"
                 @class([
                     'nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors',
-                    'font-semibold bg-gray-50 text-gray-900' => request()->routeIs('client.institute.partners.*'),
-                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! request()->routeIs('client.institute.partners.*'),
+                    'font-semibold bg-gray-50 text-gray-900' => $instituteReportsActive,
+                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteReportsActive,
                 ])
             >
-                <i data-lucide="building-2" class="w-5 h-5"></i>
-                {{ __('Approved Partners') }}
+                <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                {{ __('Reports & Analytics') }}
             </a>
-            <a
-                href="#"
-                @click.prevent="sidebarOpen = false"
-                @class([
-                    'nav-btn w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg transition-colors',
-                    'font-semibold bg-gray-50 text-gray-900' => request()->routeIs('client.institute.welfare.*'),
-                    'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! request()->routeIs('client.institute.welfare.*'),
-                ])
+            <div
+                class="space-y-0.5"
+                x-data="{ propertiesOpen: {{ $institutePropertiesSectionActive ? 'true' : 'false' }} }"
             >
-                <div class="flex items-center gap-3">
-                    <i data-lucide="life-buoy" class="w-5 h-5"></i>
-                    {{ __('Welfare Alerts') }}
+                <button
+                    type="button"
+                    @click="propertiesOpen = ! propertiesOpen"
+                    :aria-expanded="propertiesOpen"
+                    @class([
+                        'nav-btn w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors text-left',
+                        'text-gray-900 font-semibold bg-gray-50' => $institutePropertiesSectionActive,
+                        'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $institutePropertiesSectionActive,
+                    ])
+                >
+                    <span class="flex items-center gap-3 min-w-0">
+                        <i data-lucide="building-2" class="w-5 h-5 shrink-0"></i>
+                        <span class="truncate">{{ __('Properties') }}</span>
+                    </span>
+                    <span
+                        class="inline-flex shrink-0 text-gray-400 transition-transform duration-200"
+                        :class="{ 'rotate-180': ! propertiesOpen }"
+                    >
+                        <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                    </span>
+                </button>
+                <div
+                    x-show="propertiesOpen"
+                    x-cloak
+                    class="mt-0.5 ml-2 pl-3 border-l border-gray-200 space-y-0.5 py-0.5"
+                >
+                    <a
+                        href="{{ route('client.institute.properties.index') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $institutePropertiesAllActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $institutePropertiesAllActive,
+                        ])
+                    >
+                        {{ __('All Properties') }}
+                    </a>
+                    <a
+                        href="{{ route('client.institute.create-listing') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $institutePropertiesNewAdvertiseActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $institutePropertiesNewAdvertiseActive,
+                        ])
+                    >
+                        {{ __('New Advertise') }}
+                    </a>
                 </div>
-                <span class="w-2 h-2 rounded-full bg-red-500"></span>
-            </a>
+            </div>
             <div class="pt-4 mt-4 border-t border-gray-100">
                 <a
                     href="{{ route('client.institute.settings') }}"
@@ -356,28 +408,26 @@
             <span class="text-[10px] font-semibold">{{ __('Roster') }}</span>
         </a>
         <a
-            href="#"
+            href="{{ route('client.institute.properties.index') }}"
             @class([
                 'flex flex-col items-center gap-1 nav-btn-mobile',
-                'text-black' => request()->routeIs('client.institute.partners.*'),
-                'text-gray-400 hover:text-black' => ! request()->routeIs('client.institute.partners.*'),
+                'text-black' => $institutePropertiesSectionActive,
+                'text-gray-400 hover:text-black' => ! $institutePropertiesSectionActive,
             ])
         >
             <i data-lucide="building-2" class="w-5 h-5"></i>
-            <span class="text-[10px] font-semibold">{{ __('Partners') }}</span>
+            <span class="text-[10px] font-semibold">{{ __('Listings') }}</span>
         </a>
         <a
-            href="#"
-            @click.prevent
+            href="{{ route('client.institute.reports') }}"
             @class([
-                'flex flex-col items-center gap-1 relative nav-btn-mobile',
-                'text-black' => request()->routeIs('client.institute.welfare.*'),
-                'text-gray-400 hover:text-black' => ! request()->routeIs('client.institute.welfare.*'),
+                'flex flex-col items-center gap-1 nav-btn-mobile',
+                'text-black' => $instituteReportsActive,
+                'text-gray-400 hover:text-black' => ! $instituteReportsActive,
             ])
         >
-            <i data-lucide="life-buoy" class="w-5 h-5"></i>
-            <span class="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-            <span class="text-[10px] font-semibold">{{ __('Alerts') }}</span>
+            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold">{{ __('Reports') }}</span>
         </a>
     </nav>
 

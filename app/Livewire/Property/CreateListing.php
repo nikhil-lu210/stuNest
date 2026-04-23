@@ -5,6 +5,7 @@ namespace App\Livewire\Property;
 use App\Models\Area;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\InstituteRepresentative;
 use App\Models\Property\Property;
 use App\Services\GoogleMapsUrlNormalizer;
 use Illuminate\Contracts\View\View;
@@ -108,6 +109,9 @@ class CreateListing extends Component
             } elseif (request()->routeIs('client.landlord.listings.edit')) {
                 abort_unless(Auth::user()?->hasRole('Landlord'), 403);
                 abort_unless(Auth::user()?->can('update', $property), 403);
+            } elseif (request()->routeIs('client.institute.listings.edit')) {
+                abort_unless(Auth::user()?->hasRole('Institute Representative'), 403);
+                abort_unless(Auth::user()?->can('update', $property), 403);
             } else {
                 abort_unless(Auth::user()?->can('update', $property), 403);
             }
@@ -122,6 +126,10 @@ class CreateListing extends Component
 
         if (request()->routeIs('client.landlord.create-listing')) {
             abort_unless(Auth::user()?->hasRole('Landlord'), 403);
+        }
+
+        if (request()->routeIs('client.institute.create-listing')) {
+            abort_unless(Auth::user()?->hasRole('Institute Representative'), 403);
         }
 
         if ($this->isStudent()) {
@@ -563,6 +571,10 @@ class CreateListing extends Component
             return route('client.landlord.properties.index');
         }
 
+        if (Auth::user()?->hasRole('Institute Representative')) {
+            return route('client.institute.properties.index');
+        }
+
         return route('administration.dashboard.index');
     }
 
@@ -587,27 +599,90 @@ class CreateListing extends Component
                 : collect(),
         ]);
 
+        $user = Auth::user();
+        $isInstituteLister = $user?->hasRole('Institute Representative')
+            || request()->routeIs('client.institute.create-listing', 'client.institute.listings.edit');
+
         $pageTitle = match (true) {
             $this->editingPropertyId !== null => __('Edit listing'),
+            $isInstituteLister => __('Create property listing'),
             $this->isStudent() => __('List a Room/Seat'),
             default => __('Create property listing'),
         };
 
-        if ($this->isStudent()) {
-            return $view->layout('layouts.client.student-property-wizard', [
-                'title' => $pageTitle,
-            ]);
+        [$layout, $layoutData] = $this->resolveListingWizardLayout($pageTitle);
+
+        return $view->layout($layout, $layoutData);
+    }
+
+    /**
+     * Institute and landlord layouts must be chosen before {@see isStudent()}, since the legacy
+     * `users.role` column can still be `student` for some institute accounts.
+     *
+     * @return array{0: string, 1: array<string, mixed>}
+     */
+    protected function resolveListingWizardLayout(string $pageTitle): array
+    {
+        $user = Auth::user();
+
+        $onInstituteListingRoute = request()->routeIs(
+            'client.institute.create-listing',
+            'client.institute.listings.edit',
+        );
+        $onLandlordListingRoute = request()->routeIs(
+            'client.landlord.create-listing',
+            'client.landlord.listings.edit',
+        );
+        $onStudentListingRoute = request()->routeIs(
+            'client.student.create-listing',
+            'client.student.listings.edit',
+        );
+
+        if ($onInstituteListingRoute || $user?->hasRole('Institute Representative')) {
+            $instituteOrgName = __('Institution');
+            $representation = InstituteRepresentative::query()
+                ->where('user_id', Auth::id())
+                ->with('institute')
+                ->first();
+            if ($representation?->institute !== null) {
+                $instituteOrgName = $representation->institute->name;
+            }
+
+            return [
+                'layouts.institute',
+                [
+                    'title' => $pageTitle,
+                    'pageTitle' => $pageTitle,
+                    'pageSubtitle' => $instituteOrgName,
+                    'instituteOrgName' => $instituteOrgName,
+                ],
+            ];
         }
 
-        if (Auth::user()?->hasRole('Landlord')) {
-            return $view->layout('layouts.landlord', [
-                'title' => $pageTitle,
-                'pageTitle' => $pageTitle,
-            ]);
+        if ($onLandlordListingRoute || $user?->hasRole('Landlord')) {
+            return [
+                'layouts.landlord',
+                [
+                    'title' => $pageTitle,
+                    'pageTitle' => $pageTitle,
+                ],
+            ];
         }
 
-        return $view->layout('layouts.property-wizard', [
-            'title' => $pageTitle,
-        ]);
+        if ($onStudentListingRoute || $this->isStudent()) {
+            return [
+                'layouts.client.student-property-wizard',
+                [
+                    'title' => $pageTitle,
+                ],
+            ];
+        }
+
+        return [
+            'layouts.property-wizard',
+            [
+                'title' => $pageTitle,
+            ],
+        ];
     }
 }

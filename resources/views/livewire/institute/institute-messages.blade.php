@@ -16,7 +16,7 @@
         </div>
     @else
         <div
-            class="grid h-[calc(100dvh-10.5rem)] max-h-[calc(100dvh-10.5rem)] min-h-[20rem] grid-cols-1 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:h-[calc(100dvh-7.5rem)] md:max-h-[calc(100dvh-7.5rem)] md:grid-cols-3"
+            class="grid min-h-0 flex-1 grid-cols-1 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm md:grid-cols-3"
         >
             {{-- Conversations list --}}
             <aside

@@ -41,7 +41,29 @@
         }
     }
 
-    $instituteMessagesActive = request()->routeIs('client.institute.messages.index');
+    $instituteMessagesActive = request()->routeIs('client.institute.messages.*');
+
+    $instituteUnreadMessagesCount = 0;
+    if ($instituteUser instanceof \App\Models\User && $instituteUser->hasRole('Institute Representative')) {
+        $instituteRep = \App\Models\InstituteRepresentative::query()
+            ->where('user_id', $instituteUser->id)
+            ->first();
+        if ($instituteRep !== null) {
+            $repUserId = $instituteUser->id;
+            $instituteId = $instituteRep->institute_id;
+            $instituteUnreadMessagesCount = \App\Models\Message::query()
+                ->where('is_read', false)
+                ->where('sender_id', '!=', $repUserId)
+                ->where(function ($q) use ($repUserId, $instituteId) {
+                    $q->whereHas('application.property', fn ($p) => $p->where('user_id', $repUserId))
+                        ->orWhere(function ($q2) use ($instituteId) {
+                            $q2->whereNull('application_id')
+                                ->where('support_institute_id', $instituteId);
+                        });
+                })
+                ->count();
+        }
+    }
     $instituteStudentsSectionActive = request()->routeIs(
         'client.institute.students.index',
         'client.institute.students.unverified',
@@ -108,13 +130,23 @@
                 href="{{ route('client.institute.messages.index') }}"
                 @click="sidebarOpen = false"
                 @class([
-                    'nav-btn w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors',
+                    'nav-btn w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors',
                     'font-semibold bg-gray-50 text-gray-900' => $instituteMessagesActive,
                     'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteMessagesActive,
                 ])
             >
-                <i data-lucide="message-square" class="w-5 h-5"></i>
-                {{ __('Messages') }}
+                <span class="flex items-center gap-3 min-w-0">
+                    <i data-lucide="message-square" class="w-5 h-5 shrink-0"></i>
+                    <span class="truncate">{{ __('Messages') }}</span>
+                </span>
+                @if ($instituteUnreadMessagesCount > 0)
+                    <span
+                        class="shrink-0 min-w-[1.25rem] text-center bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums"
+                        title="{{ trans_choice(':count unread message|:count unread messages', $instituteUnreadMessagesCount, ['count' => $instituteUnreadMessagesCount]) }}"
+                    >
+                        {{ $instituteUnreadMessagesCount > 99 ? '99+' : $instituteUnreadMessagesCount }}
+                    </span>
+                @endif
             </a>
             <div
                 class="space-y-0.5"
@@ -308,10 +340,16 @@
     </header>
 
     <!-- --- MAIN CONTENT AREA --- -->
-    <main class="flex-1 h-full overflow-y-auto pt-16 md:pt-0 custom-scrollbar">
+    <main
+        @class([
+            'flex h-full min-h-0 min-w-0 flex-1 flex-col pt-16 md:pt-0',
+            'overflow-hidden' => request()->routeIs('client.institute.messages.*'),
+            'overflow-y-auto custom-scrollbar' => ! request()->routeIs('client.institute.messages.*'),
+        ])
+    >
 
         <!-- Top Bar Area (Desktop) -->
-        <div class="hidden md:flex h-20 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40 overflow-visible">
+        <div class="hidden md:flex h-20 shrink-0 items-center justify-between px-8 bg-white border-b border-gray-200 sticky top-0 z-40 overflow-visible">
             <div>
                 <h1 class="text-xl font-semibold tracking-tight" id="page-title">{{ $pageTitle ?? $__env->yieldContent('page_title', __('University Overview')) }}</h1>
                 <p class="text-xs text-gray-500 mt-0.5">{{ $pageSubtitle ?? $__env->yieldContent('page_subtitle', __('University College London (Academic Year 26/27)')) }}</p>
@@ -373,7 +411,12 @@
             </div>
         </div>
 
-        <div class="p-4 md:p-8 max-w-7xl mx-auto pb-24">
+        <div
+            @class([
+                'mx-auto w-full max-w-7xl p-4 pb-24 md:p-8',
+                'flex min-h-0 flex-1 flex-col overflow-hidden' => request()->routeIs('client.institute.messages.*'),
+            ])
+        >
             @hasSection('content')
                 @yield('content')
             @else

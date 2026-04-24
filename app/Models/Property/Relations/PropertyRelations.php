@@ -15,6 +15,11 @@ trait PropertyRelations
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function country()
     {
         return $this->belongsTo(Country::class);

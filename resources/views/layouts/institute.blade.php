@@ -72,6 +72,13 @@
     $instituteStudentsAllActive = request()->routeIs('client.institute.students.index');
     $instituteStudentsUnverifiedActive = request()->routeIs('client.institute.students.unverified');
     $instituteStudentsCreateActive = request()->routeIs('client.institute.students.create');
+    $instituteApplicationsSectionActive = request()->routeIs(
+        'client.institute.applications.all',
+        'client.institute.applications.our',
+        'client.institute.applications.show',
+    );
+    $instituteApplicationsAllActive = request()->routeIs('client.institute.applications.all');
+    $instituteApplicationsOurActive = request()->routeIs('client.institute.applications.our');
     $institutePropertiesSectionActive = request()->routeIs(
         'client.institute.properties.index',
         'client.institute.create-listing',
@@ -210,6 +217,60 @@
                         ])
                     >
                         {{ __('Create Account') }}
+                    </a>
+                </div>
+            </div>
+            <div
+                class="space-y-0.5"
+                x-data="{ applicationsOpen: {{ $instituteApplicationsSectionActive ? 'true' : 'false' }} }"
+            >
+                <button
+                    type="button"
+                    @click="applicationsOpen = ! applicationsOpen"
+                    :aria-expanded="applicationsOpen"
+                    @class([
+                        'nav-btn w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors text-left',
+                        'text-gray-900 font-semibold bg-gray-50' => $instituteApplicationsSectionActive,
+                        'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteApplicationsSectionActive,
+                    ])
+                >
+                    <span class="flex items-center gap-3 min-w-0">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 shrink-0"></i>
+                        <span class="truncate">{{ __('Applications') }}</span>
+                    </span>
+                    <span
+                        class="inline-flex shrink-0 text-gray-400 transition-transform duration-200"
+                        :class="{ 'rotate-180': ! applicationsOpen }"
+                    >
+                        <i data-lucide="chevron-up" class="w-4 h-4"></i>
+                    </span>
+                </button>
+                <div
+                    x-show="applicationsOpen"
+                    x-cloak
+                    class="mt-0.5 ml-2 pl-3 border-l border-gray-200 space-y-0.5 py-0.5"
+                >
+                    <a
+                        href="{{ route('client.institute.applications.all') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $instituteApplicationsAllActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteApplicationsAllActive,
+                        ])
+                    >
+                        {{ __('All Applications') }}
+                    </a>
+                    <a
+                        href="{{ route('client.institute.applications.our') }}"
+                        @click="sidebarOpen = false"
+                        @class([
+                            'nav-btn w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
+                            'bg-gray-50 text-gray-900 font-semibold' => $instituteApplicationsOurActive,
+                            'font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50' => ! $instituteApplicationsOurActive,
+                        ])
+                    >
+                        {{ __('Our Applications') }}
                     </a>
                 </div>
             </div>

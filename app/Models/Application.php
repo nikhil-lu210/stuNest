@@ -47,6 +47,11 @@ class Application extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class)->orderBy('created_at');
@@ -57,4 +62,3 @@ class Application extends Model
         return $this->hasOne(Message::class)->latestOfMany();
     }
 }
-

@@ -9,6 +9,7 @@ use App\Models\Message;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -31,9 +32,28 @@ class InstituteMessages extends Component
         $user = Auth::user();
         abort_unless($user instanceof User && $user->hasRole('Institute Representative'), 403);
 
+        $institute = $this->resolveInstitute();
+
+        $rawApplicationId = request()->query('application_id');
+        if ($rawApplicationId !== null && $rawApplicationId !== '' && (int) $rawApplicationId > 0) {
+            $this->selectConversation((int) $rawApplicationId, 'application');
+
+            return;
+        }
+
         $rawStudentId = request()->query('student_id');
         if ($rawStudentId !== null && $rawStudentId !== '' && (int) $rawStudentId > 0) {
             $this->selectConversation((int) $rawStudentId, 'support');
+
+            return;
+        }
+
+        $rawUserId = request()->query('user_id');
+        if ($rawUserId !== null && $rawUserId !== '' && (int) $rawUserId > 0) {
+            $target = User::query()->whereKey((int) $rawUserId)->whereRoleName('Student')->first();
+            if ($target !== null && $this->studentBelongsToInstitute($target, $institute)) {
+                $this->selectConversation($target->id, 'support');
+            }
         }
     }
 
@@ -48,9 +68,12 @@ class InstituteMessages extends Component
         if ($type === 'application') {
             $application = Application::query()
                 ->whereKey($threadId)
-                ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
+                ->with(['property', 'student'])
                 ->first();
-            abort_unless($application, 403);
+            abort_unless(
+                $application !== null && $this->instituteRepCanAccessApplicationThread($user, $institute, $application),
+                403
+            );
             $this->markIncomingReadForApplication($threadId, $user->id);
         } else {
             $student = User::query()->whereKey($threadId)->whereRoleName('Student')->first();
@@ -84,10 +107,13 @@ class InstituteMessages extends Component
         if ($this->activeThreadType === 'application' && $this->activeThreadId) {
             $application = Application::query()
                 ->whereKey($this->activeThreadId)
-                ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
+                ->with(['property', 'student'])
                 ->first();
 
-            abort_unless($application, 403);
+            abort_unless(
+                $application !== null && $this->instituteRepCanAccessApplicationThread($user, $institute, $application),
+                403
+            );
 
             Message::create([
                 'application_id' => $application->id,
@@ -176,7 +202,16 @@ class InstituteMessages extends Component
     protected function buildConversations(User $user, Institute $institute): Collection
     {
         $applicationRows = Application::query()
-            ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
+            ->where(function (Builder $q) use ($user, $institute) {
+                $q->whereHas('property', fn ($pq) => $pq->where('user_id', $user->id))
+                    ->orWhereHas('student', function (Builder $sq) use ($institute) {
+                        $sq->whereRoleName('Student')
+                            ->where(function (Builder $sqq) use ($institute) {
+                                $sqq->where('institution_id', $institute->id)
+                                    ->orWhereHas('instituteLocation', fn (Builder $lq) => $lq->where('institute_id', $institute->id));
+                            });
+                    });
+            })
             ->whereHas('messages')
             ->with(['property.area', 'property.city', 'student', 'latestMessage'])
             ->withMax('messages', 'created_at')
@@ -284,6 +319,23 @@ class InstituteMessages extends Component
             && (int) $student->instituteLocation->institute_id === (int) $institute->id;
     }
 
+    private function instituteRepCanAccessApplicationThread(User $rep, Institute $institute, Application $application): bool
+    {
+        $application->loadMissing(['property', 'student']);
+
+        $property = $application->property;
+        if ($property !== null && (int) $property->user_id === (int) $rep->id) {
+            return true;
+        }
+
+        $student = $application->student;
+        if ($student === null) {
+            return false;
+        }
+
+        return $this->studentBelongsToInstitute($student, $institute);
+    }
+
     public function render(): View
     {
         $user = Auth::user();
@@ -301,7 +353,6 @@ class InstituteMessages extends Component
         if ($this->activeThreadType === 'application' && $this->activeThreadId) {
             $activeApplication = Application::query()
                 ->whereKey($this->activeThreadId)
-                ->whereHas('property', fn ($q) => $q->where('user_id', $user->id))
                 ->with([
                     'property.area',
                     'property.city',
@@ -310,7 +361,10 @@ class InstituteMessages extends Component
                 ])
                 ->first();
 
-            if (! $activeApplication) {
+            if (
+                ! $activeApplication
+                || ! $this->instituteRepCanAccessApplicationThread($user, $institute, $activeApplication)
+            ) {
                 $this->activeThreadType = null;
                 $this->activeThreadId = null;
                 $this->mobilePanel = 'list';

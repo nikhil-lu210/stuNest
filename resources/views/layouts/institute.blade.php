@@ -41,7 +41,7 @@
         }
     }
 
-    $instituteMessagesActive = request()->routeIs('client.institute.messages.*');
+    $instituteMessagesActive = request()->routeIs('client.institute.messages');
 
     $instituteUnreadMessagesCount = 0;
     if ($instituteUser instanceof \App\Models\User && $instituteUser->hasRole('Institute Representative')) {
@@ -134,7 +134,7 @@
                 {{ __('Dashboard') }}
             </a>
             <a
-                href="{{ route('client.institute.messages.index') }}"
+                href="{{ route('client.institute.messages') }}"
                 @click="sidebarOpen = false"
                 @class([
                     'nav-btn w-full flex items-center justify-between gap-2 px-3 py-2.5 text-sm rounded-lg transition-colors',
@@ -404,8 +404,8 @@
     <main
         @class([
             'flex h-full min-h-0 min-w-0 flex-1 flex-col pt-16 md:pt-0',
-            'overflow-hidden' => request()->routeIs('client.institute.messages.*'),
-            'overflow-y-auto custom-scrollbar' => ! request()->routeIs('client.institute.messages.*'),
+            'overflow-hidden' => request()->routeIs('client.institute.messages'),
+            'overflow-y-auto custom-scrollbar' => ! request()->routeIs('client.institute.messages'),
         ])
     >
 
@@ -475,7 +475,7 @@
         <div
             @class([
                 'mx-auto w-full max-w-7xl p-4 pb-24 md:p-8',
-                'flex min-h-0 flex-1 flex-col overflow-hidden' => request()->routeIs('client.institute.messages.*'),
+                'flex min-h-0 flex-1 flex-col overflow-hidden' => request()->routeIs('client.institute.messages'),
             ])
         >
             @hasSection('content')

@@ -68,7 +68,7 @@ class InstituteStudents extends Component
 
         abort_unless($student !== null && $this->studentBelongsToInstitute($student, $institute), 403);
 
-        $this->redirect(route('client.institute.messages.index', ['student_id' => $studentId]));
+        $this->redirect(route('client.institute.messages', ['student_id' => $studentId]));
     }
 
     public function render(): View

@@ -3,9 +3,11 @@
 namespace App\Livewire\Student;
 
 use App\Models\User;
+use App\Support\StudentCountryList;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -19,6 +21,10 @@ class StudentSettings extends Component
     public string $last_name = '';
 
     public string $phone = '';
+
+    public string $student_id = '';
+
+    public string $country_of_citizen = '';
 
     /** @var mixed */
     public $avatar;
@@ -39,6 +45,8 @@ class StudentSettings extends Component
         $this->first_name = $user->first_name ?? '';
         $this->last_name = $user->last_name ?? '';
         $this->phone = $user->phone ?? '';
+        $this->student_id = (string) ($user->student_id ?? '');
+        $this->country_of_citizen = (string) ($user->country_of_citizen ?? '');
         $prefs = $user->preferences ?? [];
         $this->notify_application_status = (bool) ($prefs['email_application_status'] ?? true);
         $this->notify_landlord_message = (bool) ($prefs['email_landlord_message'] ?? true);
@@ -47,7 +55,7 @@ class StudentSettings extends Component
     protected function student(): User
     {
         $user = Auth::user();
-        abort_unless($user instanceof User && $user->hasRole('Student'), 403);
+        abort_unless($user instanceof User && $user->hasStudentRole(), 403);
 
         return $user;
     }
@@ -81,17 +89,38 @@ class StudentSettings extends Component
     public function updateProfile(): void
     {
         $user = $this->student();
+        $wasIncomplete = ! $user->is_profile_complete;
+        $codes = array_column(StudentCountryList::all(), 'code');
 
-        $this->validate([
+        $rules = [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'avatar' => ['nullable', 'image', 'max:5120'],
-        ]);
+        ];
+
+        if ($wasIncomplete) {
+            $rules['student_id'] = ['required', 'string', 'max:100'];
+            $rules['country_of_citizen'] = ['required', 'string', 'size:2', Rule::in($codes)];
+        } else {
+            $rules['student_id'] = ['nullable', 'string', 'max:100'];
+            $rules['country_of_citizen'] = ['nullable', 'string', 'size:2', Rule::in($codes)];
+        }
+
+        $this->validate($rules);
 
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
         $user->phone = $this->phone !== '' ? $this->phone : null;
+        $user->student_id = $this->student_id !== '' ? $this->student_id : null;
+        $user->country_of_citizen = $this->country_of_citizen !== ''
+            ? strtoupper($this->country_of_citizen)
+            : null;
+
+        if ($wasIncomplete) {
+            $user->is_profile_complete = true;
+        }
+
         $user->save();
 
         if ($this->avatar) {
@@ -100,6 +129,13 @@ class StudentSettings extends Component
                 ->usingFileName($this->avatar->getClientOriginalName())
                 ->toMediaCollection('avatar');
             $this->avatar = null;
+        }
+
+        if ($wasIncomplete) {
+            toast(__('Profile saved. Welcome to the student portal.'), 'success');
+            $this->redirect(route('client.student.dashboard'), navigate: false);
+
+            return;
         }
 
         $this->toastSuccess(__('Profile updated successfully.'));
@@ -144,6 +180,7 @@ class StudentSettings extends Component
     {
         return view('livewire.student.student-settings', [
             'user' => Auth::user()->fresh(['institution', 'media']),
+            'countries' => StudentCountryList::all(),
         ]);
     }
 }

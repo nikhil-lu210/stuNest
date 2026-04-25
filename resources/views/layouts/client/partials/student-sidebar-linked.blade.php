@@ -13,6 +13,21 @@
     $activeCls = 'bg-gray-50 text-gray-900 font-semibold';
     $idleCls = 'text-gray-500 font-medium hover:text-gray-900 hover:bg-gray-50';
     $unreadMessagesCount = $user->unreadApplicationMessagesFromLandlordsCount();
+    $avatarInitials = strtoupper(
+        mb_substr((string) ($user->first_name ?? ''), 0, 1).mb_substr((string) ($user->last_name ?? ''), 0, 1)
+    );
+    if (trim($avatarInitials) === '' && (string) ($user->name ?? '') !== '') {
+        $parts = preg_split('/\s+/', trim((string) $user->name), -1, PREG_SPLIT_NO_EMPTY);
+        $avatarInitials = $parts === []
+            ? '?'
+            : strtoupper(
+                mb_substr($parts[0], 0, 1)
+                .(isset($parts[1]) ? mb_substr($parts[1], 0, 1) : '')
+            );
+    }
+    if (trim($avatarInitials) === '') {
+        $avatarInitials = '?';
+    }
     $studentDashboardActive = request()->routeIs('client.student.dashboard');
     $studentApplicationsNavActive = request()->routeIs('client.student.applications.*');
     $propertiesBottomActive = $active === 'listings'
@@ -92,11 +107,11 @@
 
     <div class="p-4 border-t border-gray-200">
         <div class="flex items-center gap-3 px-2 py-2">
-            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden shrink-0" title="{{ $user->name }}">
                 @if ($avatarUrl)
                     <img src="{{ $avatarUrl }}" alt="" class="w-full h-full object-cover">
                 @else
-                    <span class="text-sm font-semibold text-gray-600">{{ strtoupper(mb_substr($user->first_name ?? '?', 0, 1)) }}</span>
+                    <span class="text-xs font-semibold tracking-tight text-gray-600" aria-hidden="true">{{ $avatarInitials }}</span>
                 @endif
             </div>
             <div class="flex-1 min-w-0">
@@ -131,7 +146,7 @@
             @if ($avatarUrl)
                 <img src="{{ $avatarUrl }}" alt="" class="h-full w-full object-cover">
             @else
-                <span class="text-xs font-semibold text-gray-600">{{ strtoupper(mb_substr($user->first_name ?? '?', 0, 1)) }}</span>
+                <span class="text-[10px] font-semibold leading-none tracking-tight text-gray-600" aria-hidden="true">{{ $avatarInitials }}</span>
             @endif
         </button>
         <div

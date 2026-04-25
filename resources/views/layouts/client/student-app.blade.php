@@ -28,6 +28,7 @@
     @stack('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireScripts
+    @include('sweetalert::alert')
     <script>
         if (window.lucide && typeof lucide.createIcons === 'function') {
             lucide.createIcons();

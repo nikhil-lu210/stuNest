@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Mail\VerifyRegistrationOtp;
 use App\Models\Institute;
+use App\Models\TemporaryUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,14 @@ class StudentRegister extends Component
 {
     public int $step = 1;
 
-    /** Picker open state (institute list is not stored in public props — see computed properties). */
+    /**
+     * Deduplicated institute rows for the picker (loaded in mount, not the OTP/registration source of truth).
+     *
+     * @var list<array{id: int, name: string, email_code: string}>
+     */
+    public array $institutes = [];
+
+    /** Picker open state */
     public bool $institutePickerOpen = false;
 
     public string $instituteSearch = '';
@@ -42,19 +50,23 @@ class StudentRegister extends Component
 
     public string $password_confirmation = '';
 
-    public string $generatedOtp = '';
-
     public string $enteredOtp = '';
 
-    /**
-     * Unique institutes for the UI — rebuilt each request, never sent to the browser as serialized state.
-     *
-     * @return list<array{id: int, name: string, email_code: string}>
-     */
-    #[Computed]
-    public function instituteOptions(): array
+    public string $otp0 = '';
+
+    public string $otp1 = '';
+
+    public string $otp2 = '';
+
+    public string $otp3 = '';
+
+    public string $otp4 = '';
+
+    public string $otp5 = '';
+
+    public function mount(): void
     {
-        return $this->loadDeduplicatedInstitutes();
+        $this->institutes = $this->loadDeduplicatedInstitutes();
     }
 
     /**
@@ -64,7 +76,7 @@ class StudentRegister extends Component
     public function filteredInstituteOptions(): array
     {
         $needle = mb_strtolower(trim($this->instituteSearch));
-        $rows = $this->instituteOptions;
+        $rows = $this->institutes;
         if ($needle === '') {
             return $rows;
         }
@@ -173,6 +185,27 @@ class StudentRegister extends Component
         }
     }
 
+    public function updated($name, $value): void
+    {
+        if (! in_array($name, ['otp0', 'otp1', 'otp2', 'otp3', 'otp4', 'otp5'], true)) {
+            return;
+        }
+
+        $all = preg_replace('/\D/', '', (string) $value);
+        if (strlen($all) > 1) {
+            for ($i = 0; $i < 6; $i++) {
+                $p = "otp{$i}";
+                $this->{$p} = $all[$i] ?? '';
+            }
+        } else {
+            $i = (int) substr($name, 3);
+            $p = "otp{$i}";
+            $this->{$p} = $all[0] ?? '';
+        }
+
+        $this->syncEnteredOtp();
+    }
+
     public function sendOtp(): void
     {
         $this->validate($this->stepOneRules());
@@ -187,15 +220,30 @@ class StudentRegister extends Component
             return;
         }
 
-        $email = $this->buildEmail();
-        if (User::query()->where('email', $email)->exists()) {
+        $fullEmail = $this->buildEmail();
+        if (User::query()->where('email', $fullEmail)->exists()) {
             $this->addError('email_prefix', __('This email is already registered.'));
 
             return;
         }
 
-        $this->generatedOtp = (string) random_int(100000, 999999);
-        Mail::to($email)->send(new VerifyRegistrationOtp($this->generatedOtp));
+        $otp = rand(100_000, 999_999);
+
+        TemporaryUser::query()->updateOrCreate(
+            ['email' => $fullEmail],
+            [
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'password' => Hash::make($this->password),
+                'role' => User::ROLE_STUDENT,
+                'institute_id' => $this->institute_id,
+                'otp' => (string) $otp,
+                'expires_at' => now()->addMinutes(15),
+            ],
+        );
+
+        Mail::to($fullEmail)->send(new VerifyRegistrationOtp((string) $otp));
+        $this->resetOtpFields();
         $this->step = 2;
     }
 
@@ -219,43 +267,83 @@ class StudentRegister extends Component
         return $this->email_prefix.'@'.$this->institute_domain;
     }
 
+    private function resetOtpFields(): void
+    {
+        for ($i = 0; $i < 6; $i++) {
+            $p = "otp{$i}";
+            $this->{$p} = '';
+        }
+        $this->enteredOtp = '';
+    }
+
+    private function syncEnteredOtp(): void
+    {
+        $this->enteredOtp = $this->otp0.$this->otp1.$this->otp2.$this->otp3.$this->otp4.$this->otp5;
+    }
+
     public function verifyAndRegister(): void
     {
+        $this->syncEnteredOtp();
+
         $this->validate([
             'enteredOtp' => ['required', 'string', 'size:6', 'regex:/^\d+$/'],
         ]);
 
-        if ($this->enteredOtp !== $this->generatedOtp) {
-            $this->addError('enteredOtp', __('The code is incorrect. Please try again.'));
+        // Must match the email stored on TemporaryUser in sendOtp() (same as buildEmail()).
+        $fullEmail = $this->email_prefix.'@'.$this->institute_domain;
+        if ($this->email_prefix === '' || $this->institute_domain === '' || $this->institute_id === null) {
+            $this->addError('enteredOtp', __('Please return to step 1 and resend a verification code.'));
 
             return;
         }
 
-        $email = $this->buildEmail();
+        $temporary = TemporaryUser::query()
+            ->where('email', $fullEmail)
+            ->where('otp', $this->enteredOtp)
+            ->first();
 
-        $user = DB::transaction(function () use ($email) {
+        if (! $temporary) {
+            $this->addError('enteredOtp', __('Invalid verification code.'));
+
+            return;
+        }
+
+        if ($temporary->expires_at->isPast()) {
+            $temporary->delete();
+            $this->addError('enteredOtp', __('Code has expired. Please request a new one.'));
+
+            return;
+        }
+
+        $user = DB::transaction(function () use ($temporary) {
+            // University inbox OTP proves control of the official email; no separate institute rep approval.
             $u = User::query()->create([
                 'userid' => User::generateUniqueUseridRaw(),
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'email' => $email,
-                'password' => Hash::make($this->password),
-                'email_verified_at' => now(),
-                'account_status' => User::ACCOUNT_STATUS_UNVERIFIED,
+                'first_name' => $temporary->first_name,
+                'last_name' => $temporary->last_name,
+                'email' => $temporary->email,
+                'password' => $temporary->password,
+                'account_status' => User::ACCOUNT_STATUS_ACTIVE,
                 'role' => User::ROLE_STUDENT,
-                'institution_id' => $this->institute_id,
+                'institution_id' => (int) $temporary->institute_id,
                 'is_profile_complete' => false,
             ]);
+            $u->email_verified_at = now();
+            $u->save();
 
             app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
             $u->assignRole(Role::findByName('Student', 'student'));
+
+            $temporary->delete();
 
             return $u;
         });
 
         Auth::login($user, remember: true);
+        request()->session()->regenerate();
 
-        $this->redirect(route('student.profile.edit'), navigate: true);
+        // Full navigation (not Livewire SPA) so the new session is applied before `auth` middleware runs.
+        $this->redirect(route('client.student.settings'), navigate: false);
     }
 
     public function render()

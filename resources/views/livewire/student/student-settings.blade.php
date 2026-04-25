@@ -3,9 +3,14 @@
     <section class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
         <div class="border-b border-gray-100 px-6 py-5">
             <h2 class="text-lg font-semibold text-gray-900">{{ __('Profile Information') }}</h2>
-            <p class="text-sm text-gray-500 mt-1">{{ __('Update your photo and contact details.') }}</p>
+            <p class="text-sm text-gray-500 mt-1">{{ __('Update your photo, academic details, and contact information.') }}</p>
         </div>
         <div class="px-6 py-6 space-y-6">
+            @if (! $user->is_profile_complete)
+                <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    {{ __('Complete the fields below (including Student ID and country of citizenship) and save to access the full student portal.') }}
+                </div>
+            @endif
             <div class="flex flex-col sm:flex-row sm:items-start gap-6">
                 <div class="shrink-0">
                     <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Profile photo') }}</p>
@@ -86,6 +91,45 @@
                             class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-gray-900 outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors"
                         >
                         @error('phone')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="student_id" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            {{ __('Student ID') }}
+                            @if (! $user->is_profile_complete)
+                                <span class="text-red-500">*</span>
+                            @endif
+                        </label>
+                        <input
+                            wire:model.blur="student_id"
+                            type="text"
+                            id="student_id"
+                            autocomplete="off"
+                            class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-gray-900 outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors @error('student_id') border-red-300 @enderror"
+                        >
+                        @error('student_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="country_of_citizen" class="block text-sm font-medium text-gray-700 mb-1.5">
+                            {{ __('Country of citizenship') }}
+                            @if (! $user->is_profile_complete)
+                                <span class="text-red-500">*</span>
+                            @endif
+                        </label>
+                        <select
+                            id="country_of_citizen"
+                            wire:model="country_of_citizen"
+                            class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-gray-900 outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors @error('country_of_citizen') border-red-300 @enderror"
+                        >
+                            <option value="">{{ __('Select a country') }}</option>
+                            @foreach ($countries as $c)
+                                <option value="{{ $c['code'] }}">{{ $c['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @error('country_of_citizen')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>

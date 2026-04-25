@@ -21,6 +21,14 @@ class DashboardController extends Controller
         ]);
     }
 
+    /**
+     * Property applications list (shared with the dashboard home; dedicated URL for nav).
+     */
+    public function applications(): View|RedirectResponse
+    {
+        return $this->index();
+    }
+
     public function saved(): View
     {
         $user = Auth::user();

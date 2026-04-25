@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class EnsureProfileIsComplete
             return $next($request);
         }
 
-        if ($request->routeIs('student.profile.edit')) {
+        if ($request->routeIs('student.profile.edit', 'client.student.settings')) {
             return $next($request);
         }
 
@@ -41,6 +42,6 @@ class EnsureProfileIsComplete
             return $next($request);
         }
 
-        return redirect()->route('student.profile.edit');
+        return redirect()->route('client.student.settings');
     }
 }

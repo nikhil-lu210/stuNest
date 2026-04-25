@@ -28,13 +28,12 @@ Route::middleware(['auth', 'administration.access'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    // Legacy URL: profile completion now lives on Account Settings.
     Route::get('/client/student/profile/edit', function () {
         $user = auth()->user();
         abort_unless($user instanceof User && $user->hasStudentRole(), 403);
 
-        return view('client.student.profile-edit', [
-            'user' => $user,
-        ]);
+        return redirect()->route('client.student.settings');
     })->name('student.profile.edit');
 
     include_once __DIR__.'/client/portal/portal.php';

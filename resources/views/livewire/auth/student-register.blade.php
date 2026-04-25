@@ -31,7 +31,7 @@
                             class="block w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-left text-sm text-gray-900 shadow-sm focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10"
                         >
                             @if ($institute_id)
-                                {{ data_get(collect($this->instituteOptions)->firstWhere('id', (int) $institute_id), 'name', '') }}
+                                {{ data_get(collect($this->institutes)->firstWhere('id', (int) $institute_id), 'name', '') }}
                             @else
                                 <span class="text-gray-400">{{ __('Select an institute') }}</span>
                             @endif
@@ -162,27 +162,48 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">{{ __('Verify your university email') }}</h1>
                 <p class="mt-2 text-sm text-gray-500">{{ __('Enter the 6-digit code we sent to your inbox.') }}</p>
 
-                <form class="mt-8 space-y-6" wire:submit="verifyAndRegister">
+                <form class="mt-8 space-y-6" wire:submit.prevent="verifyAndRegister">
                     <div>
-                        <label for="enteredOtp" class="sr-only">{{ __('Code') }}</label>
-                        <input
-                            type="text"
-                            id="enteredOtp"
-                            wire:model="enteredOtp"
-                            inputmode="numeric"
-                            pattern="[0-9]*"
-                            maxlength="6"
-                            autocomplete="one-time-code"
-                            class="block w-full max-w-xs mx-auto text-center text-2xl font-semibold tracking-widest rounded-xl border border-gray-200 bg-white px-3.5 py-3 text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 @error('enteredOtp') border-red-300 @enderror"
-                        />
+                        <p id="reg-otp-label" class="sr-only">{{ __('Enter the 6-digit verification code') }}</p>
+                        <div
+                            class="flex flex-wrap justify-center gap-2"
+                            x-data
+                            role="group"
+                            aria-labelledby="reg-otp-label"
+                        >
+                            @foreach (range(0, 5) as $i)
+                                <input
+                                    type="text"
+                                    inputmode="numeric"
+                                    pattern="[0-9]*"
+                                    id="reg-otp-{{ $i }}"
+                                    @class([
+                                        'h-12 w-11 sm:w-12 rounded-xl border text-center text-xl font-semibold tabular-nums text-gray-900 shadow-sm focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10',
+                                        'border-red-300' => $errors->has('enteredOtp'),
+                                        'border-gray-200' => ! $errors->has('enteredOtp'),
+                                    ])
+                                    @if ($i === 0)
+                                        maxlength="6"
+                                        autocomplete="one-time-code"
+                                    @else
+                                        maxlength="1"
+                                        autocomplete="off"
+                                    @endif
+                                    wire:model.live="otp{{ $i }}"
+                                    x-on:keydown="if ($event.key === 'Backspace' &amp;&amp; ! $el.value) { $event.preventDefault(); $el.previousElementSibling?.focus() }"
+                                    x-on:input="if ($el.value &amp;&amp; $el.value.length === 1) { $el.nextElementSibling?.focus() }"
+                                />
+                            @endforeach
+                        </div>
                         @error('enteredOtp')
-                            <p class="mt-1.5 text-sm text-red-600 text-center" role="alert">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-center text-red-500" role="alert">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <button
-                        type="submit"
+                        type="button"
                         class="w-full inline-flex justify-center items-center rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
+                        wire:click="verifyAndRegister"
                         wire:loading.attr="disabled"
                     >
                         <span wire:loading.remove wire:target="verifyAndRegister">{{ __('Verify registration code') }}</span>

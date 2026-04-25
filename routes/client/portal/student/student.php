@@ -13,6 +13,7 @@ Route::middleware(['auth', 'profile.complete'])
     ->group(function () {
         Route::controller(DashboardController::class)->group(function () {
             Route::get('/dashboard', 'index')->name('dashboard');
+            Route::get('/applications', 'applications')->name('applications.index');
             Route::get('/saved', 'saved')->name('saved');
             Route::get('/listings', 'listings')->name('listings.index');
             Route::get('/messages', 'messages')->name('messages');

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('institutes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email_code', 125)->unique()->comment('Institutional email suffix e.g. @nup.ac.cy');
-            $table->string('slug')->unique();
+            $table->string('name')->unique()->comment('Institution name should be unique and used as a slug');
+            $table->string('email_code', 125)->unique()->comment('Institutional email suffix e.g. @nup.ac.cy, this is used to generate the institutional email address for the institution');
+            $table->string('slug')->unique()->comment('Institution slug should be unique and used as a slug');
             $table->timestamps();
             $table->softDeletes();
         });

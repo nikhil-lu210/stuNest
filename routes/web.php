@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Auth\LandlordRegister;
 use App\Livewire\Auth\StudentRegister;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/student', fn () => redirect()->route('register'))
         ->name('register.student');
 
-    Route::get('/register/landlord', fn () => redirect('/register?role=landlord'))
+    Route::get('/register/landlord', LandlordRegister::class)
         ->name('register.landlord');
 
     Route::get('/register/institute', fn () => redirect('/register?role=institute'))

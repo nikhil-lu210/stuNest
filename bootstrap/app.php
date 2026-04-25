@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureProfileIsComplete;
+use App\Http\Middleware\EnsureUserCanAccessAdministration;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -38,7 +40,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
-            'administration.access' => \App\Http\Middleware\EnsureUserCanAccessAdministration::class,
+            'administration.access' => EnsureUserCanAccessAdministration::class,
+            'profile.complete' => EnsureProfileIsComplete::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

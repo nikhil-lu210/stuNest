@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 /* ==============================================
 ===============< Student Routes >==============
 ===============================================*/
-Route::middleware('auth')
+Route::middleware(['auth', 'profile.complete'])
     ->prefix('student')
     ->name('student.')
     ->group(function () {

@@ -130,6 +130,9 @@ class User extends Authenticatable implements HasMedia
         'office_address',
         'job_title',
         'preferences',
+        'student_id',
+        'country_of_citizen',
+        'is_profile_complete',
     ];
 
     /**
@@ -155,6 +158,7 @@ class User extends Authenticatable implements HasMedia
         'developer_anchor' => 'boolean',
         'super_admin_anchor' => 'boolean',
         'preferences' => 'array',
+        'is_profile_complete' => 'boolean',
     ];
 
     /**

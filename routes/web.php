@@ -18,6 +18,18 @@ Auth::routes(['register' => false]);
 Route::middleware('guest')->group(function () {
     Route::get('/register', StudentRegister::class)
         ->name('register');
+
+    Route::get('/register/student', fn () => redirect()->route('register'))
+        ->name('register.student');
+
+    Route::get('/register/landlord', fn () => redirect('/register?role=landlord'))
+        ->name('register.landlord');
+
+    Route::get('/register/institute', fn () => redirect('/register?role=institute'))
+        ->name('register.institute');
+
+    Route::get('/register/agent', fn () => redirect('/register?role=agent'))
+        ->name('register.agent');
 });
 
 /*==============================================================

@@ -28,12 +28,39 @@
                 >
                     {{ __('Log in') }}
                 </a>
-                <a
-                    href="{{ route('register') }}"
-                    class="hidden rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-transform hover:bg-gray-800 active:scale-95 md:block"
+                <div
+                    x-data="{ open: false }"
+                    @click.outside="open = false"
+                    class="relative inline-block hidden text-left md:block"
                 >
-                    {{ __('Sign up') }}
-                </a>
+                    <button
+                        type="button"
+                        @click="open = !open"
+                        class="inline-flex items-center gap-1.5 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-transform hover:bg-gray-800 active:scale-95"
+                        x-bind:aria-expanded="open"
+                        aria-haspopup="true"
+                    >
+                        {{ __('Sign up') }}
+                        <i data-lucide="chevron-down" class="h-4 w-4 shrink-0 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
+                    </button>
+                    <div
+                        x-show="open"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-150"
+                        x-transition:enter-start="translate-y-1 opacity-0"
+                        x-transition:enter-end="translate-y-0 opacity-100"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="translate-y-0 opacity-100"
+                        x-transition:leave-end="translate-y-1 opacity-0"
+                        class="absolute right-0 z-50 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border border-gray-200 bg-white py-1 shadow-lg"
+                        role="menu"
+                    >
+                        @include('layouts.client.partials.nav-public-signup-links', [
+                            'isMobileMenu' => false,
+                            'closeDesktopDropdown' => true,
+                        ])
+                    </div>
+                </div>
             @else
                 @include('layouts.client.partials.nav-user-menu', ['wrapperClass' => ''])
             @endguest
@@ -105,13 +132,13 @@
                     >
                         {{ __('Log in') }}
                     </a>
-                    <a
-                        href="{{ route('register') }}"
-                        class="mt-1 block rounded-xl bg-black px-4 py-3 text-center text-base font-semibold text-white transition-colors hover:bg-gray-800"
-                        x-on:click="mobileMenuOpen = false"
-                    >
-                        {{ __('Sign up') }}
-                    </a>
+                    <p class="mt-1 px-4 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-500">{{ __('Sign up') }}</p>
+                    <div class="mt-1 flex flex-col gap-0.5">
+                        @include('layouts.client.partials.nav-public-signup-links', [
+                            'isMobileMenu' => true,
+                            'onClickClose' => 'mobileMenuOpen = false',
+                        ])
+                    </div>
                 </div>
             @endguest
         </div>

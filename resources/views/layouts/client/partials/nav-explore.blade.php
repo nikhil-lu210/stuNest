@@ -73,10 +73,46 @@
             </button>
             @guest
                 <a href="{{ route('login') }}" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">{{ __('Log in') }}</a>
-                <a href="{{ route('register') }}" class="inline-flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-4 sm:py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors">
-                    <span class="hidden sm:inline">{{ __('Sign up') }}</span>
-                    <i data-lucide="user" class="w-4 h-4 sm:hidden"></i>
+                <a
+                    href="{{ route('register') }}"
+                    class="inline-flex items-center justify-center sm:hidden h-10 w-10 rounded-full bg-black text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                    aria-label="{{ __('Student sign up') }}"
+                >
+                    <i data-lucide="user" class="h-4 w-4"></i>
                 </a>
+                <div
+                    x-data="{ open: false }"
+                    @click.outside="open = false"
+                    class="relative hidden text-left sm:inline-block"
+                >
+                    <button
+                        type="button"
+                        @click="open = !open"
+                        class="inline-flex items-center justify-center gap-1.5 rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                        x-bind:aria-expanded="open"
+                        aria-haspopup="true"
+                    >
+                        {{ __('Sign up') }}
+                        <i data-lucide="chevron-down" class="h-4 w-4 shrink-0 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" aria-hidden="true"></i>
+                    </button>
+                    <div
+                        x-show="open"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-150"
+                        x-transition:enter-start="translate-y-1 opacity-0"
+                        x-transition:enter-end="translate-y-0 opacity-100"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="translate-y-0 opacity-100"
+                        x-transition:leave-end="translate-y-1 opacity-0"
+                        class="absolute right-0 z-50 mt-2 w-56 origin-top-right overflow-hidden rounded-xl border border-gray-200 bg-white py-1 shadow-lg"
+                        role="menu"
+                    >
+                        @include('layouts.client.partials.nav-public-signup-links', [
+                            'isMobileMenu' => false,
+                            'closeDesktopDropdown' => true,
+                        ])
+                    </div>
+                </div>
             @else
                 @include('layouts.client.partials.nav-user-menu')
             @endguest
@@ -106,6 +142,24 @@
             >
                 {{ __('How it works') }}
             </a>
+            @guest
+                <div class="mt-3 border-t border-gray-100 pt-3">
+                    <a
+                        href="{{ route('login') }}"
+                        class="block rounded-xl px-4 py-3 text-base font-medium text-gray-900 transition-colors hover:bg-gray-50"
+                        @click="exploreNavOpen = false"
+                    >
+                        {{ __('Log in') }}
+                    </a>
+                    <p class="mt-1 px-4 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-500">{{ __('Sign up') }}</p>
+                    <div class="mt-1 flex flex-col gap-0.5">
+                        @include('layouts.client.partials.nav-public-signup-links', [
+                            'isMobileMenu' => true,
+                            'onClickClose' => 'exploreNavOpen = false',
+                        ])
+                    </div>
+                </div>
+            @endguest
         </div>
     </div>
 

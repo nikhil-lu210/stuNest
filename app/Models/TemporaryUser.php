@@ -17,6 +17,8 @@ class TemporaryUser extends Model
         'first_name',
         'last_name',
         'email',
+        'phone',
+        'company_name',
         'password',
         'role',
         'institute_id',

@@ -14,12 +14,11 @@
     <script src="{{ asset('clients/js/tailwind-config.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('clients/css/base.css') }}">
     <link rel="stylesheet" href="{{ asset('clients/css/dashboard.css') }}">
+    <style>[x-cloak]{display:none !important;}</style>
     @stack('styles')
 
     @livewireStyles
     @vite(['resources/js/property-wizard.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.3/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     @stack('head')
 </head>
@@ -43,11 +42,9 @@
         ])
 
         <main class="flex min-h-0 min-w-0 flex-1 flex-col bg-gray-50 pt-16 md:pt-0">
-            <div class="hidden h-20 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white px-8 md:flex sticky top-0 z-40">
+            <div class="hidden h-20 w-full shrink-0 items-center justify-between border-b border-gray-200 bg-white px-8 md:flex sticky top-0 z-40 overflow-visible">
                 <h1 class="text-xl font-semibold tracking-tight">{{ $title ?? __('List a Room/Seat') }}</h1>
-                <div class="flex items-center gap-4">
-                    <livewire:student.notification-bell />
-                </div>
+                @include('layouts.client.partials.student-desktop-topbar-actions', ['user' => $user])
             </div>
 
             <div class="flex-1 overflow-y-auto">

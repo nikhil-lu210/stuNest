@@ -10,6 +10,18 @@ use Livewire\Component;
 
 class NotificationBell extends Component
 {
+    public bool $menuOpen = false;
+
+    public function toggleMenu(): void
+    {
+        $this->menuOpen = ! $this->menuOpen;
+    }
+
+    public function closeMenu(): void
+    {
+        $this->menuOpen = false;
+    }
+
     public function markAsRead(string $notificationId): void
     {
         $user = $this->student();
@@ -24,6 +36,7 @@ class NotificationBell extends Component
     public function markAllAsRead(): void
     {
         $this->student()->unreadNotifications->markAsRead();
+        $this->menuOpen = false;
     }
 
     #[Computed]
@@ -45,7 +58,7 @@ class NotificationBell extends Component
     protected function student(): User
     {
         $user = Auth::user();
-        abort_unless($user instanceof User && $user->hasRole('Student'), 403);
+        abort_unless($user instanceof User && $user->hasStudentRole(), 403);
 
         return $user;
     }

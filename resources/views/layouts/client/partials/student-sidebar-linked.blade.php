@@ -68,7 +68,7 @@
                     x-bind:class="{ 'rotate-180': open }"
                 ></i>
             </button>
-            <div x-show="open" x-collapse class="space-y-0.5 pb-1 pt-0.5">
+            <div x-show="open" x-transition class="space-y-0.5 pb-1 pt-0.5">
                 <a
                     href="{{ route('client.student.listings.index') }}"
                     class="flex w-full items-center rounded-lg py-2 pl-11 pr-3 text-sm transition-colors {{ $active === 'listings' ? 'bg-gray-50 font-semibold text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"

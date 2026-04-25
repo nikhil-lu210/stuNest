@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Auth\InstituteRegister;
 use App\Livewire\Auth\LandlordRegister;
 use App\Livewire\Auth\StudentRegister;
 use App\Models\User;
@@ -26,7 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register/landlord', LandlordRegister::class)
         ->name('register.landlord');
 
-    Route::get('/register/institute', fn () => redirect('/register?role=institute'))
+    Route::get('/register/institute', InstituteRegister::class)
         ->name('register.institute');
 
     Route::get('/register/agent', fn () => redirect('/register?role=agent'))

@@ -22,3 +22,30 @@ body.swal2-toast-shown .swal2-container.swal2-top-end,
 body.swal2-toast-shown .swal2-container.swal2-top-right {
     z-index: 9999999 !important;
 }
+
+/* StuNest admin sidebar: no Tailwind — logo dimensions (theme toggles .app-brand-img / .app-brand-img-collapsed) */
+.layout-menu .app-brand-link {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.layout-menu .app-brand-logo .app-brand-img {
+    display: block;
+    max-height: 2.75rem;
+    width: auto;
+    max-width: min(100%, 240px);
+    height: auto;
+    object-fit: contain;
+    object-position: left center;
+}
+
+/* Icon img: .app-brand-logo img { display: block } beats .app-brand-img-collapsed { display: none } in core.css */
+.layout-menu .app-brand-logo img.app-brand-img-collapsed {
+    display: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    max-width: 100%;
+    object-fit: contain;
+    margin-left: auto;
+    margin-right: auto;
+}

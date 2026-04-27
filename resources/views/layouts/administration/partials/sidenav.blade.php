@@ -1,8 +1,17 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="{{ route('administration.dashboard.index') }}" class="app-brand-link">
-            <span class="app-brand-logo demo">
-                <x-stunest-logo class="h-10 w-auto sm:h-12 max-w-[min(100%,300px)] object-left object-contain" />
+            <span class="app-brand-logo">
+                <img
+                    src="{{ asset('Logo/stunest_logo.png') }}"
+                    alt="{{ config('app.name') }}"
+                    class="app-brand-img"
+                />
+                <img
+                    src="{{ asset('Logo/stunest_logo_icon.png') }}"
+                    alt="{{ config('app.name') }}"
+                    class="app-brand-img-collapsed"
+                />
             </span>
         </a>
 

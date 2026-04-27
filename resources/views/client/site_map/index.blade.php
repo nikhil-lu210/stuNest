@@ -7,11 +7,8 @@
 @section('content')
     <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="{{ route('client.home') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-                </div>
-                <span class="text-xl font-bold tracking-tight">{{ config('app.name') }}.</span>
+            <a href="{{ route('client.home') }}" class="flex items-center">
+                <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
             </a>
             <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Design index</span>
         </div>

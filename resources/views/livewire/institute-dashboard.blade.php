@@ -28,8 +28,8 @@
         <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-gray-500">{{ __('Total Students') }}</h3>
-                <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-                    <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-600"></i>
+                <div class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                    <i data-lucide="graduation-cap" class="w-4 h-4 text-primary-600"></i>
                 </div>
             </div>
             <div class="flex items-baseline gap-2 mb-1">
@@ -52,11 +52,11 @@
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-500"></div>
+            <div class="absolute top-0 left-0 w-1.5 h-full bg-primary-500"></div>
             <div class="flex items-center justify-between mb-4 pl-2">
                 <h3 class="text-sm font-medium text-gray-500">{{ __('Total Applications') }}</h3>
-                <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
-                    <i data-lucide="clipboard-list" class="w-4 h-4 text-indigo-600"></i>
+                <div class="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
+                    <i data-lucide="clipboard-list" class="w-4 h-4 text-primary-600"></i>
                 </div>
             </div>
             <div class="flex items-baseline gap-2 mb-1 pl-2">
@@ -102,7 +102,7 @@
                                 <span class="text-[10px] font-semibold text-gray-600 tabular-nums">{{ $bar['count'] }}</span>
                                 <div class="relative h-28 w-full max-w-[2.5rem] mx-auto bg-gray-100 rounded-t-lg overflow-hidden">
                                     <div
-                                        class="absolute bottom-0 left-0 right-0 bg-indigo-500 rounded-t transition-all duration-300"
+                                        class="absolute bottom-0 left-0 right-0 bg-primary-500 rounded-t transition-all duration-300"
                                         style="height: {{ $bar['count'] === 0 ? 0 : max(8, (float) $bar['height_percent']) }}%"
                                     ></div>
                                 </div>

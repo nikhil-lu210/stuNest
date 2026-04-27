@@ -52,7 +52,7 @@
                         <button
                             type="button"
                             wire:click="markAsRead('{{ $notification->id }}')"
-                            class="flex w-full gap-3 bg-blue-50/80 px-4 py-3 text-left transition-colors hover:bg-gray-50/80"
+                            class="flex w-full gap-3 bg-primary-50/80 px-4 py-3 text-left transition-colors hover:bg-gray-50/80"
                         >
                             <span class="mt-0.5 shrink-0 text-gray-500" aria-hidden="true">
                                 @if (str_contains(strtolower($typeKey), 'message'))

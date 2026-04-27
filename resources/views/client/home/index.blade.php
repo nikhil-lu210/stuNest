@@ -20,9 +20,9 @@
 
     <main class="mx-auto max-w-7xl px-6 pb-20 pt-28 sm:pt-32">
         <div class="max-w-4xl mx-auto text-center mt-12 md:mt-20">
-            <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-gray-900 leading-[1.1]">
+            <h1 class="text-5xl font-semibold leading-[1.1] tracking-tight text-gray-900 md:text-7xl">
                 Find your perfect <br class="hidden md:block" />
-                <span class="text-gray-400">student home.</span>
+                <span class="text-primary-600">student home.</span>
             </h1>
             <p class="mt-6 text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed">
                 Premium student accommodation near your university. Verified properties, simple booking, and zero hidden fees.
@@ -162,7 +162,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="bg-black text-white h-14 w-14 rounded-full flex items-center justify-center hover:bg-gray-800 transition-transform active:scale-95 flex-shrink-0" aria-label="{{ __('Search') }}">
+                <button type="submit" class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary-600 text-white shadow-sm transition-transform hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 active:scale-95" aria-label="{{ __('Search') }}">
                     <i data-lucide="search" class="w-5 h-5"></i>
                 </button>
             </form>
@@ -247,7 +247,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-black py-3.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800">
+                <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary-600 py-3.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
                     <i data-lucide="search" class="h-6 w-6"></i>
                     {{ __('Search stays') }}
                 </button>
@@ -263,7 +263,7 @@
             </div>
             <a
                 href="{{ route('client.explore') }}"
-                class="inline-flex shrink-0 items-center text-sm font-semibold text-gray-900 transition-colors hover:text-gray-500"
+                class="inline-flex shrink-0 items-center text-sm font-semibold text-primary-600 transition-colors hover:text-primary-800"
             >
                 {{ __('View all') }}
                 <i data-lucide="chevron-right" class="ml-1 h-4 w-4"></i>
@@ -293,7 +293,7 @@
                             <p class="text-gray-400 text-sm">{{ $property->marketing_area_line }}</p>
                         </div>
                         <div class="flex items-center gap-1 text-sm font-medium shrink-0">
-                            <i data-lucide="star" class="w-3.5 h-3.5 fill-black"></i>
+                            <i data-lucide="star" class="h-3.5 w-3.5 fill-primary-600 text-primary-600"></i>
                             <span>{{ $property->public_star_rating }}</span>
                         </div>
                     </div>
@@ -320,7 +320,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
                 <div class="text-center">
                     <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="search" class="w-7 h-7 text-black"></i>
+                        <i data-lucide="search" class="h-7 w-7 text-primary-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">1. Discover</h3>
                     <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">
@@ -330,7 +330,7 @@
 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="shield-check" class="w-7 h-7 text-black"></i>
+                        <i data-lucide="shield-check" class="h-7 w-7 text-primary-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">2. Verify &amp; Apply</h3>
                     <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">
@@ -340,7 +340,7 @@
 
                 <div class="text-center">
                     <div class="w-16 h-16 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="home" class="w-7 h-7 text-black"></i>
+                        <i data-lucide="home" class="h-7 w-7 text-primary-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">3. Move In</h3>
                     <p class="text-gray-500 leading-relaxed max-w-xs mx-auto">

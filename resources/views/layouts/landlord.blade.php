@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? $__env->yieldContent('title', __('Landlord Dashboard')) }} | {{ config('app.name') }}</title>
 
+    <link rel="icon" type="image/x-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -71,12 +74,9 @@
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
         <!-- Logo -->
-        <a href="{{ route('client.landlord.dashboard') }}" class="h-20 flex items-center px-6 border-b border-gray-100 cursor-pointer" @click="sidebarOpen = false">
-            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
-                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-            </div>
-            <span class="text-xl font-bold tracking-tight">StuNest.</span>
-            <span class="ml-2 text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Host</span>
+        <a href="{{ route('client.landlord.dashboard') }}" class="h-20 flex items-center gap-2 px-4 border-b border-gray-100 cursor-pointer" @click="sidebarOpen = false">
+            <x-stunest-logo class="h-8 w-auto max-w-[min(100%,200px)] flex-1 min-w-0 object-left object-contain" />
+            <span class="shrink-0 text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full uppercase tracking-wider">Host</span>
         </a>
 
         <div class="md:hidden flex justify-end px-2 py-2 border-b border-gray-100">
@@ -234,9 +234,7 @@
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <a href="{{ route('client.landlord.dashboard') }}" class="flex items-center gap-2 cursor-pointer min-w-0">
-                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center shrink-0">
-                    <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
-                </div>
+                <x-stunest-logo class="h-7 w-auto max-w-[min(100%,160px)] shrink-0 object-left object-contain" />
                 <span class="text-[10px] font-bold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0">Host</span>
             </a>
         </div>

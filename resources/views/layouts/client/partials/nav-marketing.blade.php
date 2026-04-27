@@ -7,11 +7,8 @@
     x-on:click.outside="mobileMenuOpen = false"
 >
     <div class="relative mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="{{ route('client.home') }}" class="flex shrink-0 cursor-pointer items-center gap-2" x-on:click="mobileMenuOpen = false">
-            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-black">
-                <span class="text-xl font-bold leading-none tracking-tighter text-white">S</span>
-            </div>
-            <span class="text-xl font-bold tracking-tight">{{ config('app.name') }}.</span>
+        <a href="{{ route('client.home') }}" class="flex shrink-0 cursor-pointer items-center" x-on:click="mobileMenuOpen = false">
+            <x-stunest-logo class="h-10 w-auto sm:h-11 md:h-12 max-w-[min(100vw-9rem,320px)] sm:max-w-[300px] object-left object-contain" />
         </a>
 
         <div class="hidden items-center gap-8 text-sm font-medium md:flex">
@@ -36,7 +33,7 @@
                     <button
                         type="button"
                         @click="open = !open"
-                        class="inline-flex items-center gap-1.5 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-transform hover:bg-gray-800 active:scale-95"
+                        class="inline-flex items-center gap-1.5 rounded-full bg-primary-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 active:scale-95"
                         x-bind:aria-expanded="open"
                         aria-haspopup="true"
                     >

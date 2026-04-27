@@ -303,7 +303,7 @@
             </div>
 
             <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm relative overflow-hidden">
-                <div class="absolute left-0 top-0 h-full w-1.5 bg-indigo-500" aria-hidden="true"></div>
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-primary-500" aria-hidden="true"></div>
                 <div class="pl-3">
                     <h2 class="text-sm font-semibold text-gray-900">{{ __('System support') }}</h2>
                     <p class="mt-2 text-sm text-gray-500">

@@ -38,10 +38,7 @@
 
 <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
     <a href="{{ route('client.home') }}" class="h-20 flex items-center px-6 border-b border-gray-100">
-        <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
-            <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-        </div>
-        <span class="text-xl font-bold tracking-tight">{{ config('app.name') }}</span>
+        <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
     </a>
 
     <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
@@ -129,10 +126,8 @@
 </aside>
 
 <header class="md:hidden fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 overflow-visible">
-    <a href="{{ route('client.home') }}" class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-            <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
-        </div>
+    <a href="{{ route('client.home') }}" class="flex items-center">
+        <x-stunest-logo class="h-7 w-auto max-w-[180px] object-left object-contain" />
     </a>
     <div class="relative shrink-0" x-data="{ openProfile: false }">
         <button

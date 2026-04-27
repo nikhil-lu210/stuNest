@@ -60,7 +60,7 @@
                         $statusBadgeClass = 'bg-green-100 text-green-700';
                         $statusLabel = __('Live');
                     } elseif ($isRented) {
-                        $statusBadgeClass = 'bg-blue-100 text-blue-700';
+                        $statusBadgeClass = 'bg-primary-100 text-primary-700';
                         $statusLabel = __('Rented');
                     } else {
                         $statusBadgeClass = 'bg-amber-50 text-amber-800 border border-amber-100';

@@ -24,7 +24,7 @@
             <li class="flex flex-1 flex-col items-center gap-2">
                 <span @class([
                     'flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold transition',
-                    'bg-indigo-600 text-white shadow' => $currentStep >= $n,
+                    'bg-primary-600 text-white shadow' => $currentStep >= $n,
                     'bg-zinc-200 text-zinc-500' => $currentStep < $n,
                 ])>{{ $n }}</span>
                 <span class="hidden text-center text-[11px] font-medium text-zinc-500 sm:block">
@@ -56,7 +56,7 @@
                             <button type="button" wire:click="$set('listing_category', 'entire_place')"
                                 @class([
                                     'group flex flex-col rounded-2xl border p-5 text-left transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $listing_category === 'entire_place',
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $listing_category === 'entire_place',
                                     'border-zinc-200 bg-white hover:border-zinc-300' => $listing_category !== 'entire_place',
                                 ])>
                                 <span class="text-base font-semibold text-zinc-900">{{ __('Entire place') }}</span>
@@ -65,7 +65,7 @@
                             <button type="button" wire:click="$set('listing_category', 'shared_room')"
                                 @class([
                                     'group flex flex-col rounded-2xl border p-5 text-left transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $listing_category === 'shared_room',
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $listing_category === 'shared_room',
                                     'border-zinc-200 bg-white hover:border-zinc-300' => $listing_category !== 'shared_room',
                                 ])>
                                 <span class="text-base font-semibold text-zinc-900">{{ __('A shared room') }}</span>
@@ -89,7 +89,7 @@
                             <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-zinc-500">{{ __('Country') }}</label>
                             <select wire:model.live="country_id" id="location-country"
                                 data-placeholder="{{ __('Select…') }}"
-                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($countries as $country)
                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -103,7 +103,7 @@
                             <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-zinc-500">{{ __('City') }}</label>
                             <select wire:model.live="city_id" id="location-city"
                                 data-placeholder="{{ __('Select…') }}"
-                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 @disabled(! $country_id)>
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($cities as $city)
@@ -118,7 +118,7 @@
                             <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-zinc-500">{{ __('Area') }}</label>
                             <select wire:model.live="area_id" id="location-area"
                                 data-placeholder="{{ __('Select…') }}"
-                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                class="location-select block w-full rounded-2xl border-zinc-200 py-2.5 px-3 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 @disabled(! $city_id)>
                                 <option value="">{{ __('Select…') }}</option>
                                 @foreach ($areas as $area)
@@ -136,12 +136,12 @@
                     <div class="flex flex-wrap items-end justify-between gap-2">
                         <label class="block text-sm font-medium text-zinc-700">{{ __('Map link') }} <span class="text-red-500">*</span></label>
                         <button type="button" @click="showMapHelp = true"
-                            class="shrink-0 text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                            class="shrink-0 text-sm font-medium text-primary-600 hover:text-primary-700">
                             {{ __('How to get a map link') }}
                         </button>
                     </div>
                     <input type="url" wire:model.live="map_link" placeholder="https://maps.google.com/… or https://maps.app.goo.gl/…"
-                        class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                     @error('map_link')
                         <p class="text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -166,7 +166,7 @@
                             </div>
                             <div class="mt-6 flex justify-end">
                                 <button type="button" @click="showMapHelp = false"
-                                    class="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                                    class="rounded-xl bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700">
                                     {{ __('Close') }}
                                 </button>
                             </div>
@@ -178,7 +178,7 @@
                     <div>
                         <label class="mb-1 block text-sm font-medium text-zinc-700">{{ __('Latitude') }} <span class="text-xs font-normal text-zinc-400">({{ __('optional') }})</span></label>
                         <input type="text" inputmode="decimal" wire:model.live="latitude" placeholder="51.5074"
-                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                         @error('latitude')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -186,7 +186,7 @@
                     <div>
                         <label class="mb-1 block text-sm font-medium text-zinc-700">{{ __('Longitude') }} <span class="text-xs font-normal text-zinc-400">({{ __('optional') }})</span></label>
                         <input type="text" inputmode="decimal" wire:model.live="longitude" placeholder="-0.1278"
-                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                         @error('longitude')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -197,7 +197,7 @@
                     <div>
                         <label class="mb-1 block text-sm font-medium text-zinc-700">{{ __('Distance to university (km)') }} <span class="text-red-500">*</span></label>
                         <input type="number" wire:model.live="distance_university_km" min="0" max="999.99" step="0.01"
-                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                         @error('distance_university_km')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -205,7 +205,7 @@
                     <div>
                         <label class="mb-1 block text-sm font-medium text-zinc-700">{{ __('Distance to nearest bus/train (km)') }} <span class="text-red-500">*</span></label>
                         <input type="number" wire:model.live="distance_transit_km" min="0" max="999.99" step="0.01"
-                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            class="block w-full rounded-2xl border-zinc-200 py-3 px-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500">
                         @error('distance_transit_km')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -226,7 +226,7 @@
                             <button type="button" wire:click="$set('bed_type', 'single')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-left text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $bed_type === 'single',
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $bed_type === 'single',
                                     'border-zinc-200 hover:border-zinc-300' => $bed_type !== 'single',
                                 ])>
                                 <span class="block font-semibold text-zinc-900">{{ __('Single bed') }}</span>
@@ -235,7 +235,7 @@
                             <button type="button" wire:click="$set('bed_type', 'shared_double')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-left text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $bed_type === 'shared_double',
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $bed_type === 'shared_double',
                                     'border-zinc-200 hover:border-zinc-300' => $bed_type !== 'shared_double',
                                 ])>
                                 <span class="block font-semibold text-zinc-900">{{ __('Shared double') }}</span>
@@ -255,7 +255,7 @@
                             <button type="button" wire:click="$set('property_type', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-left text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $property_type === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $property_type === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $property_type !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -273,7 +273,7 @@
                                 <button type="button" wire:click="$set('bedrooms', {{ $n }})"
                                     @class([
                                         'h-10 min-w-[2.5rem] rounded-xl border px-3 text-sm font-medium transition',
-                                        'border-indigo-500 bg-indigo-50 text-indigo-900' => $bedrooms === $n,
+                                        'border-primary-500 bg-primary-50 text-primary-900' => $bedrooms === $n,
                                         'border-zinc-200 hover:border-zinc-300' => $bedrooms !== $n,
                                     ])>{{ $n === 6 ? '6+' : $n }}</button>
                             @endforeach
@@ -289,7 +289,7 @@
                                 <button type="button" wire:click="$set('bathrooms', {{ $n }})"
                                     @class([
                                         'h-10 min-w-[2.5rem] rounded-xl border px-3 text-sm font-medium transition',
-                                        'border-indigo-500 bg-indigo-50 text-indigo-900' => $bathrooms === $n,
+                                        'border-primary-500 bg-primary-50 text-primary-900' => $bathrooms === $n,
                                         'border-zinc-200 hover:border-zinc-300' => $bathrooms !== $n,
                                     ])>{{ $n === 3 ? '3+' : $n }}</button>
                             @endforeach
@@ -307,7 +307,7 @@
                             <button type="button" wire:click="$set('bathroom_type', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-left text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $bathroom_type === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $bathroom_type === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $bathroom_type !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -325,7 +325,7 @@
                     <button type="button" wire:click="$toggle('is_furnished')"
                         @class([
                             'relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200',
-                            'bg-indigo-600' => $is_furnished,
+                            'bg-primary-600' => $is_furnished,
                             'bg-zinc-200' => ! $is_furnished,
                         ]) role="switch" aria-checked="{{ $is_furnished ? 'true' : 'false' }}">
                         <span @class([
@@ -350,7 +350,7 @@
                             <button type="button" wire:click="$set('rent_duration', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-center text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $rent_duration === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $rent_duration === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $rent_duration !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -365,7 +365,7 @@
                     <div class="relative">
                         <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-400">€</span>
                         <input type="number" wire:model.live="rent_amount" min="1" step="1"
-                            class="block w-full rounded-2xl border-zinc-200 py-3 pl-9 pr-4 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full rounded-2xl border-zinc-200 py-3 pl-9 pr-4 text-sm shadow-sm focus:border-primary-500 focus:ring-primary-500"
                             placeholder="0">
                     </div>
                     @error('rent_amount')
@@ -380,7 +380,7 @@
                             <button type="button" wire:click="$set('bills_included', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-center text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $bills_included === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $bills_included === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $bills_included !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -396,10 +396,10 @@
                         <div class="grid gap-3 sm:grid-cols-2">
                             @foreach (['wifi' => __('Wi‑Fi'), 'water' => __('Water'), 'electricity' => __('Electricity'), 'gas' => __('Gas')] as $val => $label)
                                 <label
-                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20"
+                                    class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50/50 has-[:checked]:ring-2 has-[:checked]:ring-primary-500/20"
                                     wire:key="bill-{{ $val }}">
                                     <input type="checkbox" wire:model="included_bills" value="{{ $val }}"
-                                        class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
+                                        class="rounded border-zinc-300 text-primary-600 focus:ring-primary-500">
                                     <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
                                 </label>
                             @endforeach
@@ -423,7 +423,7 @@
                             <button type="button" wire:click="$set('min_contract_length', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-center text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $min_contract_length === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $min_contract_length === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $min_contract_length !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -441,7 +441,7 @@
                     <button type="button" wire:click="$toggle('provides_agreement')"
                         @class([
                             'relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200',
-                            'bg-indigo-600' => $provides_agreement,
+                            'bg-primary-600' => $provides_agreement,
                             'bg-zinc-200' => ! $provides_agreement,
                         ]) role="switch">
                         <span @class([
@@ -459,7 +459,7 @@
                             <button type="button" wire:click="$set('deposit_required', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-center text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $deposit_required === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $deposit_required === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $deposit_required !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -481,7 +481,7 @@
                             <button type="button" wire:click="$set('rent_for', '{{ $val }}')"
                                 @class([
                                     'rounded-2xl border px-4 py-3 text-left text-sm font-medium transition',
-                                    'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $rent_for === $val,
+                                    'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $rent_for === $val,
                                     'border-zinc-200 hover:border-zinc-300' => $rent_for !== $val,
                                 ])>{{ $label }}</button>
                         @endforeach
@@ -503,9 +503,9 @@
                     <div class="grid gap-3 sm:grid-cols-3">
                         @foreach (['undergraduates' => __('Undergraduates'), 'postgraduates' => __('Postgraduates'), 'couples' => __('Couples')] as $val => $label)
                             <label
-                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20">
+                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50/50 has-[:checked]:ring-2 has-[:checked]:ring-primary-500/20">
                                 <input type="checkbox" wire:model="suitable_for" value="{{ $val }}"
-                                    class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
+                                    class="rounded border-zinc-300 text-primary-600 focus:ring-primary-500">
                                 <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
                             </label>
                         @endforeach
@@ -523,7 +523,7 @@
                                 <button type="button" wire:click="$set('flatmate_vibe', '{{ $val }}')"
                                     @class([
                                         'rounded-2xl border px-4 py-3 text-center text-sm font-medium transition',
-                                        'border-indigo-500 bg-indigo-50/50 ring-2 ring-indigo-500/20' => $flatmate_vibe === $val,
+                                        'border-primary-500 bg-primary-50/50 ring-2 ring-primary-500/20' => $flatmate_vibe === $val,
                                         'border-zinc-200 hover:border-zinc-300' => $flatmate_vibe !== $val,
                                     ])>{{ $label }}</button>
                             @endforeach
@@ -539,9 +539,9 @@
                     <div class="grid gap-3 sm:grid-cols-3">
                         @foreach (['pet_friendly' => __('Pet friendly'), 'smoking_allowed' => __('Smoking allowed'), 'quiet_house' => __('Quiet house')] as $val => $label)
                             <label
-                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20">
+                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50/50 has-[:checked]:ring-2 has-[:checked]:ring-primary-500/20">
                                 <input type="checkbox" wire:model="house_rules" value="{{ $val }}"
-                                    class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
+                                    class="rounded border-zinc-300 text-primary-600 focus:ring-primary-500">
                                 <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
                             </label>
                         @endforeach
@@ -570,9 +570,9 @@
                             'bike_storage' => __('Bike storage'),
                         ] as $val => $label)
                             <label
-                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50 has-[:checked]:ring-2 has-[:checked]:ring-indigo-500/20">
+                                class="flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 transition has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50/50 has-[:checked]:ring-2 has-[:checked]:ring-primary-500/20">
                                 <input type="checkbox" wire:model="amenities" value="{{ $val }}"
-                                    class="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500">
+                                    class="rounded border-zinc-300 text-primary-600 focus:ring-primary-500">
                                 <span class="text-sm font-medium text-zinc-800">{{ $label }}</span>
                             </label>
                         @endforeach
@@ -633,17 +633,17 @@
                             x-on:dragenter.prevent="dragging = true"
                             x-on:dragleave.prevent="dragging = false"
                             x-on:drop.prevent="uploadFromDrop($event)"
-                            :class="dragging ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20' : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/80'"
+                            :class="dragging ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-500/20' : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50/80'"
                             class="flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-12 text-center transition">
                             <div wire:loading.remove wire:target="photos" class="flex flex-col items-center gap-2">
-                                <svg class="h-10 w-10 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <svg class="h-10 w-10 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3A1.5 1.5 0 001.5 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                 </svg>
                                 <span class="text-sm font-semibold text-zinc-900">{{ __('Click to upload') }}</span>
                                 <span class="text-xs text-zinc-500">{{ __('or drag and drop images here') }}</span>
                             </div>
                             <div wire:loading wire:target="photos" class="flex flex-col items-center gap-2" role="status">
-                                <svg class="h-8 w-8 shrink-0 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                <svg class="h-8 w-8 shrink-0 animate-spin text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
@@ -678,7 +678,7 @@
                                         wire:click="$removeUpload('photos', @js($photo->getFilename()))"
                                         wire:loading.attr="disabled"
                                         aria-label="{{ __('Remove image') }}"
-                                        class="absolute right-2 top-2 z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-zinc-200/80 bg-white text-zinc-800 shadow-md transition hover:border-red-500 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                        class="absolute right-2 top-2 z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-zinc-200/80 bg-white text-zinc-800 shadow-md transition hover:border-red-500 hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                                         <svg class="h-5 w-5 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
@@ -713,7 +713,7 @@
             <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end">
                 @if ($currentStep < 5)
                     <button type="button" wire:click="nextStep"
-                        class="inline-flex justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500">
+                        class="inline-flex justify-center rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-500">
                         {{ __('Continue') }}
                     </button>
                 @else
@@ -725,7 +725,7 @@
                     </button>
                     <button type="button" wire:click="submitPublished"
                         wire:loading.attr="disabled"
-                        class="inline-flex justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 disabled:opacity-60">
+                        class="inline-flex justify-center rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-500 disabled:opacity-60">
                         <span wire:loading.remove wire:target="submitPublished">
                             {{ $editingPropertyId ? __('Update & publish') : __('Publish') }}
                         </span>

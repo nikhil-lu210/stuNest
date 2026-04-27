@@ -47,11 +47,8 @@
 >
     <div class="px-6 h-20 flex w-full items-center justify-between gap-3 md:gap-4">
         <div class="flex min-w-0 flex-1 items-center gap-4 lg:gap-8">
-            <a href="{{ route('client.home') }}" class="flex shrink-0 items-center gap-2" @click="exploreNavOpen = false">
-                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-                </div>
-                <span class="text-xl font-bold tracking-tight hidden lg:inline">{{ config('app.name') }}.</span>
+            <a href="{{ route('client.home') }}" class="flex shrink-0 items-center" @click="exploreNavOpen = false">
+                <x-stunest-logo class="h-10 w-auto sm:h-11 md:h-12 max-w-[min(100vw-9rem,320px)] sm:max-w-[300px] object-left object-contain" />
             </a>
             <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium" aria-label="{{ __('Primary') }}">
                 <a href="{{ route('client.explore') }}" class="text-gray-900 transition-colors hover:text-gray-600 whitespace-nowrap">{{ __('Explore') }}</a>
@@ -75,7 +72,7 @@
                 <a href="{{ route('login') }}" class="hidden sm:block text-sm font-medium text-gray-600 hover:text-gray-900">{{ __('Log in') }}</a>
                 <a
                     href="{{ route('register') }}"
-                    class="inline-flex items-center justify-center sm:hidden h-10 w-10 rounded-full bg-black text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-sm font-medium text-white transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 sm:hidden"
                     aria-label="{{ __('Student sign up') }}"
                 >
                     <i data-lucide="user" class="h-4 w-4"></i>
@@ -88,7 +85,7 @@
                     <button
                         type="button"
                         @click="open = !open"
-                        class="inline-flex items-center justify-center gap-1.5 rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                        class="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
                         x-bind:aria-expanded="open"
                         aria-haspopup="true"
                     >

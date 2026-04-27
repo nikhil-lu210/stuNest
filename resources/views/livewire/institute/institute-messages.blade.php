@@ -73,7 +73,7 @@
                                                 </p>
                                                 @if ($c['type'] === 'application')
                                                     <span
-                                                        class="inline-flex max-w-full shrink-0 items-center truncate rounded-md border border-blue-100 bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue-700"
+                                                        class="inline-flex max-w-full shrink-0 items-center truncate rounded-md border border-primary-100 bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700"
                                                         title="{{ $c['property_title'] ?? '' }}"
                                                     >
                                                         {{ __('Housing: :title', ['title' => \Illuminate\Support\Str::limit((string) ($c['property_title'] ?? ''), 28)]) }}
@@ -89,7 +89,7 @@
                                         </div>
                                         @if ($unread > 0)
                                             <span
-                                                class="mt-1 h-2 w-2 shrink-0 rounded-full bg-blue-600"
+                                                class="mt-1 h-2 w-2 shrink-0 rounded-full bg-primary-600"
                                                 title="{{ trans_choice(':count unread message|:count unread messages', $unread, ['count' => $unread]) }}"
                                             ></span>
                                         @endif
@@ -171,7 +171,7 @@
                                 <div
                                     @class([
                                         'max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm',
-                                        'bg-blue-600 text-white' => $mine,
+                                        'bg-primary-600 text-white' => $mine,
                                         'border border-gray-200 bg-white text-gray-900' => ! $mine,
                                     ])
                                 >
@@ -179,7 +179,7 @@
                                     <p
                                         @class([
                                             'mt-1 text-[10px]',
-                                            'text-blue-100' => $mine,
+                                            'text-primary-100' => $mine,
                                             'text-gray-400' => ! $mine,
                                         ])
                                     >
@@ -278,7 +278,7 @@
                                 <div
                                     @class([
                                         'max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm',
-                                        'bg-blue-600 text-white' => $mine,
+                                        'bg-primary-600 text-white' => $mine,
                                         'border border-gray-200 bg-white text-gray-900' => ! $mine,
                                     ])
                                 >
@@ -286,7 +286,7 @@
                                     <p
                                         @class([
                                             'mt-1 text-[10px]',
-                                            'text-blue-100' => $mine,
+                                            'text-primary-100' => $mine,
                                             'text-gray-400' => ! $mine,
                                         ])
                                     >

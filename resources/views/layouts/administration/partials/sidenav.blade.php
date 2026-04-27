@@ -2,9 +2,8 @@
     <div class="app-brand demo">
         <a href="{{ route('administration.dashboard.index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="{{ asset('Logo/logo_black_01.png') }}" width="90%">
+                <x-stunest-logo class="h-9 w-auto max-w-[200px] object-left object-contain" />
             </span>
-            <span class="app-brand-text demo menu-text fw-bold">{{ config('app.name') }}</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">

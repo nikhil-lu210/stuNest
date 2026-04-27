@@ -1,11 +1,8 @@
 <footer class="border-t border-gray-200 bg-white pt-16 pb-8 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
         <div class="col-span-2 md:col-span-1">
-            <a href="{{ route('client.home') }}" class="flex items-center gap-2 mb-6">
-                <div class="w-6 h-6 bg-black rounded-md flex items-center justify-center">
-                    <span class="text-white font-bold text-sm leading-none">S</span>
-                </div>
-                <span class="text-lg font-bold tracking-tight">{{ config('app.name') }}.</span>
+            <a href="{{ route('client.home') }}" class="mb-6 block w-fit">
+                <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
             </a>
             <p class="text-gray-500 text-sm mb-6">
                 {{ __('Elevating the student living experience — verified homes near campus.') }}

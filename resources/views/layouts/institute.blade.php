@@ -6,6 +6,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? $__env->yieldContent('title', __('Institute Portal')) }} | {{ config('app.name') }}</title>
 
+    <link rel="icon" type="image/x-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -105,12 +108,9 @@
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
         <!-- Logo -->
-        <a href="{{ route('client.institute.dashboard') }}" class="h-20 flex items-center px-6 border-b border-gray-100 cursor-pointer" @click="sidebarOpen = false">
-            <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center mr-2">
-                <span class="text-white font-bold text-xl leading-none tracking-tighter">S</span>
-            </div>
-            <span class="text-xl font-bold tracking-tight">StuNest.</span>
-            <span class="ml-2 text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-indigo-100">Uni</span>
+        <a href="{{ route('client.institute.dashboard') }}" class="h-20 flex items-center gap-2 px-4 border-b border-gray-100 cursor-pointer" @click="sidebarOpen = false">
+            <x-stunest-logo class="h-8 w-auto max-w-[min(100%,200px)] flex-1 min-w-0 object-left object-contain" />
+            <span class="shrink-0 text-[10px] font-bold bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-primary-100">Uni</span>
         </a>
 
         <div class="md:hidden flex justify-end px-2 py-2 border-b border-gray-100">
@@ -148,7 +148,7 @@
                 </span>
                 @if ($instituteUnreadMessagesCount > 0)
                     <span
-                        class="shrink-0 min-w-[1.25rem] text-center bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums"
+                        class="shrink-0 min-w-[1.25rem] text-center bg-primary-100 text-primary-700 text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums"
                         title="{{ trans_choice(':count unread message|:count unread messages', $instituteUnreadMessagesCount, ['count' => $instituteUnreadMessagesCount]) }}"
                     >
                         {{ $instituteUnreadMessagesCount > 99 ? '99+' : $instituteUnreadMessagesCount }}
@@ -347,12 +347,12 @@
         <!-- Profile (Bottom Sidebar) -->
         <div class="p-4 border-t border-gray-200 bg-white">
             <div class="flex items-center gap-3 px-2 py-2">
-                <div class="w-10 h-10 bg-indigo-900 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
+                <div class="w-10 h-10 bg-primary-900 text-white rounded-full flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
                     {{ $instituteInitial }}
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-gray-900 truncate">{{ $instituteOrgName ?? __('Institution') }}</p>
-                    <p class="text-xs text-indigo-600 font-medium truncate">{{ $instituteUser?->first_name }} {{ $instituteUser?->last_name }}</p>
+                    <p class="text-xs text-primary-600 font-medium truncate">{{ $instituteUser?->first_name }} {{ $instituteUser?->last_name }}</p>
                 </div>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
@@ -371,14 +371,12 @@
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <a href="{{ route('client.institute.dashboard') }}" class="flex items-center gap-2 cursor-pointer min-w-0">
-                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center shrink-0">
-                    <span class="text-white font-bold text-lg leading-none tracking-tighter">S</span>
-                </div>
-                <span class="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-indigo-100 shrink-0">Uni</span>
+                <x-stunest-logo class="h-7 w-auto max-w-[min(100%,160px)] shrink-0 object-left object-contain" />
+                <span class="text-[10px] font-bold bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-primary-100 shrink-0">Uni</span>
             </a>
         </div>
         <div class="relative shrink-0 ml-2" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
-            <button type="button" class="w-8 h-8 bg-indigo-900 text-white rounded-full flex items-center justify-center font-bold text-[10px] overflow-hidden" @click="profileOpen = ! profileOpen" :aria-expanded="profileOpen">
+            <button type="button" class="w-8 h-8 bg-primary-900 text-white rounded-full flex items-center justify-center font-bold text-[10px] overflow-hidden" @click="profileOpen = ! profileOpen" :aria-expanded="profileOpen">
                 {{ $instituteInitial }}
             </button>
             <div
@@ -444,7 +442,7 @@
                 <div class="w-px h-6 bg-gray-200 shrink-0"></div>
                 <div class="relative ml-4 shrink-0" x-data="{ profileOpen: false }" @click.outside="profileOpen = false">
                     <button type="button" class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white pl-1 pr-2 py-1 hover:bg-gray-50 transition-colors" @click="profileOpen = ! profileOpen" :aria-expanded="profileOpen">
-                        <span class="w-9 h-9 rounded-lg bg-indigo-900 text-white flex items-center justify-center overflow-hidden shrink-0 text-xs font-bold">
+                        <span class="w-9 h-9 rounded-lg bg-primary-900 text-white flex items-center justify-center overflow-hidden shrink-0 text-xs font-bold">
                             {{ $instituteInitial }}
                         </span>
                         <span class="text-sm font-semibold text-gray-900 max-w-[8rem] truncate hidden lg:inline">{{ $instituteUser?->first_name }}</span>
@@ -508,7 +506,7 @@
             ])
         >
             <i data-lucide="user-check" class="w-5 h-5"></i>
-            <span class="absolute top-0 right-1 w-2 h-2 bg-indigo-600 rounded-full border border-white"></span>
+            <span class="absolute top-0 right-1 w-2 h-2 bg-primary-600 rounded-full border border-white"></span>
             <span class="text-[10px] font-semibold">{{ __('Roster') }}</span>
         </a>
         <a

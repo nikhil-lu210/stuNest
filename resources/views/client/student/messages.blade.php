@@ -27,15 +27,15 @@
             <div class="flex min-h-0 flex-1 flex-col overflow-hidden">
                 <div class="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col p-4 pb-24 md:p-8">
                     @if ($user->account_status === \App\Models\User::ACCOUNT_STATUS_UNVERIFIED)
-                        <div class="mb-6 flex shrink-0 flex-col items-start justify-between gap-4 rounded-2xl border border-blue-100 bg-blue-50 p-4 sm:flex-row sm:items-center">
+                        <div class="mb-6 flex shrink-0 flex-col items-start justify-between gap-4 rounded-2xl border border-primary-100 bg-primary-50 p-4 sm:flex-row sm:items-center">
                             <div class="flex items-start gap-3">
-                                <i data-lucide="shield-alert" class="mt-0.5 h-5 w-5 shrink-0 text-blue-600"></i>
+                                <i data-lucide="shield-alert" class="mt-0.5 h-5 w-5 shrink-0 text-primary-600"></i>
                                 <div>
-                                    <h4 class="text-sm font-semibold text-blue-900">{{ __('Verify your student status') }}</h4>
-                                    <p class="mt-0.5 text-sm text-blue-700">{{ __('Upload your university ID to fast-track your housing applications.') }}</p>
+                                    <h4 class="text-sm font-semibold text-primary-900">{{ __('Verify your student status') }}</h4>
+                                    <p class="mt-0.5 text-sm text-primary-700">{{ __('Upload your university ID to fast-track your housing applications.') }}</p>
                                 </div>
                             </div>
-                            <button type="button" class="whitespace-nowrap rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700">
+                            <button type="button" class="whitespace-nowrap rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700">
                                 {{ __('Verify Now') }}
                             </button>
                         </div>

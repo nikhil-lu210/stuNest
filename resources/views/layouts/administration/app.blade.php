@@ -8,7 +8,8 @@
         
         <title>{{ config('app.name') }} || @yield('page_title')</title>
         <!-- Favicon -->
-        <link rel="icon" type="image/x-icon" href="{{ asset('Logo/logo_white_01.png') }}" />
+        <link rel="icon" type="image/x-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+        <link rel="apple-touch-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
 
         <!-- Start css -->
         @include('layouts.administration.partials.stylesheet')

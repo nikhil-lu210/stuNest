@@ -32,7 +32,7 @@
                         Property::STATUS_ARCHIVED => 'bg-gray-100 text-gray-600',
                         Property::STATUS_PENDING => 'bg-amber-100 text-amber-800',
                         Property::STATUS_REJECTED => 'bg-red-100 text-red-800',
-                        Property::STATUS_LET_AGREED => 'bg-blue-100 text-blue-800',
+                        Property::STATUS_LET_AGREED => 'bg-primary-100 text-primary-800',
                         default => 'bg-gray-100 text-gray-600',
                     };
                     $statusLabel = match ($status) {

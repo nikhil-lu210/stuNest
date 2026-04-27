@@ -94,7 +94,7 @@
                                     {{ __('Live') }}
                                 </span>
                             @elseif ($isRented)
-                                <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                                <span class="inline-flex items-center gap-1.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                                     {{ __('Rented') }}
                                 </span>
                             @else

@@ -25,7 +25,7 @@
                         $body = __('You have a notification.');
                     }
                 @endphp
-                <li class="px-6 py-4 {{ $notification->read() ? 'bg-white' : 'bg-blue-50/50' }}">
+                <li class="px-6 py-4 {{ $notification->read() ? 'bg-white' : 'bg-primary-50/50' }}">
                     <p class="text-sm text-gray-900">{{ $body }}</p>
                     <p class="mt-1 text-xs text-gray-400">{{ $notification->created_at->diffForHumans() }}</p>
                 </li>

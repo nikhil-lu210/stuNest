@@ -28,15 +28,15 @@
             <div class="mx-auto w-full max-w-5xl p-4 pb-24 md:p-8">
 
                 @if ($user->account_status === \App\Models\User::ACCOUNT_STATUS_UNVERIFIED)
-                    <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="bg-primary-50 border border-primary-100 rounded-2xl p-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div class="flex items-start gap-3">
-                            <i data-lucide="shield-alert" class="w-5 h-5 text-blue-600 mt-0.5 shrink-0"></i>
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-primary-600 mt-0.5 shrink-0"></i>
                             <div>
-                                <h4 class="font-semibold text-blue-900 text-sm">{{ __('Verify your student status') }}</h4>
-                                <p class="text-sm text-blue-700 mt-0.5">{{ __('Upload your university ID to fast-track your housing applications.') }}</p>
+                                <h4 class="font-semibold text-primary-900 text-sm">{{ __('Verify your student status') }}</h4>
+                                <p class="text-sm text-primary-700 mt-0.5">{{ __('Upload your university ID to fast-track your housing applications.') }}</p>
                             </div>
                         </div>
-                        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap">
+                        <button type="button" class="bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition-colors whitespace-nowrap">
                             {{ __('Verify Now') }}
                         </button>
                     </div>

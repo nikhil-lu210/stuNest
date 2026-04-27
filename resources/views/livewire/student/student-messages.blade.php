@@ -66,7 +66,7 @@
                                         </p>
                                         @if ($unread > 0)
                                             <span
-                                                class="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-blue-600"
+                                                class="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-primary-600"
                                                 title="{{ __('Unread') }}"
                                             ></span>
                                         @endif
@@ -155,7 +155,7 @@
                                 <div
                                     @class([
                                         'max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm',
-                                        'bg-blue-600 text-white' => $mine,
+                                        'bg-primary-600 text-white' => $mine,
                                         'border border-gray-200 bg-white text-gray-900' => ! $mine,
                                     ])
                                 >
@@ -163,7 +163,7 @@
                                     <p
                                         @class([
                                             'mt-1 text-[10px]',
-                                            'text-blue-100' => $mine,
+                                            'text-primary-100' => $mine,
                                             'text-gray-400' => ! $mine,
                                         ])
                                     >

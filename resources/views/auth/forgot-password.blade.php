@@ -10,7 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ config('app.name') }} | {{ __('Forgot Password') }}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('Logo/stunest_favicon.ico') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -24,11 +25,7 @@
         <div class="flex flex-1 flex-col justify-center items-center w-full p-8 md:p-16 bg-white order-1">
             <div class="w-full max-w-md">
                 <a href="{{ url('/') }}" class="inline-block mb-10">
-                    <img
-                        src="{{ asset('Logo/logo_black_01.png') }}"
-                        alt="{{ config('app.name') }}"
-                        class="h-8 w-auto"
-                    />
+                    <x-stunest-logo class="h-9 w-auto max-w-[220px] object-left object-contain" />
                 </a>
 
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
@@ -84,11 +81,11 @@
         </div>
 
         <div
-            class="hidden lg:flex relative flex-col items-center justify-center w-full p-10 xl:p-16 order-2 bg-gradient-to-br from-indigo-50 via-sky-50/80 to-violet-50/90 min-h-[40vh] lg:min-h-0"
+            class="hidden lg:flex relative flex-col items-center justify-center w-full p-10 xl:p-16 order-2 bg-gradient-to-br from-primary-50 via-primary-100/80 to-primary-100/90 min-h-[40vh] lg:min-h-0"
         >
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-indigo-100/50 blur-3xl" aria-hidden="true"></div>
-                <div class="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-sky-100/60 blur-3xl" aria-hidden="true"></div>
+                <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-100/50 blur-3xl" aria-hidden="true"></div>
+                <div class="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-primary-200/50 blur-3xl" aria-hidden="true"></div>
             </div>
             <div class="relative flex flex-col items-center text-center max-w-lg">
                 <div class="rounded-2xl bg-white/80 p-4 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm">

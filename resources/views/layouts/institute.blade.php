@@ -109,7 +109,7 @@
     >
         <!-- Logo -->
         <a href="{{ route('client.institute.dashboard') }}" class="h-20 flex items-center gap-2 px-4 border-b border-gray-100 cursor-pointer" @click="sidebarOpen = false">
-            <x-stunest-logo class="h-8 w-auto max-w-[min(100%,200px)] flex-1 min-w-0 object-left object-contain" />
+            <x-stunest-logo class="h-10 w-auto sm:h-11 max-w-[min(100%,280px)] flex-1 min-w-0 object-left object-contain" />
             <span class="shrink-0 text-[10px] font-bold bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-primary-100">Uni</span>
         </a>
 
@@ -371,7 +371,7 @@
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
             <a href="{{ route('client.institute.dashboard') }}" class="flex items-center gap-2 cursor-pointer min-w-0">
-                <x-stunest-logo class="h-7 w-auto max-w-[min(100%,160px)] shrink-0 object-left object-contain" />
+                <x-stunest-logo class="h-9 w-auto sm:h-10 max-w-[min(100%,240px)] shrink-0 object-left object-contain" />
                 <span class="text-[10px] font-bold bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full uppercase tracking-wider border border-primary-100 shrink-0">Uni</span>
             </a>
         </div>

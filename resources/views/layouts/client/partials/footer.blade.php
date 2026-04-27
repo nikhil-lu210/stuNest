@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
         <div class="col-span-2 md:col-span-1">
             <a href="{{ route('client.home') }}" class="mb-6 block w-fit">
-                <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
+                <x-stunest-logo class="h-10 w-auto sm:h-11 max-w-[min(100%,300px)] object-left object-contain" />
             </a>
             <p class="text-gray-500 text-sm mb-6">
                 {{ __('Elevating the student living experience — verified homes near campus.') }}

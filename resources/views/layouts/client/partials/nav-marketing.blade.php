@@ -8,7 +8,7 @@
 >
     <div class="relative mx-auto flex max-w-7xl items-center justify-between px-6">
         <a href="{{ route('client.home') }}" class="flex shrink-0 cursor-pointer items-center" x-on:click="mobileMenuOpen = false">
-            <x-stunest-logo class="h-10 w-auto sm:h-11 md:h-12 max-w-[min(100vw-9rem,320px)] sm:max-w-[300px] object-left object-contain" />
+            <x-stunest-logo class="h-11 w-auto sm:h-12 md:h-14 max-w-[min(100vw-9rem,360px)] sm:max-w-[340px] object-left object-contain" />
         </a>
 
         <div class="hidden items-center gap-8 text-sm font-medium md:flex">

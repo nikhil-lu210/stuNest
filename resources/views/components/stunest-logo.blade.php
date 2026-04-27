@@ -1,5 +1,5 @@
 @props([
-    'class' => 'h-8 w-auto',
+    'class' => 'h-10 w-auto max-w-[min(100%,280px)] object-left object-contain',
 ])
 <img
     src="{{ asset('Logo/stunest_logo.png') }}"

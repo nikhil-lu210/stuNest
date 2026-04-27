@@ -48,7 +48,7 @@
     <div class="px-6 h-20 flex w-full items-center justify-between gap-3 md:gap-4">
         <div class="flex min-w-0 flex-1 items-center gap-4 lg:gap-8">
             <a href="{{ route('client.home') }}" class="flex shrink-0 items-center" @click="exploreNavOpen = false">
-                <x-stunest-logo class="h-10 w-auto sm:h-11 md:h-12 max-w-[min(100vw-9rem,320px)] sm:max-w-[300px] object-left object-contain" />
+                <x-stunest-logo class="h-11 w-auto sm:h-12 md:h-14 max-w-[min(100vw-9rem,360px)] sm:max-w-[340px] object-left object-contain" />
             </a>
             <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium" aria-label="{{ __('Primary') }}">
                 <a href="{{ route('client.explore') }}" class="text-gray-900 transition-colors hover:text-gray-600 whitespace-nowrap">{{ __('Explore') }}</a>

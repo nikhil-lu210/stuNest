@@ -7,7 +7,7 @@
     <div class="flex flex-1 flex-col justify-center items-center w-full p-8 md:p-16 bg-white order-1">
         <div class="w-full max-w-lg">
             <a href="{{ url('/') }}" class="inline-block mb-8" wire:navigate>
-                <x-stunest-logo class="h-9 w-auto max-w-[220px] object-left object-contain" />
+                <x-stunest-logo class="h-11 w-auto sm:h-12 max-w-[min(90vw,360px)] object-left object-contain" />
             </a>
 
             @if ($step === 1)

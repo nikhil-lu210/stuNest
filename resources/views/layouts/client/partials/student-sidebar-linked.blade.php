@@ -37,8 +37,8 @@
 @endphp
 
 <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 h-full shrink-0">
-    <a href="{{ route('client.home') }}" class="h-20 flex items-center px-6 border-b border-gray-100">
-        <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
+    <a href="{{ route('client.home') }}" class="flex h-20 items-center border-b border-gray-100 px-6">
+        <x-stunest-logo class="h-10 w-auto sm:h-11 max-w-[min(100%,280px)] object-left object-contain" />
     </a>
 
     <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
@@ -125,9 +125,9 @@
     </div>
 </aside>
 
-<header class="md:hidden fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b border-gray-200 bg-white px-4 overflow-visible">
-    <a href="{{ route('client.home') }}" class="flex items-center">
-        <x-stunest-logo class="h-7 w-auto max-w-[180px] object-left object-contain" />
+<header class="md:hidden fixed top-0 z-50 flex h-16 w-full max-w-full items-center justify-between overflow-visible border-b border-gray-200 bg-white px-4">
+    <a href="{{ route('client.home') }}" class="flex min-w-0 max-w-[65%] items-center">
+        <x-stunest-logo class="h-9 w-auto max-w-full object-left object-contain sm:max-w-[min(100%,240px)]" />
     </a>
     <div class="relative shrink-0" x-data="{ openProfile: false }">
         <button

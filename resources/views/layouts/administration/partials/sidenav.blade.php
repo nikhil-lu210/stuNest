@@ -2,7 +2,7 @@
     <div class="app-brand demo">
         <a href="{{ route('administration.dashboard.index') }}" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <x-stunest-logo class="h-9 w-auto max-w-[200px] object-left object-contain" />
+                <x-stunest-logo class="h-10 w-auto sm:h-12 max-w-[min(100%,300px)] object-left object-contain" />
             </span>
         </a>
 

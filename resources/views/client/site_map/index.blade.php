@@ -6,9 +6,9 @@
 
 @section('content')
     <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="{{ route('client.home') }}" class="flex items-center">
-                <x-stunest-logo class="h-8 w-auto max-w-[200px] object-left object-contain" />
+        <div class="mx-auto flex h-20 max-w-5xl items-center justify-between px-6">
+            <a href="{{ route('client.home') }}" class="flex min-w-0 max-w-[80%] items-center">
+                <x-stunest-logo class="h-10 w-auto sm:h-11 max-w-full object-left object-contain md:max-w-[320px]" />
             </a>
             <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Design index</span>
         </div>

@@ -26,7 +26,7 @@
         <div class="flex flex-1 flex-col justify-center items-center w-full p-8 md:p-16 bg-white order-1">
             <div class="w-full max-w-md">
                 <a href="{{ url('/') }}" class="inline-block mb-10">
-                    <x-stunest-logo class="h-9 w-auto max-w-[220px] object-left object-contain" />
+                    <x-stunest-logo class="h-11 w-auto sm:h-12 max-w-[min(90vw,360px)] object-left object-contain" />
                 </a>
 
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">

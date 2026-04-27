@@ -13,16 +13,36 @@ document.addEventListener('alpine:init', function () {
       strings: strings,
 
       toggleDate: function () {
-        this.dateOpen = !this.dateOpen;
+        var self = this;
+        this.guestsOpen = false;
         if (this.dateOpen) {
-          this.guestsOpen = false;
+          this.dateOpen = false;
+          return;
+        }
+        var setOpen = function () {
+          self.dateOpen = true;
+        };
+        if (typeof this.$nextTick === 'function') {
+          this.$nextTick(setOpen);
+        } else {
+          setTimeout(setOpen, 0);
         }
       },
 
       toggleGuests: function () {
-        this.guestsOpen = !this.guestsOpen;
+        var self = this;
+        this.dateOpen = false;
         if (this.guestsOpen) {
-          this.dateOpen = false;
+          this.guestsOpen = false;
+          return;
+        }
+        var setOpen = function () {
+          self.guestsOpen = true;
+        };
+        if (typeof this.$nextTick === 'function') {
+          this.$nextTick(setOpen);
+        } else {
+          setTimeout(setOpen, 0);
         }
       },
 

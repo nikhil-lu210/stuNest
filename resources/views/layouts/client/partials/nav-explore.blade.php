@@ -189,7 +189,7 @@
             </button>
             <div class="w-px h-6 bg-gray-200 shrink-0 mx-2"></div>
 
-            <div class="relative shrink-0">
+            <div class="relative shrink-0" @click.outside="priceOpen = false">
                 <button
                     type="button"
                     class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
@@ -202,8 +202,7 @@
                     x-show="priceOpen"
                     x-cloak
                     x-transition
-                    @click.outside="priceOpen = false"
-                    class="absolute left-0 top-full mt-2 w-[min(100vw-2rem,22rem)] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl z-50"
+                    class="absolute left-0 top-full z-50 mt-2 w-[min(100vw-2rem,22rem)] rounded-2xl border border-gray-200 bg-white p-4 shadow-xl"
                 >
                     <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">{{ __('Rent amount') }}</p>
                     <div class="grid grid-cols-3 gap-2 mb-4">
@@ -238,7 +237,7 @@
                 {{ __('Bills Included') }}
             </a>
 
-            <div class="relative shrink-0">
+            <div class="relative shrink-0" @click.outside="distanceOpen = false">
                 <button
                     type="button"
                     class="border rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
@@ -251,8 +250,7 @@
                     x-show="distanceOpen"
                     x-cloak
                     x-transition
-                    @click.outside="distanceOpen = false"
-                    class="absolute left-0 top-full mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl z-50"
+                    class="absolute left-0 top-full z-50 mt-2 w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl"
                 >
                     <p class="text-xs font-medium text-gray-500 mb-2">{{ __('Max distance from campus') }}</p>
                     <label class="block text-xs font-medium text-gray-600">{{ __('Kilometres') }}

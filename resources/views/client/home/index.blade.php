@@ -52,6 +52,7 @@
                 id="search-container"
                 class="hidden md:flex items-center overflow-visible bg-white rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 p-2"
                 x-data="searchForm({ moveIn: @js($searchMoveIn), guests: {{ $searchGuests }}, strings: @js($searchFormStrings) })"
+                @click.outside="dateOpen = false; guestsOpen = false"
             >
                 <div class="flex-1 flex items-center px-6 border-r border-gray-100">
                     <i data-lucide="map-pin" class="text-gray-400 mr-3 w-5 h-5 shrink-0"></i>
@@ -93,9 +94,8 @@
                             x-transition:leave="transition ease-in duration-100"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 translate-y-1"
-                            @click.outside="dateOpen = false"
                             x-cloak
-                            class="absolute left-4 right-4 top-full z-[70] mt-2 sm:left-1 sm:right-auto sm:w-72"
+                            class="absolute left-4 right-4 top-full z-[100] mt-2 sm:left-1 sm:right-auto sm:w-72"
                         >
                             <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-xl">
                                 <label class="mb-2 block text-xs font-medium text-gray-500" x-text="strings.selectDate"></label>
@@ -131,9 +131,8 @@
                         <div
                             x-show="guestsOpen"
                             x-transition
-                            @click.outside="guestsOpen = false"
                             x-cloak
-                            class="absolute left-4 right-4 top-full z-[70] mt-2 sm:left-1 sm:right-auto sm:w-72"
+                            class="absolute left-4 right-4 top-full z-[100] mt-2 sm:left-1 sm:right-auto sm:w-72"
                         >
                             <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-xl">
                                 <p class="mb-4 text-xs font-medium text-gray-500" x-text="strings.whoTravelling"></p>
@@ -172,6 +171,7 @@
                 action="{{ route('client.explore') }}"
                 class="md:hidden space-y-3 rounded-3xl border border-gray-200 bg-white p-4 shadow-sm"
                 x-data="searchForm({ moveIn: @js($searchMoveIn), guests: {{ $searchGuests }}, strings: @js($searchFormStrings) })"
+                @click.outside="dateOpen = false; guestsOpen = false"
             >
                 <div class="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3">
                     <i data-lucide="map-pin" class="h-5 w-5 shrink-0 text-gray-500"></i>
@@ -198,7 +198,6 @@
                         <div
                             x-show="dateOpen"
                             x-transition
-                            @click.outside="dateOpen = false"
                             x-cloak
                             class="absolute left-0 right-0 top-full z-[100] mt-2 px-1"
                         >
@@ -229,7 +228,6 @@
                         <div
                             x-show="guestsOpen"
                             x-transition
-                            @click.outside="guestsOpen = false"
                             x-cloak
                             class="absolute left-0 right-0 top-full z-[100] mt-2 px-1"
                         >

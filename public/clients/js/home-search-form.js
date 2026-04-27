@@ -1,5 +1,6 @@
 /**
  * Home / marketing search bar — Alpine.js pickers for move-in date & guests.
+ * (Single form in client/home — one −/+ so adjustGuests only binds once.)
  */
 document.addEventListener('alpine:init', function () {
   Alpine.data('searchForm', function (config) {
@@ -67,13 +68,29 @@ document.addEventListener('alpine:init', function () {
       },
 
       guestsLabel: function () {
-        var n = this.guests;
+        var n = parseInt(this.guests, 10) || 1;
         var unit = n === 1 ? this.strings.student || 'student' : this.strings.students || 'students';
         return n + ' ' + unit;
       },
 
+      /**
+       * Ignore rapid duplicate events (same direction) from the same physical action.
+       */
       adjustGuests: function (delta) {
-        this.guests = Math.max(1, Math.min(10, this.guests + delta));
+        var t = typeof performance !== 'undefined' && performance.now ? performance.now() : Date.now();
+        if (
+          this._lastGuestAdj != null &&
+          this._lastGuestAdj.delta === delta &&
+          t - this._lastGuestAdj.t < 150
+        ) {
+          return;
+        }
+        this._lastGuestAdj = { t: t, delta: delta };
+        var g = parseInt(this.guests, 10);
+        if (isNaN(g)) {
+          g = 1;
+        }
+        this.guests = Math.max(1, Math.min(10, g + delta));
       },
 
       clearMoveIn: function () {
